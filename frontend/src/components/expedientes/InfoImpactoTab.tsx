@@ -3,10 +3,7 @@ import {
   TextField,
   MenuItem,
   Box,
-  Typography,
-  FormControlLabel,
-  Checkbox,
-  Slider
+  Typography
 } from '@mui/material';
 import { Expediente } from '../../types/expediente.types';
 
@@ -15,19 +12,44 @@ interface InfoImpactoTabProps {
   onChange: (field: keyof Expediente, value: any) => void;
 }
 
-const nivelesImpacto = [
-  'Bajo',
-  'Medio',
-  'Alto',
-  'Muy Alto'
+const nivelesImpacto = ['ALTO', 'BAJO'];
+
+const nivelesIncidenciaZona = [
+  'S/D',
+  'ALTA',
+  'MEDIA',
+  'BAJA'
 ];
 
-const ampliacionesCircula = [
-  'Local',
-  'Provincial',
-  'Regional',
-  'Nacional',
-  'Internacional'
+const institucionesSensibles = [
+  'S/D',
+  'ESCUELA',
+  'HOSPITAL',
+  'IGLESIA',
+  'SINAGOGA',
+  'MEZQUITA',
+  'OTRO',
+  'NINGUNA',
+  'SIN_DATO'
+];
+
+const recursosLimitados = [
+  'S/D',
+  'SI',
+  'NO'
+];
+
+const areasFronterizas = [
+  'S/D',
+  'SI',
+  'NO'
+];
+
+const nivelesPercepcion = [
+  'S/D',
+  'ALTA',
+  'MEDIA',
+  'BAJA'
 ];
 
 const InfoImpactoTab: React.FC<InfoImpactoTabProps> = ({ expediente, onChange }) => {
@@ -35,10 +57,6 @@ const InfoImpactoTab: React.FC<InfoImpactoTabProps> = ({ expediente, onChange })
     const { name, value, checked, type } = e.target;
     const fieldValue = type === 'checkbox' ? checked : value;
     onChange(name as keyof Expediente, fieldValue);
-  };
-
-  const handleSliderChange = (name: string) => (event: Event, newValue: number | number[]) => {
-    onChange(name as keyof Expediente, newValue);
   };
 
   return (
@@ -98,6 +116,96 @@ const InfoImpactoTab: React.FC<InfoImpactoTabProps> = ({ expediente, onChange })
             margin="normal"
             helperText="Datos relevantes que ayuden a comprender el contexto completo del caso"
           />
+        </Box>
+
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3 }}>
+          <Box sx={{ width: { xs: '100%', md: 'calc(50% - 1.5rem)' } }}>
+            <TextField
+              fullWidth
+              select
+              label="Nivel de Incidencia en la Zona"
+              name="nivelIncidenciaZona"
+              value={expediente.nivelIncidenciaZona || 'S/D'}
+              onChange={handleChange}
+              margin="normal"
+            >
+              {nivelesIncidenciaZona.map((option) => (
+                <MenuItem key={option} value={option}>
+                  {option}
+                </MenuItem>
+              ))}
+            </TextField>
+          </Box>
+          <Box sx={{ width: { xs: '100%', md: 'calc(50% - 1.5rem)' } }}>
+            <TextField
+              fullWidth
+              select
+              label="Institución Sensible Cercana"
+              name="institucionSensibleCercana"
+              value={expediente.institucionSensibleCercana || 'S/D'}
+              onChange={handleChange}
+              margin="normal"
+            >
+              {institucionesSensibles.map((option) => (
+                <MenuItem key={option} value={option}>
+                  {option}
+                </MenuItem>
+              ))}
+            </TextField>
+          </Box>
+        </Box>
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3 }}>
+          <Box sx={{ width: { xs: '100%', md: 'calc(50% - 1.5rem)' } }}>
+            <TextField
+              fullWidth
+              select
+              label="Recursos Limitados"
+              name="recursosLimitados"
+              value={expediente.recursosLimitados || 'S/D'}
+              onChange={handleChange}
+              margin="normal"
+            >
+              {recursosLimitados.map((option) => (
+                <MenuItem key={option} value={option}>
+                  {option}
+                </MenuItem>
+              ))}
+            </TextField>
+          </Box>
+          <Box sx={{ width: { xs: '100%', md: 'calc(50% - 1.5rem)' } }}>
+            <TextField
+              fullWidth
+              select
+              label="Área Fronteriza"
+              name="areaFronteriza"
+              value={expediente.areaFronteriza || 'S/D'}
+              onChange={handleChange}
+              margin="normal"
+            >
+              {areasFronterizas.map((option) => (
+                <MenuItem key={option} value={option}>
+                  {option}
+                </MenuItem>
+              ))}
+            </TextField>
+          </Box>
+        </Box>
+        <Box sx={{ width: { xs: '100%', md: 'calc(50% - 1.5rem)' } }}>
+          <TextField
+            fullWidth
+            select
+            label="Impacto en la Percepción de Seguridad"
+            name="impactoPercepcion"
+            value={expediente.impactoPercepcion || 'S/D'}
+            onChange={handleChange}
+            margin="normal"
+          >
+            {nivelesPercepcion.map((option) => (
+              <MenuItem key={option} value={option}>
+                {option}
+              </MenuItem>
+            ))}
+          </TextField>
         </Box>
       </Box>
     </Box>

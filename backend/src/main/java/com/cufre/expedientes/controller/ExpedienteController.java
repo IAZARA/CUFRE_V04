@@ -3,6 +3,9 @@ package com.cufre.expedientes.controller;
 import com.cufre.expedientes.dto.ExpedienteDTO;
 import com.cufre.expedientes.model.Expediente;
 import com.cufre.expedientes.service.ExpedienteService;
+import com.cufre.expedientes.service.FotografiaService;
+import com.cufre.expedientes.dto.PersonaExpedienteDTO;
+import com.cufre.expedientes.service.PersonaExpedienteService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -21,10 +24,14 @@ import java.util.Map;
 public class ExpedienteController extends AbstractBaseController<Expediente, ExpedienteDTO, Long> {
     
     private final ExpedienteService expedienteService;
+    private final FotografiaService fotografiaService;
+    private final PersonaExpedienteService personaExpedienteService;
     
-    public ExpedienteController(ExpedienteService service) {
+    public ExpedienteController(ExpedienteService service, FotografiaService fotografiaService, PersonaExpedienteService personaExpedienteService) {
         super(service);
         this.expedienteService = service;
+        this.fotografiaService = fotografiaService;
+        this.personaExpedienteService = personaExpedienteService;
     }
     
     @GetMapping("/search/fechas")
@@ -134,6 +141,40 @@ public class ExpedienteController extends AbstractBaseController<Expediente, Exp
     @DeleteMapping("/{id}/delitos/{delitoId}")
     public ResponseEntity<Void> removeDelito(@PathVariable Long id, @PathVariable Long delitoId) {
         expedienteService.removeDelito(id, delitoId);
+        return ResponseEntity.ok().build();
+    }
+    
+    /**
+     * Elimina una fotografía de un expediente
+     * @param id ID del expediente
+     * @param fotografiaId ID de la fotografía
+     * @return Respuesta vacía con status OK
+     */
+    @DeleteMapping("/{id}/fotografias/{fotografiaId}")
+    public ResponseEntity<Void> eliminarFotografia(@PathVariable Long id, @PathVariable Long fotografiaId) {
+        fotografiaService.eliminarFotografiaDeExpediente(id, fotografiaId);
+        return ResponseEntity.ok().build();
+    }
+    
+    /**
+     * Asocia una persona a un expediente
+     * @param id ID del expediente
+     * @param dto Información de la relación persona-expediente
+     * @return Relación creada
+     */
+    @PostMapping("/{id}/personas")
+    public ResponseEntity<PersonaExpedienteDTO> addPersona(@PathVariable Long id, @RequestBody PersonaExpedienteDTO dto) {
+        dto.setExpedienteId(id);
+        PersonaExpedienteDTO saved = personaExpedienteService.savePersonaExpediente(dto);
+        return ResponseEntity.ok(saved);
+    }
+    
+    /**
+     * Actualiza la foto principal de un expediente
+     */
+    @PutMapping("/{id}/foto-principal/{fotoId}")
+    public ResponseEntity<Void> setFotoPrincipal(@PathVariable Long id, @PathVariable Long fotoId) {
+        expedienteService.setFotoPrincipal(id, fotoId);
         return ResponseEntity.ok().build();
     }
 } 

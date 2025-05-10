@@ -42,6 +42,15 @@ const UsuarioFormPage: React.FC = () => {
 
   const [errors, setErrors] = useState<Record<string, string>>({});
 
+  const ROL_LABELS: Record<Rol, string> = {
+    [Rol.SUPERUSUARIO]: 'Superusuario',
+    [Rol.ADMINISTRADOR]: 'Administrador',
+    [Rol.OPERADOR]: 'Operador',
+    [Rol.VISUALIZADOR]: 'Visualizador',
+    [Rol.USUARIOCARGA]: 'Usuario Carga',
+    [Rol.USUARIOCONSULTA]: 'Usuario Consulta',
+  };
+
   // Cargar usuario si estamos en modo edición
   useEffect(() => {
     if (isEditMode) {
@@ -217,18 +226,19 @@ const UsuarioFormPage: React.FC = () => {
                   labelId="rol-label"
                   id="rol"
                   name="rol"
-                  value={usuario.rol}
+                  value={usuario.rol === Rol.OPERADOR || usuario.rol === Rol.VISUALIZADOR ? Rol.ADMINISTRADOR : usuario.rol}
                   label="Rol"
                   onChange={(e) => {
                     setUsuario(prev => ({ ...prev, rol: e.target.value as Rol }));
                   }}
                 >
-                  {user?.rol === Rol.SUPERUSUARIO && (
-                    <MenuItem value={Rol.SUPERUSUARIO}>{Rol.SUPERUSUARIO}</MenuItem>
-                  )}
-                  <MenuItem value={Rol.ADMINISTRADOR}>{Rol.ADMINISTRADOR}</MenuItem>
-                  <MenuItem value={Rol.OPERADOR}>{Rol.OPERADOR}</MenuItem>
-                  <MenuItem value={Rol.VISUALIZADOR}>{Rol.VISUALIZADOR}</MenuItem>
+                  {Object.values(Rol)
+                    .filter(rol => rol !== Rol.OPERADOR && rol !== Rol.VISUALIZADOR)
+                    .map((rol) => (
+                      (rol !== Rol.SUPERUSUARIO || user?.rol === Rol.SUPERUSUARIO) && (
+                        <MenuItem key={rol} value={rol}>{ROL_LABELS[rol]}</MenuItem>
+                      )
+                    ))}
                 </Select>
               </FormControl>
             </div>

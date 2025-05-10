@@ -16,7 +16,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
      */
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        // No agregar ningún manejador de recursos estáticos
+        // Servir archivos estáticos desde /uploads/**
+        registry.addResourceHandler("/uploads/**")
+                .addResourceLocations("file:/Users/macbook/Documents/CUFRE_V04/backend/uploads/");
     }
     
     /**

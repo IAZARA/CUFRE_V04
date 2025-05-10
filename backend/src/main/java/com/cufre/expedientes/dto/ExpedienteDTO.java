@@ -108,5 +108,6 @@ public class ExpedienteDTO {
     private List<PersonaExpedienteDTO> personaExpedientes = new ArrayList<>();
     private List<DelitoDTO> delitos = new ArrayList<>();
     private List<FotografiaDTO> fotografias = new ArrayList<>();
+    private Long fotoPrincipalId;
     private List<DocumentoDTO> documentos = new ArrayList<>();
 }

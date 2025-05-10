@@ -52,7 +52,11 @@ const fuerzasAsignadas = [
 const InformacionBasicaTab: React.FC<InformacionBasicaTabProps> = ({ expediente, onChange }) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, checked, type } = e.target;
-    const fieldValue = type === 'checkbox' ? checked : value;
+    let fieldValue = type === 'checkbox' ? checked : value;
+    // Si el campo es estadoSituacion, guardar en mayúsculas
+    if (name === 'estadoSituacion') {
+      fieldValue = (fieldValue as string).toUpperCase();
+    }
     onChange(name as keyof Expediente, fieldValue);
   };
 
@@ -114,14 +118,14 @@ const InformacionBasicaTab: React.FC<InformacionBasicaTabProps> = ({ expediente,
               fullWidth
               select
               label="Estado"
-              name="estado"
-              value={expediente.estado || 'SIN EFECTO'}
+              name="estadoSituacion"
+              value={expediente.estadoSituacion || 'SIN EFECTO'}
               onChange={handleChange}
               margin="normal"
             >
               {estados.map((option) => (
-                <MenuItem key={option} value={option}>
-                  {option}
+                <MenuItem key={option} value={option.toUpperCase()}>
+                  {option.toUpperCase()}
                 </MenuItem>
               ))}
             </TextField>

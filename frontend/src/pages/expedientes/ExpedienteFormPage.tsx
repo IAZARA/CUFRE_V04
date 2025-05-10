@@ -13,6 +13,7 @@ import {
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import SaveIcon from '@mui/icons-material/Save';
 import expedienteService from '../../api/expedienteService';
+import delitoService from '../../api/delitoService';
 import { Expediente } from '../../types/expediente.types';
 
 // Importar los componentes de las pestañas
@@ -182,11 +183,18 @@ const ExpedienteFormPage: React.FC = () => {
     
     // Campos adicionales requeridos
     created_at: '',
-    updated_at: ''
+    updated_at: '',
+    tipoVictima: '',
+    nivelIncidenciaZona: '',
+    institucionSensibleCercana: '',
+    recursosLimitados: '',
+    areaFronteriza: '',
+    impactoPercepcion: '',
   });
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+  const [delitosOriginales, setDelitosOriginales] = useState<{ id: number }[]>([]);
 
   useEffect(() => {
     if (id && id !== 'new') {
@@ -207,6 +215,7 @@ const ExpedienteFormPage: React.FC = () => {
       if (!data.delitos) data.delitos = [];
       
       setExpediente(data);
+      setDelitosOriginales(data.delitos ? [...data.delitos] : []);
       
       // Cargar fotografías independientemente si el array está vacío
       try {
@@ -281,8 +290,32 @@ const ExpedienteFormPage: React.FC = () => {
 
     try {
       if (id && id !== 'new') {
+        // Sincronizar delitos
+        const actuales = expediente.delitos?.map(d => d.id) || [];
+        const originales = delitosOriginales?.map(d => d.id) || [];
+        // Delitos a asociar
+        const aAsociar = actuales.filter(idDelito => !originales.includes(idDelito));
+        // Delitos a desasociar
+        const aDesasociar = originales.filter(idDelito => !actuales.includes(idDelito));
+        // Asociar nuevos delitos
+        for (const delitoId of aAsociar) {
+          await delitoService.asociarDelitoExpediente({ expedienteId: parseInt(id), delitoId });
+        }
+        // Desasociar delitos quitados
+        if (aDesasociar.length > 0) {
+          // Obtener los ExpedienteDelito actuales para saber los IDs de relación
+          const delitosAsociados = await delitoService.getDelitosPorExpediente(parseInt(id));
+          for (const delitoId of aDesasociar) {
+            const rel = delitosAsociados.find((d: any) => d.delitoId === delitoId);
+            if (rel && rel.id) {
+              await delitoService.desasociarDelitoExpediente(rel.id);
+            }
+          }
+        }
         await expedienteService.updateExpediente(parseInt(id), expediente);
         setSuccess('Expediente actualizado correctamente');
+        // Actualizar delitosOriginales tras guardar
+        setDelitosOriginales(expediente.delitos ? [...expediente.delitos] : []);
       } else {
         const newExpediente = await expedienteService.createExpediente(expediente);
         setSuccess('Expediente creado correctamente');

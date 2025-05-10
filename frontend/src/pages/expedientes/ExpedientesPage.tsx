@@ -79,7 +79,7 @@ const ExpedientesPage: React.FC = () => {
     return (
       expediente.numero.toLowerCase().includes(searchTermLower) ||
       expediente.caratula.toLowerCase().includes(searchTermLower) ||
-      (expediente.estado?.toLowerCase().includes(searchTermLower) || false) ||
+      (expediente.estadoSituacion?.toLowerCase().includes(searchTermLower) || false) ||
       (expediente.jurisdiccion ? expediente.jurisdiccion.toLowerCase().includes(searchTermLower) : false)
     );
   });
@@ -104,19 +104,18 @@ const ExpedientesPage: React.FC = () => {
     }
   };
 
-  // Estados para los expedientes
-  const getEstadoColor = (estado: string): "success" | "error" | "warning" | "default" | "primary" | "secondary" | "info" => {
-    switch (estado.toLowerCase()) {
-      case 'activo':
-        return 'success';
-      case 'cerrado':
-        return 'error';
-      case 'archivado':
-        return 'info';
-      case 'en trámite':
-        return 'warning';
+  // Nueva función para obtener el label y color de estado
+  const getEstadoInfo = (estado?: string) => {
+    const valor = (estado || '').toUpperCase();
+    switch (valor) {
+      case 'CAPTURA VIGENTE':
+        return { label: 'CAPTURA VIGENTE', color: '#ffcccc' };
+      case 'DETENIDO':
+        return { label: 'DETENIDO', color: '#d0f5d8' };
+      case 'SIN EFECTO':
+        return { label: 'SIN EFECTO', color: '#ffe5b4' };
       default:
-        return 'default';
+        return { label: 'SIN DATO', color: 'inherit' };
     }
   };
 
@@ -174,7 +173,7 @@ const ExpedientesPage: React.FC = () => {
                 <TableCell>Carátula</TableCell>
                 <TableCell>Fecha de Inicio</TableCell>
                 <TableCell>Estado</TableCell>
-                <TableCell>Jurisdicción</TableCell>
+                <TableCell>Prófugo</TableCell>
                 <TableCell align="center">Acciones</TableCell>
               </TableRow>
             </TableHead>
@@ -188,43 +187,49 @@ const ExpedientesPage: React.FC = () => {
               ) : (
                 filteredExpedientes
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((expediente) => (
-                    <TableRow key={expediente.id} hover>
-                      <TableCell>{expediente.numero}</TableCell>
-                      <TableCell>{expediente.caratula}</TableCell>
-                      <TableCell>{expediente.fechaIngreso || expediente.fechaInicio}</TableCell>
-                      <TableCell>
-                        <Chip 
-                          label={expediente.estado || 'Pendiente'}
-                          color={getEstadoColor(expediente.estado || 'Pendiente')}
-                          size="small"
-                        />
-                      </TableCell>
-                      <TableCell>{expediente.jurisdiccion}</TableCell>
-                      <TableCell align="center">
-                        <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                          <Tooltip title="Ver detalles">
-                            <IconButton onClick={() => handleEdit(expediente.id!)}>
-                              <VisibilityIcon />
-                            </IconButton>
-                          </Tooltip>
-                          <Tooltip title="Editar">
-                            <IconButton onClick={() => handleEdit(expediente.id!)}>
-                              <EditIcon />
-                            </IconButton>
-                          </Tooltip>
-                          <Tooltip title="Eliminar">
-                            <IconButton 
-                              onClick={() => handleDelete(expediente.id!)} 
-                              color="error"
-                            >
-                              <DeleteIcon />
-                            </IconButton>
-                          </Tooltip>
-                        </Box>
-                      </TableCell>
-                    </TableRow>
-                  ))
+                  .map((expediente) => {
+                    const estadoInfo = getEstadoInfo(expediente.estadoSituacion);
+                    // Buscar persona vinculada como Prófugo
+                    const profugo = expediente.personas?.find(
+                      p => ['prófugo', 'profugo', 'imputado'].includes((p.tipoRelacion || '').toLowerCase())
+                    );
+                    const profugoNombre = profugo
+                      ? ((profugo.persona?.nombre || profugo.nombre || '') + ' ' + (profugo.persona?.apellido || profugo.apellido || '')).trim() || 'S/D'
+                      : 'S/D';
+                    return (
+                      <TableRow key={expediente.id} hover sx={{ backgroundColor: estadoInfo.color }}>
+                        <TableCell>{expediente.numero}</TableCell>
+                        <TableCell>{expediente.caratula}</TableCell>
+                        <TableCell>{expediente.fechaIngreso || expediente.fechaInicio}</TableCell>
+                        <TableCell>
+                          {estadoInfo.label}
+                        </TableCell>
+                        <TableCell>{profugoNombre}</TableCell>
+                        <TableCell align="center">
+                          <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                            <Tooltip title="Ver detalles">
+                              <IconButton onClick={() => handleEdit(expediente.id!)}>
+                                <VisibilityIcon />
+                              </IconButton>
+                            </Tooltip>
+                            <Tooltip title="Editar">
+                              <IconButton onClick={() => handleEdit(expediente.id!)}>
+                                <EditIcon />
+                              </IconButton>
+                            </Tooltip>
+                            <Tooltip title="Eliminar">
+                              <IconButton 
+                                onClick={() => handleDelete(expediente.id!)} 
+                                color="error"
+                              >
+                                <DeleteIcon />
+                              </IconButton>
+                            </Tooltip>
+                          </Box>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })
               )}
             </TableBody>
           </Table>

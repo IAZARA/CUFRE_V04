@@ -1,3 +1,4 @@
+com/cufre/expedientes/service/ExpedienteServicePriorityTest.class
 com/cufre/expedientes/config/FlywayMigrationTest.class
 com/cufre/expedientes/repository/ExpedienteRepositoryTest.class
 com/cufre/expedientes/repository/PersonaRepositoryTest.class

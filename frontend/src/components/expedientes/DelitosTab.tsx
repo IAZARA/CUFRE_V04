@@ -117,8 +117,8 @@ const DelitosTab: React.FC<DelitosTabProps> = ({ expediente, onChange }) => {
       setDelitosAsociados(updatedDelitos);
       
       // Actualizar el campo delitos en el expediente
-      const delitosIds = updatedDelitos.map(d => d.delitoId.toString());
-      onChange('delitos', delitosIds);
+      const delitosObj = updatedDelitos.map(d => ({ id: d.delitoId }));
+      onChange('delitos', delitosObj);
       
       handleCloseDialog();
       return;
@@ -146,8 +146,8 @@ const DelitosTab: React.FC<DelitosTabProps> = ({ expediente, onChange }) => {
         setDelitosAsociados(updatedDelitos);
         
         // Actualizar el campo delitos en el expediente
-        const delitosIds = updatedDelitos.map(d => d.delitoId.toString());
-        onChange('delitos', delitosIds);
+        const delitosObj = updatedDelitos.map(d => ({ id: d.delitoId }));
+        onChange('delitos', delitosObj);
         
         handleCloseDialog();
       })
@@ -170,8 +170,8 @@ const DelitosTab: React.FC<DelitosTabProps> = ({ expediente, onChange }) => {
       setDelitosAsociados(updatedDelitos);
       
       // Actualizar el campo delitos en el expediente
-      const delitosIds = updatedDelitos.map(d => d.delitoId.toString());
-      onChange('delitos', delitosIds);
+      const delitosObj = updatedDelitos.map(d => ({ id: d.delitoId }));
+      onChange('delitos', delitosObj);
       
       return;
     }
@@ -184,8 +184,8 @@ const DelitosTab: React.FC<DelitosTabProps> = ({ expediente, onChange }) => {
         setDelitosAsociados(updatedDelitos);
         
         // Actualizar el campo delitos en el expediente
-        const delitosIds = updatedDelitos.map(d => d.delitoId.toString());
-        onChange('delitos', delitosIds);
+        const delitosObj = updatedDelitos.map(d => ({ id: d.delitoId }));
+        onChange('delitos', delitosObj);
       })
       .catch(err => {
         console.error('Error al desasociar delito:', err);
@@ -242,10 +242,10 @@ const DelitosTab: React.FC<DelitosTabProps> = ({ expediente, onChange }) => {
             </TableHead>
             <TableBody>
               {delitosAsociados.map((expedienteDelito) => (
-                <TableRow key={expedienteDelito.id || `temp-${expedienteDelito.delitoId}`}>
+                <TableRow key={expedienteDelito.id ? `rel-${expedienteDelito.id}` : `delito-${expedienteDelito.delitoId}`}>
                   <TableCell>{expedienteDelito.delitoNombre}</TableCell>
-                  <TableCell>{expedienteDelito.delitoArticulo || '-'}</TableCell>
-                  <TableCell>{expedienteDelito.delitoLey || '-'}</TableCell>
+                  <TableCell>{expedienteDelito.delitoArticulo ?? '-'}</TableCell>
+                  <TableCell>{expedienteDelito.delitoLey ?? '-'}</TableCell>
                   <TableCell>
                     <Chip 
                       label={expedienteDelito.delitoEsGrave ? "Grave" : "No Grave"} 

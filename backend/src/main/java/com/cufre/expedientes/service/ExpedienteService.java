@@ -5,8 +5,10 @@ import com.cufre.expedientes.dto.ExpedienteDTO;
 import com.cufre.expedientes.dto.ExpedienteDelitoDTO;
 import com.cufre.expedientes.exception.ResourceNotFoundException;
 import com.cufre.expedientes.mapper.ExpedienteMapper;
+import com.cufre.expedientes.mapper.PersonaMapper;
 import com.cufre.expedientes.model.Expediente;
 import com.cufre.expedientes.repository.ExpedienteRepository;
+import com.cufre.expedientes.util.PriorityCalculator;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Hibernate;
 import org.springframework.beans.BeanUtils;
@@ -28,15 +30,18 @@ public class ExpedienteService extends AbstractBaseService<Expediente, Expedient
 
     private final DelitoService delitoService;
     private final ExpedienteDelitoService expedienteDelitoService;
+    private final PersonaMapper personaMapper;
 
     public ExpedienteService(
             ExpedienteRepository repository, 
             ExpedienteMapper mapper,
             DelitoService delitoService,
-            ExpedienteDelitoService expedienteDelitoService) {
+            ExpedienteDelitoService expedienteDelitoService,
+            PersonaMapper personaMapper) {
         super(repository, mapper);
         this.delitoService = delitoService;
         this.expedienteDelitoService = expedienteDelitoService;
+        this.personaMapper = personaMapper;
     }
 
     @Override
@@ -151,6 +156,18 @@ public class ExpedienteService extends AbstractBaseService<Expediente, Expedient
     }
 
     /**
+     * Crea un nuevo expediente calculando la prioridad antes de guardar
+     */
+    @Transactional
+    public ExpedienteDTO create(ExpedienteDTO dto) {
+        Expediente entity = toEntity(dto);
+        // Calcular prioridad antes de guardar
+        entity.setPrioridad(PriorityCalculator.calcularPrioridad(entity));
+        entity = repository.save(entity);
+        return toDto(entity);
+    }
+
+    /**
      * Sobrescribe el método update del servicio base para mantener las relaciones
      * existentes (fotografías, documentos, personas) al actualizar el expediente
      */
@@ -159,10 +176,8 @@ public class ExpedienteService extends AbstractBaseService<Expediente, Expedient
     public ExpedienteDTO update(Long id, ExpedienteDTO dto) {
         Expediente existingEntity = ((ExpedienteRepository) repository).findByIdWithRelations(id)
                 .orElseThrow(() -> new ResourceNotFoundException(getEntityName() + " no encontrado con id: " + id));
-        
         // Inicializamos las colecciones manualmente para evitar MultipleBagFetchException
         try {
-            // Usamos size() para forzar la inicialización de las colecciones
             if (existingEntity.getFotografias() != null) existingEntity.getFotografias().size();
             if (existingEntity.getDocumentos() != null) existingEntity.getDocumentos().size();
             if (existingEntity.getPersonaExpedientes() != null) existingEntity.getPersonaExpedientes().size();
@@ -170,10 +185,10 @@ public class ExpedienteService extends AbstractBaseService<Expediente, Expedient
         } catch (Exception e) {
             log.warn("Error al inicializar colecciones del expediente: {}", e.getMessage());
         }
-        
         // Actualizar campos simples
         Expediente updatedEntity = updateEntity(dto, existingEntity);
-        
+        // Calcular prioridad antes de guardar
+        updatedEntity.setPrioridad(PriorityCalculator.calcularPrioridad(updatedEntity));
         // No sobrescribimos las colecciones porque las relaciones se gestionan 
         // con endpoints específicos, manteniendo así las relaciones existentes
         updatedEntity = repository.save(updatedEntity);
@@ -293,7 +308,8 @@ public class ExpedienteService extends AbstractBaseService<Expediente, Expedient
                     dto.setPersonaId(personaExpediente.getPersona().getId());
                     dto.setTipoRelacion(personaExpediente.getTipoRelacion());
                     dto.setObservaciones(personaExpediente.getObservaciones());
-                    // Opcionalmente, añadir información básica de la persona si es necesario
+                    // Añadir información básica de la persona
+                    dto.setPersona(personaMapper.toDto(personaExpediente.getPersona()));
                     return dto;
                 })
                 .collect(java.util.stream.Collectors.toList());
@@ -306,6 +322,7 @@ public class ExpedienteService extends AbstractBaseService<Expediente, Expedient
      */
     @Transactional
     public ExpedienteDelitoDTO addDelito(ExpedienteDelitoDTO expedienteDelitoDTO) {
+        log.info("Asociando delito: expedienteId={}, delitoId={}", expedienteDelitoDTO.getExpedienteId(), expedienteDelitoDTO.getDelitoId());
         return expedienteDelitoService.save(expedienteDelitoDTO);
     }
     
@@ -340,5 +357,29 @@ public class ExpedienteService extends AbstractBaseService<Expediente, Expedient
         
         // Mapear a DTO incluyendo toda la información relacionada
         return toDto(expediente);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<ExpedienteDTO> findAll() {
+        List<Expediente> expedientes = repository.findAll();
+        for (Expediente expediente : expedientes) {
+            // Inicializar la colección de personas vinculadas
+            if (expediente.getPersonaExpedientes() != null) {
+                expediente.getPersonaExpedientes().size();
+            }
+        }
+        return expedientes.stream().map(this::toDto).collect(java.util.stream.Collectors.toList());
+    }
+
+    /**
+     * Actualiza la foto principal de un expediente
+     */
+    @Transactional
+    public void setFotoPrincipal(Long expedienteId, Long fotoId) {
+        Expediente expediente = repository.findById(expedienteId)
+            .orElseThrow(() -> new com.cufre.expedientes.exception.ResourceNotFoundException("Expediente no encontrado con ID: " + expedienteId));
+        expediente.setFotoPrincipalId(fotoId);
+        repository.save(expediente);
     }
 } 

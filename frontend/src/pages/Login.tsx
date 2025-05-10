@@ -61,6 +61,7 @@ const Login: React.FC = () => {
           alignItems: 'center',
         }}
       >
+        <img src="/logo-cufre-2.png" alt="CUFRE Logo" style={{ height: 64, marginBottom: 16 }} />
         <Paper elevation={3} sx={{ p: 4, width: '100%', maxWidth: 400 }}>
           <Box
             sx={{

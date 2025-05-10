@@ -15,25 +15,23 @@ interface InfoOrganizacionTabProps {
 }
 
 const nivelesOrganizacion = [
-  'Bajo',
-  'Medio',
-  'Alto',
-  'Muy Alto'
+  'S/D',
+  'SIMPLE',
+  'COMPLEJA'
 ];
 
 const ambitosBanda = [
-  'Local',
-  'Provincial',
-  'Nacional',
-  'Regional',
-  'Internacional'
+  'S/D',
+  'NACIONAL',
+  'PROVINCIAL',
+  'BARRIAL',
+  'INTERNACIONAL'
 ];
 
 const capacidadesOperativas = [
-  'Baja',
-  'Media',
-  'Alta',
-  'Muy Alta'
+  'S/D',
+  'ALTA',
+  'BAJA'
 ];
 
 const InfoOrganizacionTab: React.FC<InfoOrganizacionTabProps> = ({ expediente, onChange }) => {
@@ -96,7 +94,7 @@ const InfoOrganizacionTab: React.FC<InfoOrganizacionTabProps> = ({ expediente, o
               select
               label="Nivel de Organización"
               name="nivelOrganizacion"
-              value={expediente.nivelOrganizacion || ''}
+              value={expediente.nivelOrganizacion || 'S/D'}
               onChange={handleChange}
               margin="normal"
             >
@@ -114,7 +112,7 @@ const InfoOrganizacionTab: React.FC<InfoOrganizacionTabProps> = ({ expediente, o
               select
               label="Ámbito de la Banda"
               name="ambitoBanda"
-              value={expediente.ambitoBanda || ''}
+              value={expediente.ambitoBanda || 'S/D'}
               onChange={handleChange}
               margin="normal"
             >
@@ -132,7 +130,7 @@ const InfoOrganizacionTab: React.FC<InfoOrganizacionTabProps> = ({ expediente, o
               select
               label="Capacidad Operativa"
               name="capacidadOperativa"
-              value={expediente.capacidadOperativa || ''}
+              value={expediente.capacidadOperativa || 'S/D'}
               onChange={handleChange}
               margin="normal"
             >

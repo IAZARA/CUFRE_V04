@@ -103,4 +103,20 @@ public class FotografiaService extends AbstractBaseService<Fotografia, Fotografi
                 .map(this::toDto)
                 .collect(Collectors.toList());
     }
+
+    /**
+     * Elimina una fotografía asociada a un expediente
+     * @param expedienteId ID del expediente
+     * @param fotografiaId ID de la fotografía
+     */
+    @Transactional
+    public void eliminarFotografiaDeExpediente(Long expedienteId, Long fotografiaId) {
+        Fotografia fotografia = repository.findById(fotografiaId)
+            .orElseThrow(() -> new ResourceNotFoundException("Fotografía no encontrada con id: " + fotografiaId));
+        if (!fotografia.getExpediente().getId().equals(expedienteId)) {
+            throw new ResourceNotFoundException("La fotografía no pertenece al expediente especificado");
+        }
+        repository.delete(fotografia);
+        log.info("Fotografía {} eliminada del expediente {}", fotografiaId, expedienteId);
+    }
 } 

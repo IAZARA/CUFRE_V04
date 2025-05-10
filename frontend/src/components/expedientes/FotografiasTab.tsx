@@ -15,11 +15,14 @@ import {
   DialogContent,
   DialogActions,
   CircularProgress,
-  Alert
+  Alert,
+  Tooltip
 } from '@mui/material';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ZoomInIcon from '@mui/icons-material/ZoomIn';
+import StarIcon from '@mui/icons-material/Star';
+import StarBorderIcon from '@mui/icons-material/StarBorder';
 import { Expediente, Fotografia } from '../../types/expediente.types';
 import expedienteService from '../../api/expedienteService';
 
@@ -39,17 +42,6 @@ const tiposFotografia = [
   'Evidencia',
   'Otro'
 ];
-
-// Función para verificar si una imagen existe
-const checkImageExists = async (url: string): Promise<boolean> => {
-  try {
-    const response = await fetch(url, { method: 'HEAD' });
-    return response.ok;
-  } catch (error) {
-    console.error('Error al verificar imagen:', error);
-    return false;
-  }
-};
 
 // Componente ImageWithFallback para mostrar una imagen con fallback
 const ImageWithFallback: React.FC<{src: string, alt: string}> = ({ src, alt }) => {
@@ -167,7 +159,7 @@ const FotografiasTab: React.FC<FotografiasTabProps> = ({ expediente, onChange })
         ...expediente.fotografias,
         {
           id: uploadedFoto.id,
-          url: newFotografia.url,
+          url: `http://localhost:8080${uploadedFoto.rutaArchivo}`,
           tipo: newFotografia.tipo,
           descripcion: newFotografia.descripcion || ''
         }
@@ -188,11 +180,21 @@ const FotografiasTab: React.FC<FotografiasTabProps> = ({ expediente, onChange })
     }
   };
 
-  const handleDeleteFotografia = (id: number | undefined) => {
-    if (!id) return;
-    
-    const updatedFotografias = expediente.fotografias.filter(foto => foto.id !== id);
-    onChange('fotografias', updatedFotografias);
+  const handleDeleteFotografia = async (id: number | undefined) => {
+    if (!id || !expediente.id) return;
+
+    setUploading(true);
+    setError(null);
+
+    try {
+      await expedienteService.deleteFotografia(expediente.id, id);
+      const updatedFotografias = expediente.fotografias.filter(foto => foto.id !== id);
+      onChange('fotografias', updatedFotografias);
+    } catch (error) {
+      setError('Error al eliminar la fotografía. Intenta nuevamente.');
+    } finally {
+      setUploading(false);
+    }
   };
 
   const handleViewImage = (url: string) => {
@@ -203,6 +205,16 @@ const FotografiasTab: React.FC<FotografiasTabProps> = ({ expediente, onChange })
   const handleCloseDialog = () => {
     setOpenDialog(false);
     setSelectedImage(null);
+  };
+
+  const handleSetFotoPrincipal = async (fotoId: number) => {
+    if (!expediente.id) return;
+    try {
+      await expedienteService.setFotoPrincipal(expediente.id, fotoId);
+      onChange('fotoPrincipalId', fotoId);
+    } catch (error) {
+      // Manejar error (puedes mostrar un mensaje al usuario)
+    }
   };
 
   return (
@@ -315,7 +327,7 @@ const FotografiasTab: React.FC<FotografiasTabProps> = ({ expediente, onChange })
                 <CardMedia
                   component={() => (
                     <ImageWithFallback 
-                      src={foto.url} 
+                      src={foto.url || (foto.rutaArchivo ? `http://localhost:8080${foto.rutaArchivo}` : '')} 
                       alt={foto.descripcion || 'Fotografía'} 
                     />
                   )}
@@ -332,7 +344,7 @@ const FotografiasTab: React.FC<FotografiasTabProps> = ({ expediente, onChange })
                 <CardActions>
                   <IconButton 
                     size="small" 
-                    onClick={() => handleViewImage(foto.url)}
+                    onClick={() => handleViewImage(foto.url || (foto.rutaArchivo ? `http://localhost:8080${foto.rutaArchivo}` : ''))}
                     aria-label="Ampliar imagen"
                   >
                     <ZoomInIcon />
@@ -344,6 +356,22 @@ const FotografiasTab: React.FC<FotografiasTabProps> = ({ expediente, onChange })
                     aria-label="Eliminar imagen"
                   >
                     <DeleteIcon />
+                  </IconButton>
+                  <IconButton
+                    color={expediente.fotoPrincipalId === foto.id ? 'warning' : 'default'}
+                    onClick={() => handleSetFotoPrincipal(foto.id!)}
+                    disabled={expediente.fotoPrincipalId === foto.id}
+                    aria-label="Marcar como principal"
+                  >
+                    {expediente.fotoPrincipalId === foto.id ? (
+                      <Tooltip title="Foto principal">
+                        <StarIcon />
+                      </Tooltip>
+                    ) : (
+                      <Tooltip title="Marcar como principal">
+                        <StarBorderIcon />
+                      </Tooltip>
+                    )}
                   </IconButton>
                 </CardActions>
               </Card>

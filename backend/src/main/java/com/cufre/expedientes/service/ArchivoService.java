@@ -73,7 +73,9 @@ public class ArchivoService {
             // Crear y configurar el objeto Fotografia
             Fotografia fotografia = new Fotografia();
             fotografia.setExpediente(expediente);
-            fotografia.setRutaArchivo(targetLocation.toString());
+            // Guardar la ruta relativa para el frontend
+            String rutaRelativa = "/uploads/fotografias/" + fileName;
+            fotografia.setRutaArchivo(rutaRelativa);
             fotografia.setDescripcion(descripcion);
             fotografia.setFecha(LocalDate.now());
             fotografia.setNombreArchivo(file.getOriginalFilename());
@@ -130,7 +132,9 @@ public class ArchivoService {
             // Crear y configurar el objeto Documento
             Documento documento = new Documento();
             documento.setExpediente(expediente);
-            documento.setRutaArchivo(targetLocation.toString());
+            // Guardar la ruta relativa para el frontend
+            String rutaRelativa = "/uploads/documentos/" + fileName;
+            documento.setRutaArchivo(rutaRelativa);
             documento.setTipo(tipo);
             documento.setDescripcion(descripcion);
             documento.setFecha(LocalDate.now());
@@ -196,13 +200,18 @@ public class ArchivoService {
      */
     private Resource cargarArchivo(String rutaArchivo) {
         try {
-            Path filePath = Paths.get(rutaArchivo);
+            String relativePath = rutaArchivo;
+            if (rutaArchivo.startsWith("/uploads/")) {
+                relativePath = rutaArchivo.substring("/uploads/".length());
+            }
+            Path filePath = Paths.get(uploadsDir).resolve(relativePath).toAbsolutePath().normalize();
+            log.info("Intentando leer archivo en: {}", filePath);
             Resource resource = new UrlResource(filePath.toUri());
             
             if (resource.exists() && resource.isReadable()) {
                 return resource;
             } else {
-                throw new FileStorageException("No se pudo leer el archivo: " + rutaArchivo);
+                throw new FileStorageException("No se pudo leer el archivo: " + filePath);
             }
         } catch (MalformedURLException ex) {
             throw new FileStorageException("URL malformado: " + rutaArchivo, ex);

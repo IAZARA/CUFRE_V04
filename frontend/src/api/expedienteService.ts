@@ -1,5 +1,5 @@
 import axios from './axios';
-import { Expediente, Documento, Fotografia, Vinculo, ExpedienteDelito } from '../types/expediente.types';
+import { Expediente, Vinculo, ExpedienteDelito } from '../types/expediente.types';
 
 const expedienteService = {
   // Obtener todos los expedientes
@@ -131,11 +131,11 @@ const expedienteService = {
     }
   },
 
-  deleteFotografia: async (id: number): Promise<void> => {
+  deleteFotografia: async (expedienteId: number, fotografiaId: number): Promise<void> => {
     try {
-      await axios.delete(`/fotografias/${id}`);
+      await axios.delete(`/expedientes/${expedienteId}/fotografias/${fotografiaId}`);
     } catch (error) {
-      console.error(`Error al eliminar fotografía con ID ${id}:`, error);
+      console.error(`Error al eliminar fotografía con ID ${fotografiaId}:`, error);
       throw error;
     }
   },
@@ -314,6 +314,17 @@ const expedienteService = {
   deleteDelitoAsociado: async (id: number) => {
     const response = await axios.delete(`/expedientes/delitos/${id}`);
     return response.data;
+  },
+
+  // Método para marcar una foto como principal en un expediente
+  setFotoPrincipal: async (expedienteId: number, fotoId: number) => {
+    try {
+      const response = await axios.put(`/expedientes/${expedienteId}/foto-principal/${fotoId}`);
+      return response.data;
+    } catch (error) {
+      console.error(`Error al marcar fotografía con ID ${fotoId} como principal en el expediente ${expedienteId}:`, error);
+      throw error;
+    }
   }
 };
 

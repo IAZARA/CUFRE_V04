@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-05-09T21:40:01-0300",
+    date = "2025-05-10T03:19:41-0300",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 23.0.2 (Homebrew)"
 )
 @Component
@@ -40,10 +40,10 @@ public class ExpedienteMapperImpl implements ExpedienteMapper {
         expedienteDTO.fotografias( fotografiaListToFotografiaDTOList( expediente.getFotografias() ) );
         expedienteDTO.documentos( documentoListToDocumentoDTOList( expediente.getDocumentos() ) );
         expedienteDTO.personaExpedientes( personaExpedienteListToPersonaExpedienteDTOList( expediente.getPersonaExpedientes() ) );
+        expedienteDTO.fotoPrincipalId( expediente.getFotoPrincipalId() );
         expedienteDTO.id( expediente.getId() );
         expedienteDTO.numero( expediente.getNumero() );
         expedienteDTO.fechaIngreso( expediente.getFechaIngreso() );
-        expedienteDTO.estadoSituacion( expediente.getEstadoSituacion() );
         expedienteDTO.fuerzaAsignada( expediente.getFuerzaAsignada() );
         expedienteDTO.fechaAsignacion( expediente.getFechaAsignacion() );
         expedienteDTO.autorizacionTareas( expediente.getAutorizacionTareas() );
@@ -115,6 +115,8 @@ public class ExpedienteMapperImpl implements ExpedienteMapper {
         expedienteDTO.areaFronteriza( expediente.getAreaFronteriza() );
         expedienteDTO.tipoVictima( expediente.getTipoVictima() );
 
+        expedienteDTO.estadoSituacion( expediente.getEstadoSituacion() != null ? expediente.getEstadoSituacion().toUpperCase() : null );
+
         return expedienteDTO.build();
     }
 
@@ -126,6 +128,7 @@ public class ExpedienteMapperImpl implements ExpedienteMapper {
 
         Expediente expediente = new Expediente();
 
+        expediente.setFotoPrincipalId( expedienteDTO.getFotoPrincipalId() );
         expediente.setId( expedienteDTO.getId() );
         expediente.setNumero( expedienteDTO.getNumero() );
         expediente.setFechaIngreso( expedienteDTO.getFechaIngreso() );
@@ -210,6 +213,7 @@ public class ExpedienteMapperImpl implements ExpedienteMapper {
             return expediente;
         }
 
+        expediente.setFotoPrincipalId( expedienteDTO.getFotoPrincipalId() );
         expediente.setId( expedienteDTO.getId() );
         expediente.setNumero( expedienteDTO.getNumero() );
         expediente.setFechaIngreso( expedienteDTO.getFechaIngreso() );

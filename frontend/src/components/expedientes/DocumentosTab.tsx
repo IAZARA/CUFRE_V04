@@ -129,20 +129,30 @@ const DocumentosTab: React.FC<DocumentosTabProps> = ({ expediente, onChange }) =
     }
   };
 
-  const handleDeleteDocumento = (id: number | undefined) => {
+  const handleDeleteDocumento = async (id: number | undefined) => {
     if (!id) return;
-    
-    const updatedDocumentos = expediente.documentos.filter(doc => doc.id !== id);
-    onChange('documentos', updatedDocumentos);
+    setUploading(true);
+    setError(null);
+    try {
+      await expedienteService.deleteDocumento(id);
+      const updatedDocumentos = expediente.documentos.filter(doc => doc.id !== id);
+      onChange('documentos', updatedDocumentos);
+    } catch (error) {
+      setError('Error al eliminar el documento. Intenta nuevamente.');
+    } finally {
+      setUploading(false);
+    }
   };
 
-  const handleViewDocumento = (url: string) => {
+  const handleViewDocumento = (id: number | undefined) => {
+    if (!id) return;
+    const url = `http://localhost:8080/archivos/documentos/${id}`;
     window.open(url, '_blank');
   };
 
-  const getFileIcon = (fileName: string) => {
+  const getFileIcon = (fileName: string | undefined) => {
+    if (!fileName) return <FileIcon />;
     const extension = fileName.split('.').pop()?.toLowerCase();
-    
     if (extension === 'pdf') return <PdfIcon />;
     if (['doc', 'docx', 'txt', 'rtf'].includes(extension || '')) return <TextIcon />;
     return <FileIcon />;
@@ -267,7 +277,7 @@ const DocumentosTab: React.FC<DocumentosTabProps> = ({ expediente, onChange }) =
                 <IconButton 
                   size="small" 
                   color="primary"
-                  onClick={() => handleViewDocumento(doc.url)}
+                  onClick={() => handleViewDocumento(doc.id)}
                   aria-label="Ver documento"
                 >
                   <RemoveRedEyeIcon />

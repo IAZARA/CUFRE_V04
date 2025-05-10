@@ -70,9 +70,12 @@ const MainLayout: React.FC = () => {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
-            CUFRE - Sistema de Gestión de Expedientes
-          </Typography>
+          <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}>
+            <img src="/logo-cufre-2.png" alt="CUFRE Logo" style={{ height: 40, marginRight: 16 }} />
+            <Typography variant="h6" noWrap component="div">
+              Comando Unificado Federal De Recaptura de Evadidos
+            </Typography>
+          </Box>
           <IconButton color="inherit">
             <NotificationsIcon />
           </IconButton>

@@ -1,3 +1,5 @@
+import { Domicilio } from './persona.types';
+
 export interface Expediente {
   id?: number;
   numero: string;
@@ -111,7 +113,7 @@ export interface Expediente {
   informacionContextoAdicional: string;
   
   // Datos de entidades externas
-  delitos: string[];
+  delitos: { id: number }[];
   fotografias: Fotografia[];
   documentos: Documento[];
   personas: PersonaExpediente[];
@@ -131,6 +133,18 @@ export interface Expediente {
   
   // Adicional - Compatibilidad con frontend
   fechaInicio?: string;
+  
+  // Nuevo campo para el tipo de víctima
+  tipoVictima: string;
+  
+  // Campos faltantes para el cálculo de prioridad
+  nivelIncidenciaZona: string;
+  institucionSensibleCercana: string;
+  recursosLimitados: string;
+  areaFronteriza: string;
+  impactoPercepcion: string;
+  
+  fotoPrincipalId?: number;
 }
 
 export interface ExpedienteDelito {
@@ -182,6 +196,7 @@ export interface Fotografia {
   tipo: string;
   descripcion: string;
   file?: File; // Objeto File para subir al servidor
+  rutaArchivo?: string; // Ruta real del backend
 }
 
 export interface PersonaExpediente {
@@ -191,4 +206,16 @@ export interface PersonaExpediente {
   apellido: string;
   tipoRelacion: string;
   informacionAdicional: string;
+  persona?: PersonaDTO;
+  observaciones?: string;
+  domicilios?: Domicilio[];
+}
+
+export interface PersonaDTO {
+  id?: number;
+  tipoDocumento?: string;
+  numeroDocumento?: string;
+  nombre?: string;
+  apellido?: string;
+  // Puedes agregar más campos si los necesitas
 } 

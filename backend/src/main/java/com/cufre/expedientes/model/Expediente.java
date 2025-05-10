@@ -249,6 +249,10 @@ public class Expediente {
     @OneToMany(mappedBy = "expediente", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Fotografia> fotografias = new ArrayList<>();
     
+    // Foto principal del expediente
+    @Column(name = "FOTO_PRINCIPAL_ID")
+    private Long fotoPrincipalId;
+    
     @OneToMany(mappedBy = "expediente", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Documento> documentos = new ArrayList<>();
     

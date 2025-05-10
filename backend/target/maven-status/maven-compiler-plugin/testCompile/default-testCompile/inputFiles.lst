@@ -1,4 +1,5 @@
 /Users/macbook/Documents/CUFRE_V04/backend/src/test/java/com/cufre/expedientes/repository/PersonaRepositoryTest.java
+/Users/macbook/Documents/CUFRE_V04/backend/src/test/java/com/cufre/expedientes/service/ExpedienteServicePriorityTest.java
 /Users/macbook/Documents/CUFRE_V04/backend/src/test/java/com/cufre/expedientes/repository/ExpedienteRepositoryTest.java
 /Users/macbook/Documents/CUFRE_V04/backend/src/test/java/com/cufre/expedientes/mapper/UsuarioMapperTest.java
 /Users/macbook/Documents/CUFRE_V04/backend/src/test/java/com/cufre/expedientes/config/FlywayMigrationTest.java

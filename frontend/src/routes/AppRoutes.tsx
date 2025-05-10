@@ -27,6 +27,9 @@ import EstadisticasPage from '../pages/estadisticas/EstadisticasPage';
 import UsuariosPage from '../pages/usuarios/UsuariosPage';
 import UsuarioFormPage from '../pages/usuarios/UsuarioFormPage';
 
+// Nueva página MasBuscadosPage
+import MasBuscadosPage from '../pages/MasBuscadosPage';
+
 const AppRoutes: React.FC = () => {
   return (
     <Routes>
@@ -61,6 +64,9 @@ const AppRoutes: React.FC = () => {
             <Route path="/usuarios/crear" element={<UsuarioFormPage />} />
             <Route path="/usuarios/editar/:id" element={<UsuarioFormPage />} />
           </Route>
+
+          {/* Nueva ruta MasBuscadosPage */}
+          <Route path="/mas-buscados" element={<MasBuscadosPage />} />
         </Route>
       </Route>
       

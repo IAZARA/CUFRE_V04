@@ -5,8 +5,7 @@ import {
   Box,
   Typography,
   FormControlLabel,
-  Checkbox,
-  FormHelperText
+  Checkbox
 } from '@mui/material';
 import { Expediente } from '../../types/expediente.types';
 
@@ -16,14 +15,21 @@ interface InfoHechoTabProps {
 }
 
 const tiposDano = [
-  'Material',
-  'Físico',
-  'Psicológico',
-  'Económico',
-  'Social',
-  'Ambiental',
-  'Múltiple',
-  'Otro'
+  'S/D',
+  'FISICO',
+  'PSICOLOGICO',
+  'MATERIAL'
+];
+
+const tiposVictima = [
+  'S/D',
+  'MENOR',
+  'MUJER',
+  'ANCIANO_JUBILADO',
+  'POLITICO',
+  'JUEZ',
+  'FISCAL',
+  'OTROS'
 ];
 
 const InfoHechoTab: React.FC<InfoHechoTabProps> = ({ expediente, onChange }) => {
@@ -161,11 +167,31 @@ const InfoHechoTab: React.FC<InfoHechoTabProps> = ({ expediente, onChange }) => 
               select
               label="Tipo de Daño"
               name="tipoDano"
-              value={expediente.tipoDano || ''}
+              value={expediente.tipoDano || 'S/D'}
               onChange={handleChange}
               margin="normal"
             >
               {tiposDano.map((option) => (
+                <MenuItem key={option} value={option}>
+                  {option}
+                </MenuItem>
+              ))}
+            </TextField>
+          </Box>
+        </Box>
+        
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3 }}>
+          <Box sx={{ width: { xs: '100%', md: 'calc(50% - 1.5rem)' } }}>
+            <TextField
+              fullWidth
+              select
+              label="Tipo de Víctima"
+              name="tipoVictima"
+              value={expediente.tipoVictima || 'S/D'}
+              onChange={handleChange}
+              margin="normal"
+            >
+              {tiposVictima.map((option) => (
                 <MenuItem key={option} value={option}>
                   {option}
                 </MenuItem>

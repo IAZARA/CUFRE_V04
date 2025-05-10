@@ -5,8 +5,7 @@ import {
   Box,
   Typography,
   FormControlLabel,
-  Checkbox,
-  FormHelperText
+  Checkbox
 } from '@mui/material';
 import { Expediente } from '../../types/expediente.types';
 
@@ -51,16 +50,16 @@ const coloresOjos = [
 ];
 
 const nivelesEstudio = [
-  'Sin estudios',
-  'Primario incompleto',
-  'Primario completo',
-  'Secundario incompleto',
-  'Secundario completo',
-  'Terciario incompleto',
-  'Terciario completo',
-  'Universitario incompleto',
-  'Universitario completo',
-  'Posgrado'
+  'S/D',
+  'SIN_ESTUDIO',
+  'PRIMARIO_INCOMPLETO',
+  'PRIMARIO_COMPLETO',
+  'SECUNDARIO_INCOMPLETO',
+  'SECUNDARIO_COMPLETO',
+  'TERCIARIO_INCOMPLETO',
+  'TERCIARIO_COMPLETO',
+  'UNIVERSITARIO_INCOMPLETO',
+  'UNIVERSITARIO_COMPLETO'
 ];
 
 const gruposSanguineos = [
@@ -76,13 +75,14 @@ const gruposSanguineos = [
 ];
 
 const ocupaciones = [
+  'S/D',
   'OTRO',
   'OFICIO',
   'EMPLEADO',
   'PROFESIONAL',
-  'FUERZA SEGURIDAD',
-  'FUERZA ARMADA',
-  'SERVICIO DE INTELIGENCIA',
+  'FUERZA_SEGURIDAD',
+  'FUERZA_ARMADA',
+  'SERVICIO_INTELIGENCIA',
   'DESOCUPADO',
   'COMERCIANTE'
 ];
@@ -228,7 +228,7 @@ const InfoProfugoTab: React.FC<InfoProfugoTabProps> = ({ expediente, onChange })
               select
               label="Nivel de Estudios"
               name="profugoNivelEstudios"
-              value={expediente.profugoNivelEstudios || ''}
+              value={expediente.profugoNivelEstudios || 'S/D'}
               onChange={handleChange}
               margin="normal"
             >
@@ -246,7 +246,7 @@ const InfoProfugoTab: React.FC<InfoProfugoTabProps> = ({ expediente, onChange })
               select
               label="Ocupación"
               name="profugoProfesionOcupacion"
-              value={expediente.profugoProfesionOcupacion || 'OTRO'}
+              value={expediente.profugoProfesionOcupacion || 'S/D'}
               onChange={handleChange}
               margin="normal"
             >

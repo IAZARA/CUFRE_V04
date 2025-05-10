@@ -21,6 +21,8 @@ import {
   Edit as EditIcon
 } from '@mui/icons-material';
 import { Expediente, PersonaExpediente } from '../../types/expediente.types';
+import expedienteService from '../../api/expedienteService';
+import { Domicilio } from '../../types/persona.types';
 
 interface PersonasTabProps {
   expediente: Expediente;
@@ -28,15 +30,15 @@ interface PersonasTabProps {
 }
 
 const tiposRelacion = [
-  'Imputado',
-  'Víctima',
-  'Testigo',
-  'Informante',
-  'Cómplice',
-  'Familiar',
-  'Asociado',
-  'Responsable Civil',
-  'Otro'
+  { value: 'Imputado', label: 'Prófugo' },
+  { value: 'Víctima', label: 'Víctima' },
+  { value: 'Testigo', label: 'Testigo' },
+  { value: 'Informante', label: 'Informante' },
+  { value: 'Cómplice', label: 'Cómplice' },
+  { value: 'Familiar', label: 'Familiar' },
+  { value: 'Asociado', label: 'Asociado' },
+  { value: 'Responsable Civil', label: 'Responsable Civil' },
+  { value: 'Otro', label: 'Otro' }
 ];
 
 const PersonasTab: React.FC<PersonasTabProps> = ({ expediente, onChange }) => {
@@ -45,11 +47,14 @@ const PersonasTab: React.FC<PersonasTabProps> = ({ expediente, onChange }) => {
     nombre: '',
     apellido: '',
     tipoRelacion: '',
-    informacionAdicional: ''
+    informacionAdicional: '',
+    domicilios: []
   });
   
   const [editing, setEditing] = useState<boolean>(false);
   const [editIndex, setEditIndex] = useState<number>(-1);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -59,58 +64,60 @@ const PersonasTab: React.FC<PersonasTabProps> = ({ expediente, onChange }) => {
     }));
   };
 
-  const handleAddPersona = () => {
+  const handleAddPersona = async () => {
     if (!newPersona.dni || !newPersona.nombre || !newPersona.apellido || !newPersona.tipoRelacion) {
       return;
     }
-    
-    if (editing && editIndex >= 0) {
-      // Actualizar persona existente
-      const updatedPersonas = [...expediente.personas];
-      updatedPersonas[editIndex] = {
-        ...updatedPersonas[editIndex],
-        ...newPersona as PersonaExpediente
-      };
-      
-      onChange('personas', updatedPersonas);
-      setEditing(false);
-      setEditIndex(-1);
-    } else {
-      // Agregar nueva persona
-      const updatedPersonas = [
-        ...expediente.personas,
-        {
-          id: Date.now(), // Temporal ID for UI
-          dni: newPersona.dni,
+    if (typeof expediente.id !== 'number') {
+      setError('No se puede agregar persona: expediente sin ID.');
+      return;
+    }
+    setLoading(true);
+    setError(null);
+    try {
+      // Construir el DTO para el backend con los campos correctos, incluyendo domicilios
+      const personaExpedienteDTO = {
+        persona: {
+          numeroDocumento: newPersona.dni,
+          tipoDocumento: 'DNI',
           nombre: newPersona.nombre,
           apellido: newPersona.apellido,
-          tipoRelacion: newPersona.tipoRelacion,
-          informacionAdicional: newPersona.informacionAdicional || ''
-        }
-      ];
-      
-      onChange('personas', updatedPersonas);
+          domicilios: newPersona.domicilios || []
+        },
+        tipoRelacion: newPersona.tipoRelacion,
+        observaciones: newPersona.informacionAdicional || ''
+      };
+      const response = await expedienteService.addPersona(expediente.id, personaExpedienteDTO);
+      // Recargar la lista de personas desde el backend
+      const personasActualizadas = await expedienteService.getPersonas(expediente.id);
+      onChange('personas', personasActualizadas);
+      setNewPersona({
+        dni: '',
+        nombre: '',
+        apellido: '',
+        tipoRelacion: '',
+        informacionAdicional: '',
+        domicilios: []
+      });
+      setEditing(false);
+      setEditIndex(-1);
+    } catch (err) {
+      setError('Error al agregar persona. Intenta nuevamente.');
+    } finally {
+      setLoading(false);
     }
-    
-    // Reset form
-    setNewPersona({
-      dni: '',
-      nombre: '',
-      apellido: '',
-      tipoRelacion: '',
-      informacionAdicional: ''
-    });
   };
 
   const handleEditPersona = (index: number) => {
     const persona = expediente.personas[index];
     
     setNewPersona({
-      dni: persona.dni,
-      nombre: persona.nombre,
-      apellido: persona.apellido,
+      dni: persona.persona?.numeroDocumento || '',
+      nombre: persona.persona?.nombre || '',
+      apellido: persona.persona?.apellido || '',
       tipoRelacion: persona.tipoRelacion,
-      informacionAdicional: persona.informacionAdicional
+      informacionAdicional: persona.observaciones || '',
+      domicilios: persona.domicilios || []
     });
     
     setEditing(true);
@@ -130,7 +137,8 @@ const PersonasTab: React.FC<PersonasTabProps> = ({ expediente, onChange }) => {
         nombre: '',
         apellido: '',
         tipoRelacion: '',
-        informacionAdicional: ''
+        informacionAdicional: '',
+        domicilios: []
       });
       setEditing(false);
       setEditIndex(-1);
@@ -143,7 +151,8 @@ const PersonasTab: React.FC<PersonasTabProps> = ({ expediente, onChange }) => {
       nombre: '',
       apellido: '',
       tipoRelacion: '',
-      informacionAdicional: ''
+      informacionAdicional: '',
+      domicilios: []
     });
     setEditing(false);
     setEditIndex(-1);
@@ -159,7 +168,9 @@ const PersonasTab: React.FC<PersonasTabProps> = ({ expediente, onChange }) => {
         <Typography variant="subtitle1" gutterBottom>
           {editing ? 'Editar Persona' : 'Agregar Nueva Persona'}
         </Typography>
-        
+        {error && (
+          <Typography color="error" sx={{ mb: 1 }}>{error}</Typography>
+        )}
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
           <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
             <TextField
@@ -195,8 +206,8 @@ const PersonasTab: React.FC<PersonasTabProps> = ({ expediente, onChange }) => {
               sx={{ flex: '1 1 200px' }}
             >
               {tiposRelacion.map((option) => (
-                <MenuItem key={option} value={option}>
-                  {option}
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
                 </MenuItem>
               ))}
             </TextField>
@@ -226,10 +237,10 @@ const PersonasTab: React.FC<PersonasTabProps> = ({ expediente, onChange }) => {
               variant="contained"
               color="primary"
               onClick={handleAddPersona}
-              disabled={!newPersona.dni || !newPersona.nombre || !newPersona.apellido || !newPersona.tipoRelacion}
+              disabled={loading || !newPersona.dni || !newPersona.nombre || !newPersona.apellido || !newPersona.tipoRelacion}
               startIcon={editing ? <EditIcon /> : <AddIcon />}
             >
-              {editing ? 'Actualizar' : 'Agregar'}
+              {loading ? 'Guardando...' : (editing ? 'Actualizar' : 'Agregar')}
             </Button>
           </Box>
         </Box>
@@ -256,27 +267,31 @@ const PersonasTab: React.FC<PersonasTabProps> = ({ expediente, onChange }) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {expediente.personas.map((persona, index) => (
-                <TableRow key={persona.id} hover>
-                  <TableCell>{persona.dni}</TableCell>
-                  <TableCell>{`${persona.nombre} ${persona.apellido}`}</TableCell>
+              {expediente.personas.map((persona, personaIdx) => (
+                <TableRow key={persona.id || personaIdx} hover>
+                  <TableCell>{persona.persona?.numeroDocumento || '-'}</TableCell>
+                  <TableCell>{[persona.persona?.nombre, persona.persona?.apellido].filter(Boolean).join(' ') || '-'}</TableCell>
                   <TableCell>
                     <Chip 
-                      label={persona.tipoRelacion} 
+                      label={
+                        persona.tipoRelacion && persona.tipoRelacion.trim().toLowerCase().includes('imputado')
+                          ? 'Prófugo'
+                          : persona.tipoRelacion || '-'
+                      }
                       color={
-                        persona.tipoRelacion === 'Imputado' ? 'error' :
+                        persona.tipoRelacion && persona.tipoRelacion.trim().toLowerCase().includes('imputado') ? 'error' :
                         persona.tipoRelacion === 'Víctima' ? 'warning' :
                         persona.tipoRelacion === 'Testigo' ? 'info' : 'default'
                       }
                       size="small"
                     />
                   </TableCell>
-                  <TableCell>{persona.informacionAdicional || '-'}</TableCell>
+                  <TableCell>{persona.observaciones || '-'}</TableCell>
                   <TableCell align="right">
                     <IconButton 
                       size="small" 
                       color="primary" 
-                      onClick={() => handleEditPersona(index)}
+                      onClick={() => handleEditPersona(personaIdx)}
                       aria-label="Editar persona"
                     >
                       <EditIcon />

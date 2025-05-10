@@ -13,6 +13,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  * Servicio para la gestión de documentos
@@ -120,5 +123,26 @@ public class DocumentoService extends AbstractBaseService<Documento, DocumentoDT
         return repository.findByTipoAndExpedienteId(tipo, expedienteId).stream()
                 .map(this::toDto)
                 .toList();
+    }
+
+    @Override
+    @Transactional
+    public void delete(Long id) {
+        Documento documento = repository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Documento no encontrado con id: " + id));
+        // Eliminar archivo físico si existe
+        if (documento.getRutaArchivo() != null) {
+            try {
+                String ruta = documento.getRutaArchivo();
+                String uploadsDir = "backend/uploads"; // Ajusta si usas otra ruta o variable
+                String relativePath = ruta.startsWith("/uploads/") ? ruta.substring("/uploads/".length()) : ruta;
+                Path filePath = Paths.get(uploadsDir).resolve(relativePath).toAbsolutePath().normalize();
+                Files.deleteIfExists(filePath);
+                log.info("Archivo físico eliminado: {}", filePath);
+            } catch (Exception e) {
+                log.warn("No se pudo eliminar el archivo físico del documento: {}", documento.getRutaArchivo(), e);
+            }
+        }
+        repository.delete(documento);
     }
 } 

@@ -1,6 +1,7 @@
 package com.cufre.expedientes.service;
 
 import com.cufre.expedientes.dto.PersonaExpedienteDTO;
+import com.cufre.expedientes.dto.PersonaDTO;
 import com.cufre.expedientes.exception.ResourceNotFoundException;
 import com.cufre.expedientes.mapper.PersonaExpedienteMapper;
 import com.cufre.expedientes.model.Expediente;
@@ -9,6 +10,7 @@ import com.cufre.expedientes.model.PersonaExpediente;
 import com.cufre.expedientes.repository.ExpedienteRepository;
 import com.cufre.expedientes.repository.PersonaExpedienteRepository;
 import com.cufre.expedientes.repository.PersonaRepository;
+import com.cufre.expedientes.service.PersonaService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,12 +26,15 @@ public class PersonaExpedienteService extends AbstractBaseService<PersonaExpedie
 
     private final ExpedienteRepository expedienteRepository;
     private final PersonaRepository personaRepository;
+    private final PersonaService personaService;
 
     public PersonaExpedienteService(PersonaExpedienteRepository repository, PersonaExpedienteMapper mapper,
-                                   ExpedienteRepository expedienteRepository, PersonaRepository personaRepository) {
+                                   ExpedienteRepository expedienteRepository, PersonaRepository personaRepository,
+                                   PersonaService personaService) {
         super(repository, mapper);
         this.expedienteRepository = expedienteRepository;
         this.personaRepository = personaRepository;
+        this.personaService = personaService;
     }
 
     @Override
@@ -104,5 +109,54 @@ public class PersonaExpedienteService extends AbstractBaseService<PersonaExpedie
         return repository.findByTipoRelacion(tipoRelacion).stream()
                 .map(this::toDto)
                 .toList();
+    }
+
+    /**
+     * Crea la relación PersonaExpediente asegurando que la persona exista y tenga ID
+     */
+    @Transactional
+    public PersonaExpedienteDTO savePersonaExpediente(PersonaExpedienteDTO dto) {
+        Long personaId = dto.getPersonaId();
+        PersonaDTO personaDTO = dto.getPersona();
+        if (personaId == null && personaDTO != null) {
+            // Buscar por tipoDocumento+numeroDocumento
+            String tipoDoc = personaDTO.getTipoDocumento() != null ? personaDTO.getTipoDocumento() : "DNI";
+            String numeroDoc = personaDTO.getNumeroDocumento();
+            if (numeroDoc == null || numeroDoc.isBlank()) {
+                throw new IllegalArgumentException("El número de documento es obligatorio para crear o asociar una persona");
+            }
+            var personaOpt = personaRepository.findByTipoDocumentoAndNumeroDocumento(tipoDoc, numeroDoc);
+            Persona persona;
+            if (personaOpt.isPresent()) {
+                persona = personaOpt.get();
+                // Si nombre o apellido difieren, loguear warning pero usar la existente
+                if ((personaDTO.getNombre() != null && !personaDTO.getNombre().equalsIgnoreCase(persona.getNombre())) ||
+                    (personaDTO.getApellido() != null && !personaDTO.getApellido().equalsIgnoreCase(persona.getApellido()))) {
+                    log.warn("Intento de asociar persona con documento existente pero distinto nombre/apellido. Se usará la persona existente. Documento: {} {}, Nombre BD: {} {}, Nombre recibido: {} {}", tipoDoc, numeroDoc, persona.getNombre(), persona.getApellido(), personaDTO.getNombre(), personaDTO.getApellido());
+                }
+            } else {
+                PersonaDTO personaCreada = personaService.save(personaDTO);
+                persona = personaRepository.findById(personaCreada.getId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Persona creada no encontrada con id: " + personaCreada.getId()));
+            }
+            dto.setPersonaId(persona.getId());
+            dto.setPersona(null); // Limpiar el campo persona para evitar inconsistencias
+        }
+        if (dto.getPersonaId() == null) {
+            throw new IllegalArgumentException("No se pudo determinar el ID de la persona para asociar al expediente");
+        }
+        // --- REFORZADO: Verificar si ya existe la relación antes de guardar ---
+        Long expedienteId = dto.getExpedienteId();
+        if (expedienteId != null && dto.getPersonaId() != null && dto.getTipoRelacion() != null) {
+            var existente = repository.buscarPorExpedientePersonaYRelacion(expedienteId, dto.getPersonaId(), dto.getTipoRelacion());
+            if (existente.isPresent()) {
+                log.info("La relación PersonaExpediente ya existe para expediente {}, persona {} y tipoRelacion {}. No se crea duplicado.", expedienteId, dto.getPersonaId(), dto.getTipoRelacion());
+                return toDto(existente.get());
+            }
+        }
+        // --- FIN REFORZADO ---
+        PersonaExpediente entity = toEntity(dto);
+        PersonaExpediente saved = repository.save(entity);
+        return toDto(saved);
     }
 } 
