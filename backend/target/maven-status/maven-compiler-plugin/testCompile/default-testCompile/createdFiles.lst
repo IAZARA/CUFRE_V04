@@ -1,0 +1,4 @@
+com/cufre/expedientes/config/FlywayMigrationTest.class
+com/cufre/expedientes/repository/ExpedienteRepositoryTest.class
+com/cufre/expedientes/repository/PersonaRepositoryTest.class
+com/cufre/expedientes/mapper/UsuarioMapperTest.class

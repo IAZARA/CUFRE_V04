@@ -1,0 +1,95 @@
+/* Reemplazo de estilos Grid para solucionar problemas de tipado */
+.grid-container {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  margin: -8px; /* Equivalente al spacing de MUI */
+}
+
+.grid-item {
+  padding: 8px;
+  box-sizing: border-box;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.width-12 {
+  width: 100%;
+}
+
+.width-11 {
+  width: 91.66%;
+}
+
+.width-10 {
+  width: 83.33%;
+}
+
+.width-9 {
+  width: 75%;
+}
+
+.width-8 {
+  width: 66.66%;
+}
+
+.width-7 {
+  width: 58.33%;
+}
+
+.width-6 {
+  width: 50%;
+}
+
+.width-5 {
+  width: 41.66%;
+}
+
+.width-4 {
+  width: 33.33%;
+}
+
+.width-3 {
+  width: 25%;
+}
+
+.width-2 {
+  width: 16.66%;
+}
+
+.width-1 {
+  width: 8.33%;
+}
+
+/* Responsive para pantallas medianas (equivalente a sm en MUI) */
+@media (max-width: 960px) {
+  .width-sm-12 {
+    width: 100%;
+  }
+  
+  .width-sm-6 {
+    width: 50%;
+  }
+  
+  .width-sm-4 {
+    width: 33.33%;
+  }
+  
+  .width-sm-8 {
+    width: 66.66%;
+  }
+  
+  /* Se puede agregar más según necesidad */
+}
+
+/* Responsive para pantallas pequeñas */
+@media (max-width: 600px) {
+  .width-xs-12,
+  .width-8,
+  .width-6,
+  .width-4 {
+    width: 100%;
+  }
+} 
