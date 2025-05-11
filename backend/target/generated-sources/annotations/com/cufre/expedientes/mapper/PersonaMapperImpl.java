@@ -7,14 +7,16 @@ import com.cufre.expedientes.model.Domicilio;
 import com.cufre.expedientes.model.MedioComunicacion;
 import com.cufre.expedientes.model.Persona;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 import javax.annotation.processing.Generated;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-05-11T16:18:11-0300",
+    date = "2025-05-11T16:28:28-0300",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 23.0.2 (Homebrew)"
 )
 @Component
@@ -33,8 +35,8 @@ public class PersonaMapperImpl implements PersonaMapper {
 
         PersonaDTO.PersonaDTOBuilder personaDTO = PersonaDTO.builder();
 
-        personaDTO.domicilios( domicilioListToDomicilioDTOList( persona.getDomicilios() ) );
-        personaDTO.mediosComunicacion( medioComunicacionListToMedioComunicacionDTOList( persona.getMediosComunicacion() ) );
+        personaDTO.domicilios( domicilioSetToDomicilioDTOList( persona.getDomicilios() ) );
+        personaDTO.mediosComunicacion( medioComunicacionSetToMedioComunicacionDTOList( persona.getMediosComunicacion() ) );
         personaDTO.id( persona.getId() );
         personaDTO.tipoDocumento( persona.getTipoDocumento() );
         personaDTO.numeroDocumento( persona.getNumeroDocumento() );
@@ -69,8 +71,8 @@ public class PersonaMapperImpl implements PersonaMapper {
         persona.setNacionalidad( personaDTO.getNacionalidad() );
         persona.setGenero( personaDTO.getGenero() );
         persona.setEstadoCivil( personaDTO.getEstadoCivil() );
-        persona.setDomicilios( domicilioDTOListToDomicilioList( personaDTO.getDomicilios() ) );
-        persona.setMediosComunicacion( medioComunicacionDTOListToMedioComunicacionList( personaDTO.getMediosComunicacion() ) );
+        persona.setDomicilios( domicilioDTOListToDomicilioSet( personaDTO.getDomicilios() ) );
+        persona.setMediosComunicacion( medioComunicacionDTOListToMedioComunicacionSet( personaDTO.getMediosComunicacion() ) );
 
         return persona;
     }
@@ -93,90 +95,90 @@ public class PersonaMapperImpl implements PersonaMapper {
         persona.setGenero( personaDTO.getGenero() );
         persona.setEstadoCivil( personaDTO.getEstadoCivil() );
         if ( persona.getDomicilios() != null ) {
-            List<Domicilio> list = domicilioDTOListToDomicilioList( personaDTO.getDomicilios() );
-            if ( list != null ) {
+            Set<Domicilio> set = domicilioDTOListToDomicilioSet( personaDTO.getDomicilios() );
+            if ( set != null ) {
                 persona.getDomicilios().clear();
-                persona.getDomicilios().addAll( list );
+                persona.getDomicilios().addAll( set );
             }
             else {
                 persona.setDomicilios( null );
             }
         }
         else {
-            List<Domicilio> list = domicilioDTOListToDomicilioList( personaDTO.getDomicilios() );
-            if ( list != null ) {
-                persona.setDomicilios( list );
+            Set<Domicilio> set = domicilioDTOListToDomicilioSet( personaDTO.getDomicilios() );
+            if ( set != null ) {
+                persona.setDomicilios( set );
             }
         }
         if ( persona.getMediosComunicacion() != null ) {
-            List<MedioComunicacion> list1 = medioComunicacionDTOListToMedioComunicacionList( personaDTO.getMediosComunicacion() );
-            if ( list1 != null ) {
+            Set<MedioComunicacion> set1 = medioComunicacionDTOListToMedioComunicacionSet( personaDTO.getMediosComunicacion() );
+            if ( set1 != null ) {
                 persona.getMediosComunicacion().clear();
-                persona.getMediosComunicacion().addAll( list1 );
+                persona.getMediosComunicacion().addAll( set1 );
             }
             else {
                 persona.setMediosComunicacion( null );
             }
         }
         else {
-            List<MedioComunicacion> list1 = medioComunicacionDTOListToMedioComunicacionList( personaDTO.getMediosComunicacion() );
-            if ( list1 != null ) {
-                persona.setMediosComunicacion( list1 );
+            Set<MedioComunicacion> set1 = medioComunicacionDTOListToMedioComunicacionSet( personaDTO.getMediosComunicacion() );
+            if ( set1 != null ) {
+                persona.setMediosComunicacion( set1 );
             }
         }
 
         return persona;
     }
 
-    protected List<DomicilioDTO> domicilioListToDomicilioDTOList(List<Domicilio> list) {
-        if ( list == null ) {
+    protected List<DomicilioDTO> domicilioSetToDomicilioDTOList(Set<Domicilio> set) {
+        if ( set == null ) {
             return null;
         }
 
-        List<DomicilioDTO> list1 = new ArrayList<DomicilioDTO>( list.size() );
-        for ( Domicilio domicilio : list ) {
-            list1.add( domicilioMapper.toDto( domicilio ) );
+        List<DomicilioDTO> list = new ArrayList<DomicilioDTO>( set.size() );
+        for ( Domicilio domicilio : set ) {
+            list.add( domicilioMapper.toDto( domicilio ) );
         }
 
-        return list1;
+        return list;
     }
 
-    protected List<MedioComunicacionDTO> medioComunicacionListToMedioComunicacionDTOList(List<MedioComunicacion> list) {
-        if ( list == null ) {
+    protected List<MedioComunicacionDTO> medioComunicacionSetToMedioComunicacionDTOList(Set<MedioComunicacion> set) {
+        if ( set == null ) {
             return null;
         }
 
-        List<MedioComunicacionDTO> list1 = new ArrayList<MedioComunicacionDTO>( list.size() );
-        for ( MedioComunicacion medioComunicacion : list ) {
-            list1.add( medioComunicacionMapper.toDto( medioComunicacion ) );
+        List<MedioComunicacionDTO> list = new ArrayList<MedioComunicacionDTO>( set.size() );
+        for ( MedioComunicacion medioComunicacion : set ) {
+            list.add( medioComunicacionMapper.toDto( medioComunicacion ) );
         }
 
-        return list1;
+        return list;
     }
 
-    protected List<Domicilio> domicilioDTOListToDomicilioList(List<DomicilioDTO> list) {
+    protected Set<Domicilio> domicilioDTOListToDomicilioSet(List<DomicilioDTO> list) {
         if ( list == null ) {
             return null;
         }
 
-        List<Domicilio> list1 = new ArrayList<Domicilio>( list.size() );
+        Set<Domicilio> set = new LinkedHashSet<Domicilio>( Math.max( (int) ( list.size() / .75f ) + 1, 16 ) );
         for ( DomicilioDTO domicilioDTO : list ) {
-            list1.add( domicilioMapper.toEntity( domicilioDTO ) );
+            set.add( domicilioMapper.toEntity( domicilioDTO ) );
         }
 
-        return list1;
+        return set;
     }
 
-    protected List<MedioComunicacion> medioComunicacionDTOListToMedioComunicacionList(List<MedioComunicacionDTO> list) {
+    protected Set<MedioComunicacion> medioComunicacionDTOListToMedioComunicacionSet(List<MedioComunicacionDTO> list) {
         if ( list == null ) {
             return null;
         }
 
-        List<MedioComunicacion> list1 = new ArrayList<MedioComunicacion>( list.size() );
+        Set<MedioComunicacion> set = new LinkedHashSet<MedioComunicacion>( Math.max( (int) ( list.size() / .75f ) + 1, 16 ) );
         for ( MedioComunicacionDTO medioComunicacionDTO : list ) {
-            list1.add( medioComunicacionMapper.toEntity( medioComunicacionDTO ) );
+            set.add( medioComunicacionMapper.toEntity( medioComunicacionDTO ) );
         }
 
-        return list1;
+        return set;
     }
 }

@@ -15,7 +15,7 @@ public interface PersonaExpedienteRepository extends JpaRepository<PersonaExpedi
     
     List<PersonaExpediente> findByPersonaId(Long personaId);
     
-    @EntityGraph(attributePaths = {"persona"})
+    @EntityGraph(attributePaths = {"persona", "persona.mediosComunicacion", "persona.domicilios"})
     List<PersonaExpediente> findByExpedienteId(Long expedienteId);
     
     List<PersonaExpediente> findByTipoRelacion(String tipoRelacion);

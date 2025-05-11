@@ -8,6 +8,8 @@ import com.cufre.expedientes.mapper.ExpedienteMapper;
 import com.cufre.expedientes.mapper.PersonaMapper;
 import com.cufre.expedientes.model.Expediente;
 import com.cufre.expedientes.repository.ExpedienteRepository;
+import com.cufre.expedientes.repository.PersonaExpedienteRepository;
+import com.cufre.expedientes.mapper.PersonaExpedienteMapper;
 import com.cufre.expedientes.util.PriorityCalculator;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Hibernate;
@@ -32,6 +34,8 @@ public class ExpedienteService extends AbstractBaseService<Expediente, Expedient
     private final ExpedienteDelitoService expedienteDelitoService;
     private final PersonaMapper personaMapper;
     private final DomicilioService domicilioService;
+    private final PersonaExpedienteRepository personaExpedienteRepository;
+    private final PersonaExpedienteMapper personaExpedienteMapper;
 
     public ExpedienteService(
             ExpedienteRepository repository, 
@@ -39,12 +43,16 @@ public class ExpedienteService extends AbstractBaseService<Expediente, Expedient
             DelitoService delitoService,
             ExpedienteDelitoService expedienteDelitoService,
             PersonaMapper personaMapper,
-            DomicilioService domicilioService) {
+            DomicilioService domicilioService,
+            PersonaExpedienteRepository personaExpedienteRepository,
+            PersonaExpedienteMapper personaExpedienteMapper) {
         super(repository, mapper);
         this.delitoService = delitoService;
         this.expedienteDelitoService = expedienteDelitoService;
         this.personaMapper = personaMapper;
         this.domicilioService = domicilioService;
+        this.personaExpedienteRepository = personaExpedienteRepository;
+        this.personaExpedienteMapper = personaExpedienteMapper;
     }
 
     @Override
@@ -300,28 +308,11 @@ public class ExpedienteService extends AbstractBaseService<Expediente, Expedient
      */
     @Transactional(readOnly = true)
     public List<com.cufre.expedientes.dto.PersonaExpedienteDTO> findPersonasByExpedienteId(Long expedienteId) {
-        log.info("Buscando personas para expediente con ID: {}", expedienteId);
-        Expediente expediente = repository.findById(expedienteId)
-                .orElseThrow(() -> new com.cufre.expedientes.exception.ResourceNotFoundException("Expediente no encontrado con ID: " + expedienteId));
-        
-        // Inicializar colección de personas
-        Hibernate.initialize(expediente.getPersonaExpedientes());
-        
-        return expediente.getPersonaExpedientes().stream()
-                .map(personaExpediente -> {
-                    com.cufre.expedientes.dto.PersonaExpedienteDTO dto = new com.cufre.expedientes.dto.PersonaExpedienteDTO();
-                    dto.setId(personaExpediente.getId());
-                    dto.setExpedienteId(expedienteId);
-                    dto.setPersonaId(personaExpediente.getPersona().getId());
-                    dto.setTipoRelacion(personaExpediente.getTipoRelacion());
-                    dto.setObservaciones(personaExpediente.getObservaciones());
-                    // Añadir información básica de la persona
-                    dto.setPersona(personaMapper.toDto(personaExpediente.getPersona()));
-                    // Poblar domicilios
-                    dto.setDomicilios(domicilioService.findByPersonaId(personaExpediente.getPersona().getId()));
-                    return dto;
-                })
-                .collect(java.util.stream.Collectors.toList());
+        log.info("Buscando personas para expediente con ID: {} (usando EntityGraph)", expedienteId);
+        return personaExpedienteRepository.findByExpedienteId(expedienteId)
+            .stream()
+            .map(personaExpedienteMapper::toDto)
+            .collect(java.util.stream.Collectors.toList());
     }
     
     /**

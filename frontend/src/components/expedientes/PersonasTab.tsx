@@ -362,8 +362,14 @@ const PersonasTab: React.FC<PersonasTabProps> = ({ expediente, onChange }) => {
     if (!personaSeleccionada || typeof personaSeleccionada.persona?.id !== 'number') return;
     try {
       await expedienteService.deleteMedioComunicacion(medioId);
+      // Refrescar medios de la persona seleccionada
       const mediosActualizados = await expedienteService.getMediosComunicacion(personaSeleccionada.persona.id);
       setMediosPersona(mediosActualizados);
+      // También actualiza la lista de personas en el expediente para refrescar la tabla principal
+      if (typeof expediente.id === 'number') {
+        const personasActualizadas = await expedienteService.getPersonas(expediente.id);
+        onChange('personas', personasActualizadas);
+      }
     } catch (error) {
       // Manejo de error
     }
@@ -401,6 +407,16 @@ const PersonasTab: React.FC<PersonasTabProps> = ({ expediente, onChange }) => {
       default:
         return '/images/contacto.png'; // Ícono por defecto
     }
+  };
+
+  // Función para formatear el tipo de medio en formato capitalizado
+  const formatTipoMedio = (tipo: string) => {
+    if (!tipo) return '';
+    return tipo
+      .toLowerCase()
+      .split(' ')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
   };
 
   return (
@@ -626,27 +642,46 @@ const PersonasTab: React.FC<PersonasTabProps> = ({ expediente, onChange }) => {
                       </TableCell>
                     </TableRow>
                   )}
-                  {/* Si no hay domicilios, igual muestra el botón */}
-                  {(!Array.isArray(persona.domicilios) || persona.domicilios.length === 0) && (
+                  {/* Si no hay domicilios, igual muestra el botón y la fila de 'Sin domicilios registrados' */}
+                  {(Array.isArray(persona.domicilios) && persona.domicilios.length === 0) && (
                     <TableRow>
-                      <TableCell colSpan={5} align="right" sx={{ background: '#f5f5f5', borderLeft: '4px solid #1976d2' }}>
+                      <TableCell colSpan={5} sx={{ background: '#f5f5f5', borderLeft: '4px solid #1976d2', p: 0 }}>
                         <Box sx={{ display: 'flex', alignItems: 'center', pl: 2, pt: 1, pb: 1 }}>
                           <span style={{ color: '#1976d2', marginRight: 8 }}><span role="img" aria-label="casa">🏠</span></span>
                           <Typography variant="subtitle2" color="primary" sx={{ fontWeight: 600, flexGrow: 1 }}>
                             Domicilios
                           </Typography>
-                          <Button
-                            variant="outlined"
-                            color="primary"
-                            startIcon={<AddIcon />}
-                            onClick={() => {
-                              setPersonaSeleccionada(persona);
-                              handleAgregarDomicilioPersona();
-                            }}
-                          >
-                            Agregar Domicilio
-                          </Button>
                         </Box>
+                        <Table size="small" sx={{ ml: 4, width: '98%' }}>
+                          <TableHead>
+                            <TableRow>
+                              <TableCell>Domicilio</TableCell>
+                              <TableCell align="right">Acciones</TableCell>
+                            </TableRow>
+                          </TableHead>
+                          <TableBody>
+                            <TableRow>
+                              <TableCell colSpan={2} align="center" sx={{ color: '#888' }}>
+                                Sin domicilios registrados
+                              </TableCell>
+                            </TableRow>
+                            <TableRow>
+                              <TableCell colSpan={2} align="right">
+                                <Button
+                                  variant="outlined"
+                                  color="primary"
+                                  startIcon={<AddIcon />}
+                                  onClick={() => {
+                                    setPersonaSeleccionada(persona);
+                                    handleAgregarDomicilioPersona();
+                                  }}
+                                >
+                                  Agregar Domicilio
+                                </Button>
+                              </TableCell>
+                            </TableRow>
+                          </TableBody>
+                        </Table>
                       </TableCell>
                     </TableRow>
                   )}
@@ -675,7 +710,7 @@ const PersonasTab: React.FC<PersonasTabProps> = ({ expediente, onChange }) => {
                               <TableRow key={medio.id || idx}>
                                 <TableCell>
                                   <img src={getMedioIcon(medio.tipo)} alt={medio.tipo} style={{ width: 24, height: 24, verticalAlign: 'middle', marginRight: 8 }} />
-                                  {medio.tipo}
+                                  {formatTipoMedio(medio.tipo)}
                                 </TableCell>
                                 <TableCell>{medio.valor}</TableCell>
                                 <TableCell>{medio.observaciones}</TableCell>
@@ -720,151 +755,84 @@ const PersonasTab: React.FC<PersonasTabProps> = ({ expediente, onChange }) => {
         </TableContainer>
       )}
 
-      {personaSeleccionada && (
-        <Paper variant="outlined" sx={{ p: 2, mt: 2 }}>
-          <Typography variant="subtitle1" gutterBottom>
-            Domicilios de {personaSeleccionada.persona?.nombre} {personaSeleccionada.persona?.apellido}
-          </Typography>
-          <TableContainer component={Paper} variant="outlined">
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>DNI/ID</TableCell>
-                  <TableCell>Domicilio</TableCell>
-                  <TableCell align="right">Acciones</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {domiciliosPersona.map((dom, idx) => (
-                  <TableRow key={idx}>
-                    <TableCell>{dom.id || '-'}</TableCell>
-                    <TableCell>{[dom.calle, dom.numero].filter(Boolean).join(' ')}</TableCell>
-                    <TableCell align="right">
-                      {typeof personaSeleccionada?.persona?.id === 'number' && typeof dom.id === 'number' && (
-                        <>
-                          <IconButton
-                            size="small"
-                            color="primary"
-                            onClick={() => handleEditarDomicilio(dom)}
-                            aria-label="Editar domicilio"
-                          >
-                            <EditIcon fontSize="small" />
-                          </IconButton>
-                          <IconButton
-                            size="small"
-                            color="error"
-                            onClick={() => handleEliminarDomicilio(personaSeleccionada.persona!.id as number, dom.id as number)}
-                            aria-label="Eliminar domicilio"
-                          >
-                            <DeleteIcon fontSize="small" />
-                          </IconButton>
-                        </>
-                      )}
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-          <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2, mt: 2 }}>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => personaSeleccionada?.persona?.id !== undefined && handleMostrarFormularioDomicilio(personaSeleccionada.persona.id!)}
-              disabled={loading || !nuevoDomicilio.calle || !nuevoDomicilio.numero || !nuevoDomicilio.localidad}
-              startIcon={<AddIcon />}
-            >
-              {loading ? 'Guardando...' : 'Agregar Domicilio'}
-            </Button>
-          </Box>
-        </Paper>
-      )}
-
-      {personaSeleccionada && (
-        <Paper variant="outlined" sx={{ p: 2, mt: 2 }}>
-          <Typography variant="subtitle1" gutterBottom>
-            Medios de comunicación de {personaSeleccionada.persona?.nombre} {personaSeleccionada.persona?.apellido}
-          </Typography>
-          <TableContainer component={Paper} variant="outlined">
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Tipo</TableCell>
-                  <TableCell>Valor</TableCell>
-                  <TableCell>Observaciones</TableCell>
-                  <TableCell align="right">Acciones</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {mediosPersona.map((medio, idx) => (
-                  <TableRow key={medio.id || idx}>
-                    <TableCell>
-                      <img src={getMedioIcon(medio.tipo)} alt={medio.tipo} style={{ width: 24, height: 24, verticalAlign: 'middle', marginRight: 8 }} />
-                      {medio.tipo}
-                    </TableCell>
-                    <TableCell>{medio.valor}</TableCell>
-                    <TableCell>{medio.observaciones}</TableCell>
-                    <TableCell align="right">
-                      <IconButton size="small" color="primary" onClick={() => handleEditarMedio(medio)} aria-label="Editar medio">
-                        <EditIcon fontSize="small" />
-                      </IconButton>
-                      <IconButton size="small" color="error" onClick={() => medio.id && handleEliminarMedio(medio.id)} aria-label="Eliminar medio">
-                        <DeleteIcon fontSize="small" />
-                      </IconButton>
-                    </TableCell>
-                  </TableRow>
-                ))}
-                <TableRow>
-                  <TableCell colSpan={4} align="right">
-                    <Button
-                      variant="outlined"
-                      color="primary"
-                      startIcon={<AddIcon />}
-                      onClick={handleAgregarMedioPersona}
-                    >
-                      Agregar Medio de Comunicación
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Paper>
-      )}
-
-      <Dialog open={openDomicilioModal} onClose={handleCloseDomicilioModal} maxWidth="sm" fullWidth>
-        <DialogTitle>{domicilioEnEdicion ? 'Editar domicilio' : 'Agregar domicilio'}</DialogTitle>
-        <DialogContent>
+      <Dialog open={openDomicilioModal} onClose={handleCloseDomicilioModal} maxWidth="sm" fullWidth PaperProps={{
+        sx: {
+          borderRadius: 3,
+          background: 'linear-gradient(135deg, #f8fafc 0%, #e3f2fd 100%)',
+          boxShadow: 8
+        }
+      }}>
+        <DialogTitle sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          fontWeight: 700,
+          fontSize: 22,
+          color: '#1976d2',
+          pb: 1
+        }}>
+          <span style={{ marginRight: 10, fontSize: 28 }}>🏠</span>
+          {domicilioEnEdicion ? 'Editar domicilio' : 'Agregar domicilio'}
+        </DialogTitle>
+        <DialogContent sx={{
+          p: 3,
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 3
+        }}>
           <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, mb: 1 }}>
-            <TextField label="Calle" name="calle" value={nuevoDomicilio.calle || ''} onChange={handleChangeDomicilio} fullWidth />
-            <TextField label="Número" name="numero" value={nuevoDomicilio.numero || ''} onChange={handleChangeDomicilio} fullWidth />
-            <TextField label="Piso" name="piso" value={nuevoDomicilio.piso || ''} onChange={handleChangeDomicilio} fullWidth />
-            <TextField label="Departamento" name="departamento" value={nuevoDomicilio.departamento || ''} onChange={handleChangeDomicilio} fullWidth />
-            <TextField label="Código Postal" name="codigoPostal" value={nuevoDomicilio.codigoPostal || ''} onChange={handleChangeDomicilio} fullWidth />
-            <TextField label="Localidad" name="localidad" value={nuevoDomicilio.localidad || ''} onChange={handleChangeDomicilio} fullWidth />
-            <TextField label="Provincia" name="provincia" value={nuevoDomicilio.provincia || ''} onChange={handleChangeDomicilio} fullWidth />
-            <TextField label="País" name="pais" value={nuevoDomicilio.pais || ''} onChange={handleChangeDomicilio} fullWidth />
-            <TextField select label="Tipo" name="tipo" value={nuevoDomicilio.tipo || ''} onChange={handleChangeDomicilio} fullWidth>
+            <TextField label="Calle" name="calle" value={nuevoDomicilio.calle || ''} onChange={handleChangeDomicilio} fullWidth sx={{ borderRadius: 2, boxShadow: 1, background: '#fff' }} />
+            <TextField label="Número" name="numero" value={nuevoDomicilio.numero || ''} onChange={handleChangeDomicilio} fullWidth sx={{ borderRadius: 2, boxShadow: 1, background: '#fff' }} />
+            <TextField label="Piso" name="piso" value={nuevoDomicilio.piso || ''} onChange={handleChangeDomicilio} fullWidth sx={{ borderRadius: 2, boxShadow: 1, background: '#fff' }} />
+            <TextField label="Departamento" name="departamento" value={nuevoDomicilio.departamento || ''} onChange={handleChangeDomicilio} fullWidth sx={{ borderRadius: 2, boxShadow: 1, background: '#fff' }} />
+            <TextField label="Código Postal" name="codigoPostal" value={nuevoDomicilio.codigoPostal || ''} onChange={handleChangeDomicilio} fullWidth sx={{ borderRadius: 2, boxShadow: 1, background: '#fff' }} />
+            <TextField label="Localidad" name="localidad" value={nuevoDomicilio.localidad || ''} onChange={handleChangeDomicilio} fullWidth sx={{ borderRadius: 2, boxShadow: 1, background: '#fff' }} />
+            <TextField label="Provincia" name="provincia" value={nuevoDomicilio.provincia || ''} onChange={handleChangeDomicilio} fullWidth sx={{ borderRadius: 2, boxShadow: 1, background: '#fff' }} />
+            <TextField label="País" name="pais" value={nuevoDomicilio.pais || ''} onChange={handleChangeDomicilio} fullWidth sx={{ borderRadius: 2, boxShadow: 1, background: '#fff' }} />
+            <TextField select label="Tipo" name="tipo" value={nuevoDomicilio.tipo || ''} onChange={handleChangeDomicilio} fullWidth sx={{ borderRadius: 2, boxShadow: 1, background: '#fff' }}>
               <MenuItem value="">Seleccionar</MenuItem>
               <MenuItem value="Principal">Principal</MenuItem>
               <MenuItem value="Secundario">Secundario</MenuItem>
               <MenuItem value="Otro">Otro</MenuItem>
             </TextField>
-            <TextField label="Observaciones" name="observaciones" value={nuevoDomicilio.observaciones || ''} onChange={handleChangeDomicilio} fullWidth multiline minRows={2} />
+            <TextField label="Observaciones" name="observaciones" value={nuevoDomicilio.observaciones || ''} onChange={handleChangeDomicilio} fullWidth multiline minRows={2} sx={{ borderRadius: 2, boxShadow: 1, background: '#fff' }} />
           </Box>
         </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseDomicilioModal}>Cancelar</Button>
-          <Button onClick={handleGuardarDomicilioModal} variant="contained" color="primary">Guardar</Button>
+        <DialogActions sx={{ justifyContent: 'space-between', px: 3, pb: 2 }}>
+          <Button onClick={handleCloseDomicilioModal} variant="outlined" color="secondary" sx={{ borderRadius: 2, fontWeight: 600 }}>Cancelar</Button>
+          <Button onClick={handleGuardarDomicilioModal} variant="contained" color="primary" sx={{ borderRadius: 2, fontWeight: 600, boxShadow: 2 }}>Guardar</Button>
         </DialogActions>
       </Dialog>
 
       {/* Modal para agregar/editar medio de comunicación */}
-      <Dialog open={openMedioModal} onClose={handleCloseMedioModal} maxWidth="sm" fullWidth>
-        <DialogTitle>{medioEnEdicion ? 'Editar medio de comunicación' : 'Agregar medio de comunicación'}</DialogTitle>
-        <DialogContent>
+      <Dialog open={openMedioModal} onClose={handleCloseMedioModal} maxWidth="sm" fullWidth PaperProps={{
+        sx: {
+          borderRadius: 3,
+          background: 'linear-gradient(135deg, #f8fafc 0%, #e3f2fd 100%)',
+          boxShadow: 8
+        }
+      }}>
+        <DialogTitle sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          fontWeight: 700,
+          fontSize: 22,
+          color: '#1976d2',
+          pb: 1
+        }}>
+          <span style={{ marginRight: 10, fontSize: 28 }}>📞</span>
+          {medioEnEdicion ? 'Editar medio de comunicación' : 'Agregar medio de comunicación'}
+        </DialogTitle>
+        <DialogContent sx={{
+          p: 3,
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 3
+        }}>
           <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, mb: 1 }}>
-            <TextField select label="Tipo" name="tipo" value={nuevoMedio.tipo || ''} onChange={handleChangeMedio} fullWidth>
+            <TextField select label="Tipo" name="tipo" value={nuevoMedio.tipo || ''} onChange={handleChangeMedio} fullWidth
+              sx={{ borderRadius: 2, boxShadow: 1, background: '#fff' }}>
               <MenuItem value="">Seleccionar</MenuItem>
               <MenuItem value="CELULAR">Celular</MenuItem>
               <MenuItem value="EMAIL">Email</MenuItem>
@@ -880,13 +848,15 @@ const PersonasTab: React.FC<PersonasTabProps> = ({ expediente, onChange }) => {
               <MenuItem value="TELEGRAM">Telegram</MenuItem>
               <MenuItem value="REDDIT">Reddit</MenuItem>
             </TextField>
-            <TextField label="Valor" name="valor" value={nuevoMedio.valor || ''} onChange={handleChangeMedio} fullWidth />
-            <TextField label="Observaciones" name="observaciones" value={nuevoMedio.observaciones || ''} onChange={handleChangeMedio} fullWidth multiline minRows={2} />
+            <TextField label="Valor" name="valor" value={nuevoMedio.valor || ''} onChange={handleChangeMedio} fullWidth
+              sx={{ borderRadius: 2, boxShadow: 1, background: '#fff' }} />
+            <TextField label="Observaciones" name="observaciones" value={nuevoMedio.observaciones || ''} onChange={handleChangeMedio} fullWidth multiline minRows={2}
+              sx={{ borderRadius: 2, boxShadow: 1, background: '#fff' }} />
           </Box>
         </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseMedioModal}>Cancelar</Button>
-          <Button onClick={handleGuardarMedioModal} variant="contained" color="primary">Guardar</Button>
+        <DialogActions sx={{ justifyContent: 'space-between', px: 3, pb: 2 }}>
+          <Button onClick={handleCloseMedioModal} variant="outlined" color="secondary" sx={{ borderRadius: 2, fontWeight: 600 }}>Cancelar</Button>
+          <Button onClick={handleGuardarMedioModal} variant="contained" color="success" sx={{ borderRadius: 2, fontWeight: 600, boxShadow: 2 }}>Guardar</Button>
         </DialogActions>
       </Dialog>
     </Box>

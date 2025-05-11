@@ -8,6 +8,8 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.HashSet;
 
 @Entity
 @Table(name = "PERSONA")
@@ -52,13 +54,13 @@ public class Persona {
     private String estadoCivil;
     
     @OneToMany(mappedBy = "persona", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Domicilio> domicilios = new ArrayList<>();
+    private Set<Domicilio> domicilios = new HashSet<>();
     
     @OneToMany(mappedBy = "persona", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<MedioComunicacion> mediosComunicacion = new ArrayList<>();
+    private Set<MedioComunicacion> mediosComunicacion = new HashSet<>();
     
     @OneToMany(mappedBy = "persona", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<PersonaExpediente> personaExpedientes = new ArrayList<>();
+    private Set<PersonaExpediente> personaExpedientes = new HashSet<>();
     
     // Métodos de conveniencia
     public String getNombreCompleto() {

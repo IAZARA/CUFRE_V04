@@ -10,13 +10,14 @@ import com.cufre.expedientes.model.Persona;
 import com.cufre.expedientes.model.PersonaExpediente;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import javax.annotation.processing.Generated;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-05-11T16:18:11-0300",
+    date = "2025-05-11T16:28:28-0300",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 23.0.2 (Homebrew)"
 )
 @Component
@@ -38,10 +39,10 @@ public class PersonaExpedienteMapperImpl implements PersonaExpedienteMapper {
         personaExpedienteDTO.personaId( personaExpedientePersonaId( personaExpediente ) );
         personaExpedienteDTO.expedienteId( personaExpedienteExpedienteId( personaExpediente ) );
         personaExpedienteDTO.persona( personaMapper.toDto( personaExpediente.getPersona() ) );
-        List<Domicilio> domicilios = personaExpedientePersonaDomicilios( personaExpediente );
-        personaExpedienteDTO.domicilios( domicilioListToDomicilioDTOList( domicilios ) );
-        List<MedioComunicacion> mediosComunicacion = personaExpedientePersonaMediosComunicacion( personaExpediente );
-        personaExpedienteDTO.mediosComunicacion( medioComunicacionListToMedioComunicacionDTOList( mediosComunicacion ) );
+        Set<Domicilio> domicilios = personaExpedientePersonaDomicilios( personaExpediente );
+        personaExpedienteDTO.domicilios( domicilioSetToDomicilioDTOList( domicilios ) );
+        Set<MedioComunicacion> mediosComunicacion = personaExpedientePersonaMediosComunicacion( personaExpediente );
+        personaExpedienteDTO.mediosComunicacion( medioComunicacionSetToMedioComunicacionDTOList( mediosComunicacion ) );
         personaExpedienteDTO.id( personaExpediente.getId() );
         personaExpedienteDTO.tipoRelacion( personaExpediente.getTipoRelacion() );
         personaExpedienteDTO.observaciones( personaExpediente.getObservaciones() );
@@ -107,7 +108,7 @@ public class PersonaExpedienteMapperImpl implements PersonaExpedienteMapper {
         return id;
     }
 
-    private List<Domicilio> personaExpedientePersonaDomicilios(PersonaExpediente personaExpediente) {
+    private Set<Domicilio> personaExpedientePersonaDomicilios(PersonaExpediente personaExpediente) {
         if ( personaExpediente == null ) {
             return null;
         }
@@ -115,7 +116,7 @@ public class PersonaExpedienteMapperImpl implements PersonaExpedienteMapper {
         if ( persona == null ) {
             return null;
         }
-        List<Domicilio> domicilios = persona.getDomicilios();
+        Set<Domicilio> domicilios = persona.getDomicilios();
         if ( domicilios == null ) {
             return null;
         }
@@ -146,20 +147,20 @@ public class PersonaExpedienteMapperImpl implements PersonaExpedienteMapper {
         return domicilioDTO.build();
     }
 
-    protected List<DomicilioDTO> domicilioListToDomicilioDTOList(List<Domicilio> list) {
-        if ( list == null ) {
+    protected List<DomicilioDTO> domicilioSetToDomicilioDTOList(Set<Domicilio> set) {
+        if ( set == null ) {
             return null;
         }
 
-        List<DomicilioDTO> list1 = new ArrayList<DomicilioDTO>( list.size() );
-        for ( Domicilio domicilio : list ) {
-            list1.add( domicilioToDomicilioDTO( domicilio ) );
+        List<DomicilioDTO> list = new ArrayList<DomicilioDTO>( set.size() );
+        for ( Domicilio domicilio : set ) {
+            list.add( domicilioToDomicilioDTO( domicilio ) );
         }
 
-        return list1;
+        return list;
     }
 
-    private List<MedioComunicacion> personaExpedientePersonaMediosComunicacion(PersonaExpediente personaExpediente) {
+    private Set<MedioComunicacion> personaExpedientePersonaMediosComunicacion(PersonaExpediente personaExpediente) {
         if ( personaExpediente == null ) {
             return null;
         }
@@ -167,23 +168,23 @@ public class PersonaExpedienteMapperImpl implements PersonaExpedienteMapper {
         if ( persona == null ) {
             return null;
         }
-        List<MedioComunicacion> mediosComunicacion = persona.getMediosComunicacion();
+        Set<MedioComunicacion> mediosComunicacion = persona.getMediosComunicacion();
         if ( mediosComunicacion == null ) {
             return null;
         }
         return mediosComunicacion;
     }
 
-    protected List<MedioComunicacionDTO> medioComunicacionListToMedioComunicacionDTOList(List<MedioComunicacion> list) {
-        if ( list == null ) {
+    protected List<MedioComunicacionDTO> medioComunicacionSetToMedioComunicacionDTOList(Set<MedioComunicacion> set) {
+        if ( set == null ) {
             return null;
         }
 
-        List<MedioComunicacionDTO> list1 = new ArrayList<MedioComunicacionDTO>( list.size() );
-        for ( MedioComunicacion medioComunicacion : list ) {
-            list1.add( medioComunicacionMapper.toDto( medioComunicacion ) );
+        List<MedioComunicacionDTO> list = new ArrayList<MedioComunicacionDTO>( set.size() );
+        for ( MedioComunicacion medioComunicacion : set ) {
+            list.add( medioComunicacionMapper.toDto( medioComunicacion ) );
         }
 
-        return list1;
+        return list;
     }
 }
