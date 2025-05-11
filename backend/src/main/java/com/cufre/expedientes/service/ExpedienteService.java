@@ -14,6 +14,7 @@ import com.cufre.expedientes.util.PriorityCalculator;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Hibernate;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -396,5 +397,14 @@ public class ExpedienteService extends AbstractBaseService<Expediente, Expedient
             .orElseThrow(() -> new com.cufre.expedientes.exception.ResourceNotFoundException("Expediente no encontrado con ID: " + expedienteId));
         expediente.setFotoPrincipalId(fotoId);
         repository.save(expediente);
+    }
+
+    /**
+     * Devuelve los expedientes más buscados (mayor prioridad primero) solo con estado CAPTURA VIGENTE
+     */
+    @Transactional(readOnly = true)
+    public List<ExpedienteDTO> findMasBuscados(int limit) {
+        List<Expediente> expedientes = repository.findAllByEstadoSituacionAndOrderByPrioridadAsc("CAPTURA VIGENTE", PageRequest.of(0, limit));
+        return expedientes.stream().map(this::toDto).collect(Collectors.toList());
     }
 } 

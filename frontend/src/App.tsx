@@ -5,6 +5,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { AuthProvider } from './context/AuthContext';
 import AppRoutes from './routes/AppRoutes';
 import ExpedienteDetallePage from './pages/expedientes/ExpedienteDetallePage';
+import { ModalProvider } from './context/ModalContext';
 
 // Definir el tema personalizado
 const theme = createTheme({
@@ -52,10 +53,12 @@ function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
-          <AppRoutes />
-        </ThemeProvider>
+        <ModalProvider>
+          <ThemeProvider theme={theme}>
+            <CssBaseline />
+            <AppRoutes />
+          </ThemeProvider>
+        </ModalProvider>
       </AuthProvider>
     </BrowserRouter>
   );

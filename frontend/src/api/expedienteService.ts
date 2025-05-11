@@ -398,6 +398,28 @@ const expedienteService = {
       throw error;
     }
   },
+
+  // Obtener los expedientes más buscados
+  getMasBuscados: async (limit = 10): Promise<Expediente[]> => {
+    try {
+      const response = await axios.get(`/expedientes/mas-buscados?limit=${limit}`);
+      return response.data;
+    } catch (error) {
+      console.error('Error al obtener los más buscados:', error);
+      throw error;
+    }
+  },
+
+  // Obtener detalle de expediente por ID
+  getExpedienteDetalle: async (id: number): Promise<Expediente> => {
+    try {
+      const response = await axios.get(`/expedientes/${id}`);
+      return response.data;
+    } catch (error) {
+      console.error('Error al obtener detalle de expediente:', error);
+      throw error;
+    }
+  },
 };
 
 export default expedienteService; 

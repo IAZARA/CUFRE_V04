@@ -12,6 +12,7 @@ import {
 import { Outlet, useNavigate } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import { useAuth } from '../../context/AuthContext';
+import { useModalContext } from '../../context/ModalContext';
 
 const drawerWidth = 240;
 
@@ -42,6 +43,7 @@ const MainLayout: React.FC = () => {
   const [open, setOpen] = useState(true);
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const { masBuscadosModalOpen } = useModalContext();
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -110,9 +112,11 @@ const MainLayout: React.FC = () => {
         <Box sx={{ flexGrow: 1, position: 'relative', zIndex: 1 }}>
           <Outlet />
         </Box>
-        <Box component="footer" sx={{ textAlign: 'center', py: 2, color: 'text.secondary', fontSize: 14, position: 'relative', zIndex: 1 }}>
-          2025 - Dirección Nacional Gestión de Bases de Datos de Seguridad
-        </Box>
+        {!masBuscadosModalOpen && (
+          <Box component="footer" sx={{ textAlign: 'center', py: 2, color: 'text.secondary', fontSize: 14, position: 'relative', zIndex: 1 }}>
+            2025 - Dirección Nacional Gestión de Bases de Datos de Seguridad
+          </Box>
+        )}
       </Box>
     </Box>
   );

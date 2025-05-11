@@ -2,6 +2,7 @@ import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import ProtectedRoute from './ProtectedRoute';
 import { Rol } from '../types/usuario.types';
+import { useOutletContext } from 'react-router-dom';
 
 // Importar componentes de Layout
 import MainLayout from '../components/layout/MainLayout';
@@ -34,6 +35,13 @@ import UsuarioFormPage from '../pages/usuarios/UsuarioFormPage';
 // Nueva página MasBuscadosPage
 import MasBuscadosPage from '../pages/MasBuscadosPage';
 
+// Wrapper para MainLayout que oculta el footer si el modal de Más Buscados está abierto
+type MasBuscadosContext = { modalOpen?: boolean };
+function MainLayoutWithFooterControl() {
+  const context = useOutletContext<MasBuscadosContext>();
+  return <MainLayout />;
+}
+
 const AppRoutes: React.FC = () => {
   return (
     <Routes>
@@ -49,7 +57,8 @@ const AppRoutes: React.FC = () => {
       
       {/* Rutas protegidas - requieren autenticación */}
       <Route element={<ProtectedRoute />}>
-        <Route element={<MainLayout />}>
+        <Route element={<MainLayoutWithFooterControl />}>
+          <Route path="/mas-buscados" element={<MasBuscadosPage />} />
           <Route path="/dashboard" element={<Dashboard />} />
           
           {/* Rutas de Expedientes */}
@@ -72,9 +81,6 @@ const AppRoutes: React.FC = () => {
             <Route path="/usuarios/crear" element={<UsuarioFormPage />} />
             <Route path="/usuarios/editar/:id" element={<UsuarioFormPage />} />
           </Route>
-
-          {/* Nueva ruta MasBuscadosPage */}
-          <Route path="/mas-buscados" element={<MasBuscadosPage />} />
         </Route>
       </Route>
       

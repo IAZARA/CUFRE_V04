@@ -177,4 +177,10 @@ public class ExpedienteController extends AbstractBaseController<Expediente, Exp
         expedienteService.setFotoPrincipal(id, fotoId);
         return ResponseEntity.ok().build();
     }
+
+    // --- NUEVO ENDPOINT ---
+    @GetMapping("/mas-buscados")
+    public ResponseEntity<List<ExpedienteDTO>> getMasBuscados(@RequestParam(defaultValue = "10") int limit) {
+        return ResponseEntity.ok(expedienteService.findMasBuscados(limit));
+    }
 } 

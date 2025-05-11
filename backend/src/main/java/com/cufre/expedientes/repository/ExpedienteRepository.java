@@ -1,6 +1,7 @@
 package com.cufre.expedientes.repository;
 
 import com.cufre.expedientes.model.Expediente;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -115,4 +116,8 @@ public interface ExpedienteRepository extends JpaRepository<Expediente, Long> {
      */
     @Query("SELECT COUNT(e) FROM Expediente e WHERE e.estadoSituacion = :estado")
     Long countByEstadoSituacionEquals(@Param("estado") String estado);
+
+    List<Expediente> findAllByOrderByPrioridadAsc(Pageable pageable);
+
+    List<Expediente> findAllByEstadoSituacionAndOrderByPrioridadAsc(String estadoSituacion, Pageable pageable);
 } 
