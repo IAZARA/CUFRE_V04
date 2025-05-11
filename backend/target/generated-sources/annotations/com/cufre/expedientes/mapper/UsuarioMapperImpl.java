@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-05-10T23:40:11-0300",
+    date = "2025-05-11T10:28:28-0300",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 23.0.2 (Homebrew)"
 )
 @Component
@@ -22,6 +22,9 @@ public class UsuarioMapperImpl implements UsuarioMapper {
         UsuarioDTO.UsuarioDTOBuilder usuarioDTO = UsuarioDTO.builder();
 
         usuarioDTO.creadoPorId( usuarioCreadoPorId( usuario ) );
+        usuarioDTO.requiereCambioContrasena( usuario.isRequiereCambioContrasena() );
+        usuarioDTO.requiere2FA( usuario.isRequiere2FA() );
+        usuarioDTO.secret2FA( usuario.getSecret2FA() );
         usuarioDTO.id( usuario.getId() );
         usuarioDTO.rol( usuario.getRol() );
         usuarioDTO.nombre( usuario.getNombre() );
@@ -46,6 +49,9 @@ public class UsuarioMapperImpl implements UsuarioMapper {
         usuario.setNombre( usuarioDTO.getNombre() );
         usuario.setApellido( usuarioDTO.getApellido() );
         usuario.setEmail( usuarioDTO.getEmail() );
+        usuario.setRequiereCambioContrasena( usuarioDTO.isRequiereCambioContrasena() );
+        usuario.setRequiere2FA( usuarioDTO.isRequiere2FA() );
+        usuario.setSecret2FA( usuarioDTO.getSecret2FA() );
         usuario.setDependencia( usuarioDTO.getDependencia() );
 
         return usuario;
@@ -63,6 +69,9 @@ public class UsuarioMapperImpl implements UsuarioMapper {
         usuario.setApellido( usuarioDTO.getApellido() );
         usuario.setEmail( usuarioDTO.getEmail() );
         usuario.setContrasena( usuarioDTO.getContrasena() );
+        usuario.setRequiereCambioContrasena( usuarioDTO.isRequiereCambioContrasena() );
+        usuario.setRequiere2FA( usuarioDTO.isRequiere2FA() );
+        usuario.setSecret2FA( usuarioDTO.getSecret2FA() );
         usuario.setDependencia( usuarioDTO.getDependencia() );
 
         return usuario;

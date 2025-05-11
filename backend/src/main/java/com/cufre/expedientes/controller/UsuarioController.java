@@ -53,4 +53,10 @@ public class UsuarioController extends AbstractBaseController<Usuario, UsuarioDT
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
+    
+    @PostMapping("/{id}/reset-password")
+    public ResponseEntity<Void> resetPasswordAnd2FA(@PathVariable Long id) {
+        usuarioService.resetPasswordAnd2FA(id);
+        return ResponseEntity.ok().build();
+    }
 } 

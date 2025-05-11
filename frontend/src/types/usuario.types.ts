@@ -23,10 +23,15 @@ export interface LoginRequest {
   password: string;
 }
 
-export interface AuthResponse {
-  token: string;
-  id: number;
-  nombre: string;
-  email: string;
-  rol: Rol;
-} 
+export type AuthResponse =
+  | {
+      token: string;
+      id: number;
+      nombre: string;
+      email: string;
+      rol: Rol;
+    }
+  | {
+      action: 'cambiar_contrasena' | 'activar_2fa';
+      message: string;
+    }; 

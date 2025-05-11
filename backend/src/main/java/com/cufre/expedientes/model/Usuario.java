@@ -36,6 +36,15 @@ public class Usuario {
     @Column(name = "CONTRASENA", nullable = false, length = 200)
     private String contrasena;
     
+    @Column(name = "REQUIERE_CAMBIO_CONTRASENA", nullable = false)
+    private boolean requiereCambioContrasena = false;
+    
+    @Column(name = "REQUIERE_2FA", nullable = false)
+    private boolean requiere2FA = false;
+    
+    @Column(name = "SECRET_2FA")
+    private String secret2FA;
+    
     @Column(name = "DEPENDENCIA", length = 100)
     private String dependencia;
     

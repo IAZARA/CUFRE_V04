@@ -14,6 +14,9 @@ import org.mapstruct.ReportingPolicy;
 public interface UsuarioMapper {
     
     @Mapping(target = "creadoPorId", source = "creadoPor.id")
+    @Mapping(target = "requiereCambioContrasena", source = "requiereCambioContrasena")
+    @Mapping(target = "requiere2FA", source = "requiere2FA")
+    @Mapping(target = "secret2FA", source = "secret2FA")
     UsuarioDTO toDto(Usuario usuario);
     
     @Mapping(target = "creadoPor", ignore = true)

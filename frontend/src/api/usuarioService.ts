@@ -48,6 +48,28 @@ const usuarioService = {
   findByRol: async (rol: string): Promise<Usuario[]> => {
     const response = await axiosClient.get(`/usuarios/search/rol?rol=${rol}`);
     return response.data;
+  },
+  
+  cambiarContrasena: async (nuevaContrasena: string): Promise<void> => {
+    await axiosClient.post('/auth/change-password', { newPassword: nuevaContrasena });
+  },
+
+  obtenerQr2FA: async (): Promise<string> => {
+    const response = await axiosClient.get('/auth/2fa-setup');
+    return response.data.qrUrl;
+  },
+
+  activar2FA: async (codigo: string): Promise<void> => {
+    await axiosClient.post('/auth/activar-2fa', { code: codigo });
+  },
+
+  validar2FA: async (codigo: string): Promise<{ token: string }> => {
+    const response = await axiosClient.post('/auth/validar-2fa', { code: codigo });
+    return response.data;
+  },
+
+  resetPasswordAnd2FA: async (id: number): Promise<void> => {
+    await axiosClient.post(`/usuarios/${id}/reset-password`);
   }
 };
 

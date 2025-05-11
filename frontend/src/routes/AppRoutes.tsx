@@ -11,6 +11,9 @@ import Login from '../pages/Login';
 import Dashboard from '../pages/Dashboard';
 import AccesoDenegado from '../pages/AccesoDenegado';
 import NotFound from '../pages/NotFound';
+import CambiarContrasena from '../pages/CambiarContrasena';
+import Activar2FA from '../pages/Activar2FA';
+import Validar2FA from '../pages/Validar2FA';
 
 // Páginas de Expedientes
 import ExpedientesPage from '../pages/expedientes/ExpedientesPage';
@@ -35,6 +38,9 @@ const AppRoutes: React.FC = () => {
     <Routes>
       {/* Rutas públicas */}
       <Route path="/login" element={<Login />} />
+      <Route path="/cambiar-contrasena" element={<CambiarContrasena />} />
+      <Route path="/activar-2fa" element={<Activar2FA />} />
+      <Route path="/validar-2fa" element={<Validar2FA />} />
       <Route path="/acceso-denegado" element={<AccesoDenegado />} />
       
       {/* Redirección a dashboard cuando se accede a la raíz */}

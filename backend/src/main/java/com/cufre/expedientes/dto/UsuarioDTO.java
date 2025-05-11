@@ -23,6 +23,10 @@ public class UsuarioDTO {
     // Solo se usa internamente para la autenticación, no se incluye en respuestas JSON
     private String contrasena;
     
+    private boolean requiereCambioContrasena;
+    private boolean requiere2FA;
+    private String secret2FA;
+    
     // Método de conveniencia
     public String getNombreCompleto() {
         return nombre + " " + apellido;

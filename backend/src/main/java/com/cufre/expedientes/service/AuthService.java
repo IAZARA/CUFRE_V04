@@ -21,6 +21,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import com.cufre.expedientes.model.Usuario;
+
 /**
  * Servicio para gestionar la autenticación y registro de usuarios.
  */
@@ -60,6 +62,22 @@ public class AuthService {
             
             UsuarioDTO usuario = usuarioOptional.get();
             
+            // Revisar si requiere cambio de contraseña
+            if (usuario.isRequiereCambioContrasena()) {
+                Map<String, Object> response = new HashMap<>();
+                response.put("action", "cambiar_contrasena");
+                response.put("message", "Debe cambiar su contraseña antes de continuar.");
+                return response;
+            }
+
+            // Revisar si requiere activar 2FA
+            if (usuario.isRequiere2FA() || usuario.getSecret2FA() == null || usuario.getSecret2FA().isEmpty()) {
+                Map<String, Object> response = new HashMap<>();
+                response.put("action", "activar_2fa");
+                response.put("message", "Debe activar el segundo factor de autenticación (2FA) antes de continuar.");
+                return response;
+            }
+
             // Generar token JWT
             String jwt = tokenProvider.generateToken(usuario);
             
@@ -110,5 +128,9 @@ public class AuthService {
         
         log.info("Usuario registrado: {}", usuarioCreado.getEmail());
         return authResponse;
+    }
+
+    public String getTokenForUsuario(Usuario usuario) {
+        return tokenProvider.generateToken(usuarioService.toDto(usuario));
     }
 } 

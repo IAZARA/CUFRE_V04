@@ -10,7 +10,7 @@ interface AuthContextType {
     email: string;
     rol: Rol;
   } | null;
-  login: (credentials: LoginRequest) => Promise<void>;
+  login: (credentials: LoginRequest) => Promise<AuthResponse>;
   logout: () => void;
   loading: boolean;
 }
@@ -50,19 +50,27 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const login = async (credentials: LoginRequest) => {
     try {
       const response = await usuarioService.login(credentials);
-      
-      // Guardar token y datos de usuario en localStorage
-      localStorage.setItem('token', response.token);
-      
-      const userData = {
-        id: response.id,
-        nombre: response.nombre,
-        email: response.email,
-        rol: response.rol
-      };
-      
-      localStorage.setItem('user', JSON.stringify(userData));
-      setUser(userData);
+
+      // Si el backend responde con acción especial, simplemente la retornamos
+      if ('action' in response) {
+        return response;
+      }
+
+      // Guardar token y datos de usuario en localStorage solo si hay token
+      if ('token' in response) {
+        localStorage.setItem('token', response.token);
+
+        const userData = {
+          id: response.id,
+          nombre: response.nombre,
+          email: response.email,
+          rol: response.rol
+        };
+
+        localStorage.setItem('user', JSON.stringify(userData));
+        setUser(userData);
+      }
+      return response;
     } catch (error) {
       console.error('Error en login:', error);
       throw error;

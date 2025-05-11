@@ -87,6 +87,7 @@ com/cufre/expedientes/repository/DocumentoRepository.class
 com/cufre/expedientes/model/Persona.class
 com/cufre/expedientes/model/MedioComunicacion.class
 com/cufre/expedientes/mapper/ExpedienteMapperImpl.class
+com/cufre/expedientes/service/EmailService.class
 com/cufre/expedientes/util/PriorityCalculator$3.class
 com/cufre/expedientes/service/DocumentoService.class
 com/cufre/expedientes/mapper/PersonaExpedienteMapperImpl.class
@@ -122,6 +123,7 @@ com/cufre/expedientes/dto/UsuarioDTO.class
 com/cufre/expedientes/security/JwtAuthenticationFilter.class
 com/cufre/expedientes/mapper/FotografiaMapper.class
 com/cufre/expedientes/service/ExpedienteDelitoService.class
+com/cufre/expedientes/dto/ChangePasswordDTO.class
 com/cufre/expedientes/controller/PersonaExpedienteController.class
 com/cufre/expedientes/controller/DelitoController.class
 com/cufre/expedientes/security/JwtAuthorizationFilter.class

@@ -213,6 +213,20 @@ const UsuariosPage: React.FC = () => {
     }
   };
 
+  const handleResetPasswordAnd2FA = async (usuario: Usuario) => {
+    if (!window.confirm(`¿Seguro que deseas resetear la contraseña y el 2FA de ${usuario.nombre} ${usuario.apellido}?`)) return;
+    try {
+      setLoading(true);
+      await usuarioService.resetPasswordAnd2FA(usuario.id!);
+      setSuccess('Contraseña y 2FA reseteados correctamente. El usuario deberá cambiar la contraseña y reconfigurar 2FA al ingresar.');
+      fetchUsuarios();
+    } catch (err: any) {
+      setError('Error al resetear la contraseña y 2FA');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // Función para determinar si el usuario actual puede editar a otro usuario
   const canEdit = (targetUsuario: Usuario) => {
     // Un usuario no puede editar a alguien con un rol superior
@@ -352,10 +366,19 @@ const UsuariosPage: React.FC = () => {
                               <IconButton 
                                 color="error"
                                 onClick={() => handleDelete(usuario.id!)}
-                                disabled={user?.id === usuario.id} // No puede eliminarse a sí mismo
+                                disabled={user?.id === usuario.id}
                               >
                                 <DeleteIcon />
                               </IconButton>
+                              <Button
+                                variant="outlined"
+                                color="secondary"
+                                size="small"
+                                onClick={() => handleResetPasswordAnd2FA(usuario)}
+                                style={{ marginLeft: 8 }}
+                              >
+                                Resetear Contraseña
+                              </Button>
                             </>
                           )}
                         </Box>

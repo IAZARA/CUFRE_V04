@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-import javax.mail.MessagingException;
+import jakarta.mail.MessagingException;
 
 /**
  * Servicio para la gestión de usuarios
@@ -121,5 +121,46 @@ public class UsuarioService extends AbstractBaseService<Usuario, UsuarioDTO, Lon
     public Optional<UsuarioDTO> findByEmail(String email) {
         return repository.findByEmail(email)
                 .map(this::toDto);
+    }
+
+    /**
+     * Busca un usuario por email y retorna la entidad Usuario
+     * @param email Email del usuario
+     * @return Usuario encontrado o excepción
+     */
+    @Transactional(readOnly = true)
+    public Usuario findByEmailEntity(String email) {
+        return repository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado con email: " + email));
+    }
+
+    /**
+     * Cambia la contraseña de un usuario por email
+     * @param email Email del usuario
+     * @param newPassword Nueva contraseña
+     */
+    @Transactional
+    public void changePasswordByEmail(String email, String newPassword) {
+        Usuario usuario = findByEmailEntity(email);
+        usuario.setContrasena(passwordEncoder.encode(newPassword));
+        usuario.setRequiereCambioContrasena(false);
+        repository.save(usuario);
+        log.info("Contraseña cambiada para usuario con email: {}", email);
+    }
+
+    /**
+     * Resetea la contraseña y el 2FA de un usuario (para uso administrativo)
+     * @param id ID del usuario
+     */
+    @Transactional
+    public void resetPasswordAnd2FA(Long id) {
+        Usuario usuario = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado con id: " + id));
+        usuario.setContrasena(passwordEncoder.encode("Minseg2025-"));
+        usuario.setRequiereCambioContrasena(true);
+        usuario.setRequiere2FA(true);
+        usuario.setSecret2FA(null);
+        repository.save(usuario);
+        log.info("Contraseña y 2FA reseteados para usuario con ID: {}", id);
     }
 } 

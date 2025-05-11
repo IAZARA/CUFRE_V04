@@ -44,8 +44,21 @@ const Login: React.FC = () => {
     }
 
     try {
-      await login({ email: username, password });
-      // La redirección se maneja en el useEffect
+      const response = await login({ email: username, password });
+
+      if ('action' in response) {
+        if (response.action === 'cambiar_contrasena') {
+          navigate('/cambiar-contrasena');
+        } else if (response.action === 'activar_2fa') {
+          navigate('/activar-2fa');
+        } else {
+          setError(response.message || 'Acción requerida.');
+        }
+      } else if ('token' in response) {
+        // La redirección se maneja en el useEffect
+      } else {
+        setError('Respuesta inesperada del servidor');
+      }
     } catch (err: any) {
       setError(err.message || 'Error al iniciar sesión');
     }

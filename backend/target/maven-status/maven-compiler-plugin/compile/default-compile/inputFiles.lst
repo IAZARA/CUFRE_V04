@@ -32,6 +32,7 @@
 /Users/macbook/Documents/CUFRE_V04/backend/src/main/java/com/cufre/expedientes/dto/DocumentoDTO.java
 /Users/macbook/Documents/CUFRE_V04/backend/src/main/java/com/cufre/expedientes/controller/FotografiaController.java
 /Users/macbook/Documents/CUFRE_V04/backend/src/main/java/com/cufre/expedientes/mapper/DocumentoMapper.java
+/Users/macbook/Documents/CUFRE_V04/backend/src/main/java/com/cufre/expedientes/dto/ChangePasswordDTO.java
 /Users/macbook/Documents/CUFRE_V04/backend/src/main/java/com/cufre/expedientes/mapper/FotografiaMapper.java
 /Users/macbook/Documents/CUFRE_V04/backend/src/main/java/com/cufre/expedientes/model/MedioComunicacion.java
 /Users/macbook/Documents/CUFRE_V04/backend/src/main/java/com/cufre/expedientes/service/EstadisticaService.java
@@ -43,6 +44,7 @@
 /Users/macbook/Documents/CUFRE_V04/backend/src/main/java/com/cufre/expedientes/service/DocumentoService.java
 /Users/macbook/Documents/CUFRE_V04/backend/src/main/java/com/cufre/expedientes/repository/UsuarioRepository.java
 /Users/macbook/Documents/CUFRE_V04/backend/src/main/java/com/cufre/expedientes/service/AuthService.java
+/Users/macbook/Documents/CUFRE_V04/backend/src/main/java/com/cufre/expedientes/service/EmailService.java
 /Users/macbook/Documents/CUFRE_V04/backend/src/main/java/com/cufre/expedientes/exception/ErrorResponse.java
 /Users/macbook/Documents/CUFRE_V04/backend/src/main/java/com/cufre/expedientes/mapper/UsuarioMapper.java
 /Users/macbook/Documents/CUFRE_V04/backend/src/main/java/com/cufre/expedientes/dto/DelitoDTO.java
