@@ -23,4 +23,7 @@ public class DelitoDTO {
     private Integer valoracion;
     private LocalDate creadoEn;
     private LocalDate actualizadoEn;
+    private String articulo;
+    private String ley;
+    private Boolean esGrave;
 } 

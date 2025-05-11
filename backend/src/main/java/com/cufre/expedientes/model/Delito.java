@@ -49,6 +49,15 @@ public class Delito {
     @Column(name = "ACTUALIZADO_EN")
     private LocalDate actualizadoEn;
     
+    @Column(name = "ARTICULO", length = 100)
+    private String articulo;
+    
+    @Column(name = "LEY", length = 100)
+    private String ley;
+    
+    @Column(name = "ES_GRAVE")
+    private Boolean esGrave;
+    
     @OneToMany(mappedBy = "delito", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ExpedienteDelito> expedienteDelitos = new ArrayList<>();
     

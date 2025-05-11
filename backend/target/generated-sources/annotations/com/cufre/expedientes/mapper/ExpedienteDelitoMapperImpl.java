@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-05-11T12:48:58-0300",
+    date = "2025-05-11T16:18:11-0300",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 23.0.2 (Homebrew)"
 )
 @Component
@@ -44,6 +44,8 @@ public class ExpedienteDelitoMapperImpl implements ExpedienteDelitoMapper {
 
         ExpedienteDelito expedienteDelito = new ExpedienteDelito();
 
+        expedienteDelito.setExpediente( expedienteFromId( expedienteDelitoDTO.getExpedienteId() ) );
+        expedienteDelito.setDelito( delitoFromId( expedienteDelitoDTO.getDelitoId() ) );
         expedienteDelito.setId( expedienteDelitoDTO.getId() );
         expedienteDelito.setObservaciones( expedienteDelitoDTO.getObservaciones() );
 
@@ -56,6 +58,8 @@ public class ExpedienteDelitoMapperImpl implements ExpedienteDelitoMapper {
             return expedienteDelito;
         }
 
+        expedienteDelito.setExpediente( expedienteFromId( expedienteDelitoDTO.getExpedienteId() ) );
+        expedienteDelito.setDelito( delitoFromId( expedienteDelitoDTO.getDelitoId() ) );
         expedienteDelito.setId( expedienteDelitoDTO.getId() );
         expedienteDelito.setObservaciones( expedienteDelitoDTO.getObservaciones() );
 

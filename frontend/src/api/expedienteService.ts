@@ -356,7 +356,48 @@ const expedienteService = {
       console.error(`Error al marcar fotografía con ID ${fotoId} como principal en el expediente ${expedienteId}:`, error);
       throw error;
     }
-  }
+  },
+
+  // Gestión de medios de comunicación
+  getMediosComunicacion: async (personaId: number): Promise<any[]> => {
+    try {
+      const response = await axios.get(`/medios-comunicacion/persona/${personaId}`);
+      return response.data;
+    } catch (error) {
+      console.error(`Error al obtener medios de comunicación de la persona ${personaId}:`, error);
+      throw error;
+    }
+  },
+
+  addMedioComunicacion: async (personaId: number, medio: any): Promise<any> => {
+    try {
+      const { id, ...medioSinId } = medio;
+      const response = await axios.post(`/medios-comunicacion/persona/${personaId}`, medioSinId);
+      return response.data;
+    } catch (error) {
+      console.error(`Error al agregar medio de comunicación a la persona con ID ${personaId}:`, error);
+      throw error;
+    }
+  },
+
+  updateMedioComunicacion: async (medioId: number, medio: any): Promise<any> => {
+    try {
+      const response = await axios.put(`/medios-comunicacion/${medioId}`, medio);
+      return response.data;
+    } catch (error) {
+      console.error(`Error al actualizar medio de comunicación con ID ${medioId}:`, error);
+      throw error;
+    }
+  },
+
+  deleteMedioComunicacion: async (medioId: number): Promise<void> => {
+    try {
+      await axios.delete(`/medios-comunicacion/${medioId}`);
+    } catch (error) {
+      console.error(`Error al eliminar medio de comunicación con ID ${medioId}:`, error);
+      throw error;
+    }
+  },
 };
 
 export default expedienteService; 

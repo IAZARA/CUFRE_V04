@@ -30,6 +30,7 @@ import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Expediente, ExpedienteDelito, Delito } from '../../types/expediente.types';
 import delitoService from '../../api/delitoService';
+import Autocomplete from '@mui/material/Autocomplete';
 
 interface DelitosTabProps {
   expediente: Expediente;
@@ -57,7 +58,18 @@ const DelitosTab: React.FC<DelitosTabProps> = ({ expediente, onChange }) => {
         // Si ya tenemos un ID de expediente, cargar sus delitos asociados
         if (expediente.id) {
           const asociados = await delitoService.getDelitosPorExpediente(expediente.id);
-          setDelitosAsociados(asociados);
+          // Mapear para compatibilidad con la UI
+          const asociadosMapeados = asociados.map((rel: any) => ({
+            id: rel.id,
+            expedienteId: rel.expedienteId,
+            delitoId: rel.delitoId,
+            delitoNombre: rel.delito?.nombre || '',
+            delitoCodigoPenal: rel.delito?.codigoPenal || '',
+            delitoTipoPena: rel.delito?.tipoPena || '',
+            fechaRegistro: rel.fechaRegistro,
+            observaciones: rel.observaciones
+          }));
+          setDelitosAsociados(asociadosMapeados);
         }
       } catch (err) {
         console.error('Error al obtener delitos:', err);
@@ -106,9 +118,8 @@ const DelitosTab: React.FC<DelitosTabProps> = ({ expediente, onChange }) => {
         expedienteId: -1, // Temporal
         delitoId: delito.id || 0,
         delitoNombre: delito.nombre,
-        delitoEsGrave: delito.esGrave,
-        delitoArticulo: delito.articulo,
-        delitoLey: delito.ley,
+        delitoCodigoPenal: delito.codigoPenal || '',
+        delitoTipoPena: delito.tipoPena || '',
         fechaRegistro: new Date().toISOString().split('T')[0],
         observaciones: ''
       };
@@ -137,9 +148,8 @@ const DelitosTab: React.FC<DelitosTabProps> = ({ expediente, onChange }) => {
         const delitoCompleto: ExpedienteDelito = {
           ...response,
           delitoNombre: delito.nombre,
-          delitoEsGrave: delito.esGrave,
-          delitoArticulo: delito.articulo,
-          delitoLey: delito.ley
+          delitoCodigoPenal: delito.codigoPenal || '',
+          delitoTipoPena: delito.tipoPena || '',
         };
         
         const updatedDelitos = [...delitosAsociados, delitoCompleto];
@@ -230,36 +240,29 @@ const DelitosTab: React.FC<DelitosTabProps> = ({ expediente, onChange }) => {
         </Typography>
       ) : (
         <TableContainer component={Paper}>
-          <Table>
+          <Table sx={{ minWidth: 650, borderRadius: 2, overflow: 'hidden' }}>
             <TableHead>
-              <TableRow>
-                <TableCell>Delito</TableCell>
-                <TableCell>Artículo</TableCell>
-                <TableCell>Ley</TableCell>
-                <TableCell>Gravedad</TableCell>
-                <TableCell>Acciones</TableCell>
+              <TableRow sx={{ backgroundColor: '#1976d2' }}>
+                <TableCell sx={{ color: '#fff', fontWeight: 'bold', fontSize: 16 }}>Delito</TableCell>
+                <TableCell sx={{ color: '#fff', fontWeight: 'bold', fontSize: 16 }}>Código Penal</TableCell>
+                <TableCell sx={{ color: '#fff', fontWeight: 'bold', fontSize: 16 }}>Tipo de Pena</TableCell>
+                <TableCell sx={{ color: '#fff', fontWeight: 'bold', fontSize: 16, textAlign: 'center' }}>Acciones</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {delitosAsociados.map((expedienteDelito) => (
-                <TableRow key={expedienteDelito.id ? `rel-${expedienteDelito.id}` : `delito-${expedienteDelito.delitoId}`}>
-                  <TableCell>{expedienteDelito.delitoNombre}</TableCell>
-                  <TableCell>{expedienteDelito.delitoArticulo ?? '-'}</TableCell>
-                  <TableCell>{expedienteDelito.delitoLey ?? '-'}</TableCell>
-                  <TableCell>
-                    <Chip 
-                      label={expedienteDelito.delitoEsGrave ? "Grave" : "No Grave"} 
-                      color={expedienteDelito.delitoEsGrave ? "error" : "default"}
-                      size="small"
-                    />
-                  </TableCell>
-                  <TableCell>
-                    <IconButton 
-                      color="error" 
-                      onClick={() => handleDesasociarDelito(expedienteDelito)}
-                      disabled={loading}
-                      size="small"
-                    >
+              {delitosAsociados.map((expedienteDelito, idx) => (
+                <TableRow
+                  key={expedienteDelito.id ? `rel-${expedienteDelito.id}` : `delito-${expedienteDelito.delitoId}`}
+                  sx={{
+                    backgroundColor: idx % 2 === 0 ? '#f5f7fa' : '#e3eaf2',
+                    '&:hover': { backgroundColor: '#e0f2f1' },
+                  }}
+                >
+                  <TableCell sx={{ fontSize: 15 }}>{expedienteDelito.delitoNombre}</TableCell>
+                  <TableCell sx={{ fontSize: 15 }}>{expedienteDelito.delitoCodigoPenal ?? '-'}</TableCell>
+                  <TableCell sx={{ fontSize: 15 }}>{expedienteDelito.delitoTipoPena ?? '-'}</TableCell>
+                  <TableCell sx={{ textAlign: 'center' }}>
+                    <IconButton color="error" onClick={() => handleDesasociarDelito(expedienteDelito)}>
                       <DeleteIcon />
                     </IconButton>
                   </TableCell>
@@ -273,19 +276,45 @@ const DelitosTab: React.FC<DelitosTabProps> = ({ expediente, onChange }) => {
       {/* Diálogo para seleccionar delitos */}
       <Dialog open={openDialog} onClose={handleCloseDialog} maxWidth="md" fullWidth>
         <DialogTitle>Seleccionar Delito</DialogTitle>
-        <DialogContent>
-          <Box sx={{ mb: 2, display: 'flex', gap: 1 }}>
-            <TextField
-              fullWidth
-              label="Buscar delito por nombre, artículo o ley"
-              variant="outlined"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+        <DialogContent sx={{ pt: 3 }}>
+          <Box
+            sx={{
+              mb: 2,
+              mt: 2,
+              display: 'flex',
+              flexDirection: { xs: 'column', sm: 'row' },
+              gap: 1,
+              alignItems: { xs: 'stretch', sm: 'center' }
+            }}
+          >
+            <Autocomplete
+              freeSolo
+              options={delitosDisponibles.map((d) => d.nombre)}
+              inputValue={searchTerm}
+              onInputChange={(_, value) => setSearchTerm(value)}
+              onChange={(_, value) => setSearchTerm(value || '')}
+              sx={{ flex: 1, minWidth: 250 }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  fullWidth
+                  label="Buscar delito por nombre, artículo o ley"
+                  variant="outlined"
+                />
+              )}
             />
-            <Button 
-              variant="contained" 
+            <Button
+              variant="contained"
               onClick={handleSearch}
               startIcon={<SearchIcon />}
+              sx={{
+                minWidth: 110,
+                px: 2,
+                py: 1.5,
+                alignSelf: { xs: 'stretch', sm: 'auto' },
+                fontWeight: 'bold',
+                fontSize: 16
+              }}
             >
               Buscar
             </Button>
@@ -300,12 +329,23 @@ const DelitosTab: React.FC<DelitosTabProps> = ({ expediente, onChange }) => {
           ) : (
             <List>
               {filteredDelitos.map((delito) => {
-                // Verificar si el delito ya está asociado para evitar duplicados
                 const yaAsociado = delitosAsociados.some(d => d.delitoId === delito.id);
-                
+                const mostrarDescripcion = delito.descripcion && delito.descripcion !== delito.nombre;
+
                 return (
                   <React.Fragment key={delito.id}>
-                    <ListItem 
+                    <ListItem
+                      alignItems="flex-start"
+                      sx={{
+                        display: 'flex',
+                        flexDirection: { xs: 'column', sm: 'row' },
+                        alignItems: { xs: 'flex-start', sm: 'center' },
+                        gap: 1,
+                        opacity: yaAsociado ? 0.6 : 1,
+                        '&:hover': {
+                          backgroundColor: yaAsociado ? 'transparent' : 'rgba(0, 0, 0, 0.04)'
+                        }
+                      }}
                       secondaryAction={
                         <Button
                           variant="outlined"
@@ -313,33 +353,31 @@ const DelitosTab: React.FC<DelitosTabProps> = ({ expediente, onChange }) => {
                           startIcon={<AddIcon />}
                           disabled={yaAsociado}
                           onClick={() => handleAsociarDelito(delito)}
+                          sx={{
+                            minWidth: 120,
+                            whiteSpace: 'nowrap',
+                            ml: { xs: 0, sm: 2 }
+                          }}
                         >
                           {yaAsociado ? 'Ya asociado' : 'Asociar'}
                         </Button>
                       }
-                      sx={{ 
-                        opacity: yaAsociado ? 0.6 : 1,
-                        '&:hover': {
-                          backgroundColor: yaAsociado ? 'transparent' : 'rgba(0, 0, 0, 0.04)'
-                        }
-                      }}
                     >
-                      <ListItemText
-                        primary={<Box sx={{ fontWeight: 'bold' }}>{delito.nombre}</Box>}
-                        secondary={
-                          <Box>
-                            {delito.articulo && <span>Artículo: {delito.articulo} • </span>}
-                            {delito.ley && <span>Ley: {delito.ley} • </span>}
-                            <Chip 
-                              label={delito.esGrave ? "Grave" : "No Grave"} 
-                              color={delito.esGrave ? "error" : "default"}
-                              size="small"
-                              sx={{ mr: 1 }}
-                            />
-                            {delito.descripcion && <span>{delito.descripcion}</span>}
-                          </Box>
-                        }
-                      />
+                      <Box sx={{
+                        maxWidth: { xs: '100%', sm: '70%' }
+                      }}>
+                        <Typography
+                          variant="subtitle1"
+                          fontWeight="bold"
+                        >
+                          {delito.nombre}
+                        </Typography>
+                        {mostrarDescripcion && (
+                          <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+                            {delito.descripcion}
+                          </Typography>
+                        )}
+                      </Box>
                     </ListItem>
                     <Divider />
                   </React.Fragment>

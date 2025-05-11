@@ -18,6 +18,7 @@ import Validar2FA from '../pages/Validar2FA';
 // Páginas de Expedientes
 import ExpedientesPage from '../pages/expedientes/ExpedientesPage';
 import ExpedienteFormPage from '../pages/expedientes/ExpedienteFormPage';
+import ExpedienteDetallePage from '../pages/expedientes/ExpedienteDetallePage';
 
 // Páginas de Delitos
 import DelitosPage from '../pages/delitos/DelitosPage';
@@ -55,6 +56,7 @@ const AppRoutes: React.FC = () => {
           <Route path="/expedientes" element={<ExpedientesPage />} />
           <Route path="/expedientes/crear" element={<ExpedienteFormPage />} />
           <Route path="/expedientes/editar/:id" element={<ExpedienteFormPage />} />
+          <Route path="/expedientes/detalle/:id" element={<ExpedienteDetallePage />} />
           
           {/* Rutas de Delitos */}
           <Route path="/delitos" element={<DelitosPage />} />

@@ -19,11 +19,27 @@ public interface ExpedienteDelitoMapper {
     @Mapping(target = "delito", source = "delito")
     ExpedienteDelitoDTO toDto(ExpedienteDelito expedienteDelito);
     
-    @Mapping(target = "expediente", ignore = true)
-    @Mapping(target = "delito", ignore = true)
+    @Mapping(target = "expediente", source = "expedienteId", qualifiedByName = "expedienteFromId")
+    @Mapping(target = "delito", source = "delitoId", qualifiedByName = "delitoFromId")
     ExpedienteDelito toEntity(ExpedienteDelitoDTO expedienteDelitoDTO);
     
-    @Mapping(target = "expediente", ignore = true)
-    @Mapping(target = "delito", ignore = true)
+    @Mapping(target = "expediente", source = "expedienteId", qualifiedByName = "expedienteFromId")
+    @Mapping(target = "delito", source = "delitoId", qualifiedByName = "delitoFromId")
     ExpedienteDelito updateEntity(ExpedienteDelitoDTO expedienteDelitoDTO, @org.mapstruct.MappingTarget ExpedienteDelito expedienteDelito);
+
+    // Métodos auxiliares para mapear por ID
+    @org.mapstruct.Named("expedienteFromId")
+    default com.cufre.expedientes.model.Expediente expedienteFromId(Long id) {
+        if (id == null) return null;
+        com.cufre.expedientes.model.Expediente e = new com.cufre.expedientes.model.Expediente();
+        e.setId(id);
+        return e;
+    }
+    @org.mapstruct.Named("delitoFromId")
+    default com.cufre.expedientes.model.Delito delitoFromId(Long id) {
+        if (id == null) return null;
+        com.cufre.expedientes.model.Delito d = new com.cufre.expedientes.model.Delito();
+        d.setId(id);
+        return d;
+    }
 } 

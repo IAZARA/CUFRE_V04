@@ -1,4 +1,4 @@
-import { Domicilio } from './persona.types';
+import { Domicilio, MedioComunicacion } from './persona.types';
 
 export interface Expediente {
   id?: number;
@@ -117,6 +117,7 @@ export interface Expediente {
   fotografias: Fotografia[];
   documentos: Documento[];
   personas: PersonaExpediente[];
+  personaExpedientes?: PersonaExpediente[];
   
   // Datos adicionales
   created_at: string;
@@ -155,9 +156,8 @@ export interface ExpedienteDelito {
   expedienteId: number;
   delitoId: number;
   delitoNombre?: string;
-  delitoEsGrave?: boolean;
-  delitoArticulo?: string;
-  delitoLey?: string;
+  delitoCodigoPenal?: string;
+  delitoTipoPena?: string;
   fechaRegistro?: string;
   observaciones?: string;
 }
@@ -182,6 +182,8 @@ export interface Delito {
   descripcion?: string;
   observaciones?: string;
   esGrave: boolean;
+  codigoPenal?: string;
+  tipoPena?: string;
 }
 
 export interface Documento {
@@ -212,6 +214,7 @@ export interface PersonaExpediente {
   persona?: PersonaDTO;
   observaciones?: string;
   domicilios?: Domicilio[];
+  mediosComunicacion?: MedioComunicacion[];
 }
 
 export interface PersonaDTO {

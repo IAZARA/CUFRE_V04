@@ -27,7 +27,7 @@ import {
 } from '@mui/icons-material';
 import { Expediente, PersonaExpediente } from '../../types/expediente.types';
 import expedienteService from '../../api/expedienteService';
-import { Domicilio } from '../../types/persona.types';
+import { Domicilio, MedioComunicacion } from '../../types/persona.types';
 
 interface PersonasTabProps {
   expediente: Expediente;
@@ -85,6 +85,12 @@ const PersonasTab: React.FC<PersonasTabProps> = ({ expediente, onChange }) => {
   const [domicilioEnEdicion, setDomicilioEnEdicion] = useState<Domicilio | null>(null);
 
   const [openDomicilioModal, setOpenDomicilioModal] = useState(false);
+
+  // Estado para medios de comunicación
+  const [mediosPersona, setMediosPersona] = useState<MedioComunicacion[]>([]);
+  const [openMedioModal, setOpenMedioModal] = useState(false);
+  const [medioEnEdicion, setMedioEnEdicion] = useState<MedioComunicacion | null>(null);
+  const [nuevoMedio, setNuevoMedio] = useState<Partial<MedioComunicacion>>({ tipo: '', valor: '', observaciones: '' });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -261,11 +267,16 @@ const PersonasTab: React.FC<PersonasTabProps> = ({ expediente, onChange }) => {
 
   const handleSeleccionarPersona = async (persona: PersonaExpediente) => {
     setPersonaSeleccionada(persona);
-    // Usar domicilios directamente del objeto personaSeleccionada
     if (Array.isArray(persona.domicilios)) {
       setDomiciliosPersona(persona.domicilios);
     } else {
       setDomiciliosPersona([]);
+    }
+    if (persona.persona?.id) {
+      const medios = await expedienteService.getMediosComunicacion(persona.persona.id);
+      setMediosPersona(medios);
+    } else {
+      setMediosPersona([]);
     }
   };
 
@@ -302,6 +313,93 @@ const PersonasTab: React.FC<PersonasTabProps> = ({ expediente, onChange }) => {
       setNuevoDomicilio({});
     } catch (error) {
       // Manejo de error
+    }
+  };
+
+  // Handler para abrir modal de medio
+  const handleAgregarMedioPersona = () => {
+    setMedioEnEdicion(null);
+    setNuevoMedio({ tipo: '', valor: '', observaciones: '' });
+    setOpenMedioModal(true);
+  };
+
+  const handleEditarMedio = (medio: MedioComunicacion) => {
+    setMedioEnEdicion(medio);
+    setNuevoMedio(medio);
+    setOpenMedioModal(true);
+  };
+
+  const handleCloseMedioModal = () => {
+    setOpenMedioModal(false);
+    setMedioEnEdicion(null);
+    setNuevoMedio({ tipo: '', valor: '', observaciones: '' });
+  };
+
+  const handleChangeMedio = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNuevoMedio({ ...nuevoMedio, [e.target.name]: e.target.value });
+  };
+
+  const handleGuardarMedioModal = async () => {
+    if (!personaSeleccionada || typeof personaSeleccionada.persona?.id !== 'number') return;
+    try {
+      if (medioEnEdicion && typeof medioEnEdicion.id === 'number') {
+        await expedienteService.updateMedioComunicacion(medioEnEdicion.id, nuevoMedio);
+      } else {
+        await expedienteService.addMedioComunicacion(personaSeleccionada.persona.id, nuevoMedio);
+      }
+      // Refrescar medios
+      const mediosActualizados = await expedienteService.getMediosComunicacion(personaSeleccionada.persona.id);
+      setMediosPersona(mediosActualizados);
+      setOpenMedioModal(false);
+      setMedioEnEdicion(null);
+      setNuevoMedio({ tipo: '', valor: '', observaciones: '' });
+    } catch (error) {
+      // Manejo de error
+    }
+  };
+
+  const handleEliminarMedio = async (medioId: number) => {
+    if (!personaSeleccionada || typeof personaSeleccionada.persona?.id !== 'number') return;
+    try {
+      await expedienteService.deleteMedioComunicacion(medioId);
+      const mediosActualizados = await expedienteService.getMediosComunicacion(personaSeleccionada.persona.id);
+      setMediosPersona(mediosActualizados);
+    } catch (error) {
+      // Manejo de error
+    }
+  };
+
+  // Función para obtener el ícono según el tipo de medio
+  const getMedioIcon = (tipo: string) => {
+    switch ((tipo || '').toUpperCase()) {
+      case 'EMAIL':
+        return '/images/correo-electronico.png';
+      case 'FACEBOOK':
+        return '/images/facebook.png';
+      case 'X':
+        return '/images/gorjeo.png';
+      case 'INSTAGRAM':
+        return '/images/instagram.png';
+      case 'LINKEDLN':
+      case 'LINKEDIN':
+        return '/images/linkedin.png';
+      case 'WHATSAPP':
+        return '/images/whatsapp.png';
+      case 'YOUTUBE':
+        return '/images/icons8-youtube-48.png';
+      case 'PINTEREST':
+        return '/images/icons8-pinterest-50.png';
+      case 'REDDIT':
+        return '/images/icons8-reddit-48.png';
+      case 'TELEGRAM':
+        return '/images/icons8-telegrama-48.png';
+      case 'TIK TOK':
+      case 'TIKTOK':
+        return '/images/icons8-tik-tok-50.png';
+      case 'CELULAR':
+        return '/images/telefono.png'; // Puedes agregar un ícono de teléfono si tienes uno
+      default:
+        return '/images/contacto.png'; // Ícono por defecto
     }
   };
 
@@ -552,6 +650,69 @@ const PersonasTab: React.FC<PersonasTabProps> = ({ expediente, onChange }) => {
                       </TableCell>
                     </TableRow>
                   )}
+                  {/* Medios de comunicación de la persona */}
+                  <TableRow>
+                    <TableCell colSpan={5} sx={{ p: 0, background: '#f5f5f5', borderLeft: '4px solid #388e3c' }}>
+                      <Box sx={{ display: 'flex', alignItems: 'center', pl: 2, pt: 1 }}>
+                        <span style={{ color: '#388e3c', marginRight: 8 }}><span role="img" aria-label="comunicación">📞</span></span>
+                        <Typography variant="subtitle2" color="success.main" sx={{ fontWeight: 600 }}>
+                          Medios de comunicación
+                        </Typography>
+                      </Box>
+                      <Table size="small" sx={{ ml: 4, width: '98%' }}>
+                        <TableHead>
+                          <TableRow>
+                            <TableCell>Tipo</TableCell>
+                            <TableCell>Valor</TableCell>
+                            <TableCell>Observaciones</TableCell>
+                            <TableCell align="right">Acciones</TableCell>
+                          </TableRow>
+                        </TableHead>
+                        <TableBody>
+                          {/* Renderizar los medios de comunicación de la persona */}
+                          {Array.isArray(persona.mediosComunicacion) && persona.mediosComunicacion.length > 0 ? (
+                            persona.mediosComunicacion.map((medio, idx) => (
+                              <TableRow key={medio.id || idx}>
+                                <TableCell>
+                                  <img src={getMedioIcon(medio.tipo)} alt={medio.tipo} style={{ width: 24, height: 24, verticalAlign: 'middle', marginRight: 8 }} />
+                                  {medio.tipo}
+                                </TableCell>
+                                <TableCell>{medio.valor}</TableCell>
+                                <TableCell>{medio.observaciones}</TableCell>
+                                <TableCell align="right">
+                                  <IconButton size="small" color="primary" onClick={() => { setPersonaSeleccionada(persona); handleEditarMedio(medio); }} aria-label="Editar medio">
+                                    <EditIcon fontSize="small" />
+                                  </IconButton>
+                                  <IconButton size="small" color="error" onClick={() => { setPersonaSeleccionada(persona); medio.id && handleEliminarMedio(medio.id); }} aria-label="Eliminar medio">
+                                    <DeleteIcon fontSize="small" />
+                                  </IconButton>
+                                </TableCell>
+                              </TableRow>
+                            ))
+                          ) : (
+                            <TableRow>
+                              <TableCell colSpan={4} align="center" sx={{ color: '#888' }}>
+                                Sin medios de comunicación registrados
+                              </TableCell>
+                            </TableRow>
+                          )}
+                          {/* Botón para agregar medio al final de la lista */}
+                          <TableRow>
+                            <TableCell colSpan={4} align="right">
+                              <Button
+                                variant="outlined"
+                                color="success"
+                                startIcon={<AddIcon />}
+                                onClick={() => { setPersonaSeleccionada(persona); handleAgregarMedioPersona(); }}
+                              >
+                                Agregar Medio de Comunicación
+                              </Button>
+                            </TableCell>
+                          </TableRow>
+                        </TableBody>
+                      </Table>
+                    </TableCell>
+                  </TableRow>
                 </React.Fragment>
               ))}
             </TableBody>
@@ -619,6 +780,58 @@ const PersonasTab: React.FC<PersonasTabProps> = ({ expediente, onChange }) => {
         </Paper>
       )}
 
+      {personaSeleccionada && (
+        <Paper variant="outlined" sx={{ p: 2, mt: 2 }}>
+          <Typography variant="subtitle1" gutterBottom>
+            Medios de comunicación de {personaSeleccionada.persona?.nombre} {personaSeleccionada.persona?.apellido}
+          </Typography>
+          <TableContainer component={Paper} variant="outlined">
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Tipo</TableCell>
+                  <TableCell>Valor</TableCell>
+                  <TableCell>Observaciones</TableCell>
+                  <TableCell align="right">Acciones</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {mediosPersona.map((medio, idx) => (
+                  <TableRow key={medio.id || idx}>
+                    <TableCell>
+                      <img src={getMedioIcon(medio.tipo)} alt={medio.tipo} style={{ width: 24, height: 24, verticalAlign: 'middle', marginRight: 8 }} />
+                      {medio.tipo}
+                    </TableCell>
+                    <TableCell>{medio.valor}</TableCell>
+                    <TableCell>{medio.observaciones}</TableCell>
+                    <TableCell align="right">
+                      <IconButton size="small" color="primary" onClick={() => handleEditarMedio(medio)} aria-label="Editar medio">
+                        <EditIcon fontSize="small" />
+                      </IconButton>
+                      <IconButton size="small" color="error" onClick={() => medio.id && handleEliminarMedio(medio.id)} aria-label="Eliminar medio">
+                        <DeleteIcon fontSize="small" />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                ))}
+                <TableRow>
+                  <TableCell colSpan={4} align="right">
+                    <Button
+                      variant="outlined"
+                      color="primary"
+                      startIcon={<AddIcon />}
+                      onClick={handleAgregarMedioPersona}
+                    >
+                      Agregar Medio de Comunicación
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Paper>
+      )}
+
       <Dialog open={openDomicilioModal} onClose={handleCloseDomicilioModal} maxWidth="sm" fullWidth>
         <DialogTitle>{domicilioEnEdicion ? 'Editar domicilio' : 'Agregar domicilio'}</DialogTitle>
         <DialogContent>
@@ -643,6 +856,37 @@ const PersonasTab: React.FC<PersonasTabProps> = ({ expediente, onChange }) => {
         <DialogActions>
           <Button onClick={handleCloseDomicilioModal}>Cancelar</Button>
           <Button onClick={handleGuardarDomicilioModal} variant="contained" color="primary">Guardar</Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Modal para agregar/editar medio de comunicación */}
+      <Dialog open={openMedioModal} onClose={handleCloseMedioModal} maxWidth="sm" fullWidth>
+        <DialogTitle>{medioEnEdicion ? 'Editar medio de comunicación' : 'Agregar medio de comunicación'}</DialogTitle>
+        <DialogContent>
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, mb: 1 }}>
+            <TextField select label="Tipo" name="tipo" value={nuevoMedio.tipo || ''} onChange={handleChangeMedio} fullWidth>
+              <MenuItem value="">Seleccionar</MenuItem>
+              <MenuItem value="CELULAR">Celular</MenuItem>
+              <MenuItem value="EMAIL">Email</MenuItem>
+              <MenuItem value="FACEBOOK">Facebook</MenuItem>
+              <MenuItem value="INSTAGRAM">Instagram</MenuItem>
+              <MenuItem value="TIK TOK">Tik Tok</MenuItem>
+              <MenuItem value="X">X</MenuItem>
+              <MenuItem value="YOUTUBE">YouTube</MenuItem>
+              <MenuItem value="WHATSAPP">WhatsApp</MenuItem>
+              <MenuItem value="LINKEDLN">LinkedIn</MenuItem>
+              <MenuItem value="PINTEREST">Pinterest</MenuItem>
+              <MenuItem value="SNAPCHAT">Snapchat</MenuItem>
+              <MenuItem value="TELEGRAM">Telegram</MenuItem>
+              <MenuItem value="REDDIT">Reddit</MenuItem>
+            </TextField>
+            <TextField label="Valor" name="valor" value={nuevoMedio.valor || ''} onChange={handleChangeMedio} fullWidth />
+            <TextField label="Observaciones" name="observaciones" value={nuevoMedio.observaciones || ''} onChange={handleChangeMedio} fullWidth multiline minRows={2} />
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseMedioModal}>Cancelar</Button>
+          <Button onClick={handleGuardarMedioModal} variant="contained" color="primary">Guardar</Button>
         </DialogActions>
       </Dialog>
     </Box>

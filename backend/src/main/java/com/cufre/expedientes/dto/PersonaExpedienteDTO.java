@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.util.List;
+import com.cufre.expedientes.dto.MedioComunicacionDTO;
 
 @Data
 @Builder
@@ -23,4 +24,6 @@ public class PersonaExpedienteDTO {
 
     // Lista de domicilios asociados a la persona
     private List<DomicilioDTO> domicilios;
+    // Lista de medios de comunicación asociados a la persona
+    private List<MedioComunicacionDTO> mediosComunicacion;
 } 

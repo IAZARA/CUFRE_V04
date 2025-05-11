@@ -4,6 +4,7 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { AuthProvider } from './context/AuthContext';
 import AppRoutes from './routes/AppRoutes';
+import ExpedienteDetallePage from './pages/expedientes/ExpedienteDetallePage';
 
 // Definir el tema personalizado
 const theme = createTheme({

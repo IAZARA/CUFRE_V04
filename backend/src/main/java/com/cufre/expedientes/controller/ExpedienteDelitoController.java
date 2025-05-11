@@ -43,4 +43,13 @@ public class ExpedienteDelitoController extends AbstractBaseController<Expedient
     public ResponseEntity<List<ExpedienteDelitoDTO>> findByDelitoId(@PathVariable Long delitoId) {
         return ResponseEntity.ok(expedienteDelitoService.findByDelitoId(delitoId));
     }
+
+    /**
+     * Endpoint directo para obtener relaciones por ID de expediente (sin /search)
+     * Compatible con el frontend
+     */
+    @GetMapping("/expediente/{expedienteId}")
+    public ResponseEntity<List<ExpedienteDelitoDTO>> getByExpedienteId(@PathVariable Long expedienteId) {
+        return ResponseEntity.ok(expedienteDelitoService.findByExpedienteId(expedienteId));
+    }
 } 

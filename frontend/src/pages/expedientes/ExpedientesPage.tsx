@@ -92,6 +92,10 @@ const ExpedientesPage: React.FC = () => {
     navigate(`/expedientes/editar/${id}`);
   };
 
+  const handleViewDetails = (id: number) => {
+    navigate(`/expedientes/detalle/${id}`);
+  };
+
   const handleDelete = async (id: number) => {
     if (window.confirm('¿Está seguro que desea eliminar este expediente?')) {
       try {
@@ -259,7 +263,7 @@ const ExpedientesPage: React.FC = () => {
                         <TableCell align="center">
                           <Box sx={{ display: 'flex', justifyContent: 'center', gap: 1 }}>
                             <Tooltip title="Ver detalles">
-                              <IconButton onClick={() => handleEdit(expediente.id!)}>
+                              <IconButton onClick={() => handleViewDetails(expediente.id!)}>
                                 <VisibilityIcon />
                               </IconButton>
                             </Tooltip>

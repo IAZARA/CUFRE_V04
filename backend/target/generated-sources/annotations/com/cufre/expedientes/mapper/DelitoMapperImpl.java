@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-05-11T12:48:58-0300",
+    date = "2025-05-11T16:18:11-0300",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 23.0.2 (Homebrew)"
 )
 @Component
@@ -31,6 +31,9 @@ public class DelitoMapperImpl implements DelitoMapper {
         delitoDTO.valoracion( delito.getValoracion() );
         delitoDTO.creadoEn( delito.getCreadoEn() );
         delitoDTO.actualizadoEn( delito.getActualizadoEn() );
+        delitoDTO.articulo( delito.getArticulo() );
+        delitoDTO.ley( delito.getLey() );
+        delitoDTO.esGrave( delito.getEsGrave() );
 
         return delitoDTO.build();
     }
@@ -53,6 +56,9 @@ public class DelitoMapperImpl implements DelitoMapper {
         delito.setValoracion( delitoDTO.getValoracion() );
         delito.setCreadoEn( delitoDTO.getCreadoEn() );
         delito.setActualizadoEn( delitoDTO.getActualizadoEn() );
+        delito.setArticulo( delitoDTO.getArticulo() );
+        delito.setLey( delitoDTO.getLey() );
+        delito.setEsGrave( delitoDTO.getEsGrave() );
 
         return delito;
     }
@@ -73,6 +79,9 @@ public class DelitoMapperImpl implements DelitoMapper {
         delito.setValoracion( delitoDTO.getValoracion() );
         delito.setCreadoEn( delitoDTO.getCreadoEn() );
         delito.setActualizadoEn( delitoDTO.getActualizadoEn() );
+        delito.setArticulo( delitoDTO.getArticulo() );
+        delito.setLey( delitoDTO.getLey() );
+        delito.setEsGrave( delitoDTO.getEsGrave() );
 
         return delito;
     }

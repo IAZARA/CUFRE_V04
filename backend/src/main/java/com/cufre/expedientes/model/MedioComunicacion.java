@@ -14,7 +14,8 @@ import jakarta.persistence.*;
 public class MedioComunicacion {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "medios_seq")
+    @SequenceGenerator(name = "medios_seq", sequenceName = "SEQ_MEDIOS_COMUNICACION", allocationSize = 1)
     @Column(name = "ID")
     private Long id;
     

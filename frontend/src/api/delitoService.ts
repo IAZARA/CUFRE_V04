@@ -77,7 +77,7 @@ const delitoService = {
   
   getDelitosPorExpediente: async (expedienteId: number) => {
     try {
-      const response = await axios.get(`${API_URL}/expedientes/${expedienteId}/delitos`);
+      const response = await axios.get(`${API_URL}/expediente-delitos/expediente/${expedienteId}`);
       return response.data;
     } catch (error: any) {
       console.error(`Error al obtener delitos del expediente ${expedienteId}:`, error);
@@ -93,6 +93,9 @@ const delitoService = {
       );
       return response.data;
     } catch (error: any) {
+      if (error.response?.status === 409 && error.response?.data?.mensaje) {
+        throw new Error(error.response.data.mensaje);
+      }
       console.error('Error al asociar delito a expediente:', error);
       throw new Error(error.response?.data?.message || 'Error al asociar delito');
     }

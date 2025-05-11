@@ -49,7 +49,11 @@ public class ExpedienteService extends AbstractBaseService<Expediente, Expedient
 
     @Override
     protected ExpedienteDTO toDto(Expediente entity) {
-        return mapper.toDto(entity);
+        ExpedienteDTO dto = mapper.toDto(entity);
+        // Poblar manualmente los delitos asociados
+        List<DelitoDTO> delitos = delitoService.findByExpedienteId(entity.getId());
+        dto.setDelitos(delitos);
+        return dto;
     }
 
     @Override

@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.hibernate.exception.ConstraintViolationException;
 
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -16,11 +18,25 @@ import java.util.Map;
 @ControllerAdvice
 public class DataSourceExceptionHandler {
 
-    @ExceptionHandler({DataAccessException.class, SQLException.class, JDBCConnectionException.class})
+    @ExceptionHandler({DataAccessException.class, SQLException.class, JDBCConnectionException.class, DataIntegrityViolationException.class})
     public ResponseEntity<Object> handleDatabaseException(Exception ex) {
         log.error("Error de conexión a la base de datos: {}", ex.getMessage(), ex);
         
         Map<String, Object> response = new HashMap<>();
+
+        // Manejo específico para restricción única de expediente-delito
+        Throwable cause = ex.getCause();
+        if (cause instanceof ConstraintViolationException cve && cve.getConstraintName() != null && cve.getConstraintName().contains("UK_EXPEDIENTE_DELITO")) {
+            response.put("tipo", "Asociación duplicada");
+            response.put("mensaje", "El delito ya está asociado a este expediente.");
+            return new ResponseEntity<>(response, HttpStatus.CONFLICT);
+        }
+        if (ex.getMessage() != null && ex.getMessage().contains("UK_EXPEDIENTE_DELITO")) {
+            response.put("tipo", "Asociación duplicada");
+            response.put("mensaje", "El delito ya está asociado a este expediente.");
+            return new ResponseEntity<>(response, HttpStatus.CONFLICT);
+        }
+
         response.put("error", "Error de conexión a la base de datos");
         response.put("mensaje", "Se ha producido un error al conectar con la base de datos. Por favor, contacte al administrador.");
         response.put("detalle", ex.getMessage());

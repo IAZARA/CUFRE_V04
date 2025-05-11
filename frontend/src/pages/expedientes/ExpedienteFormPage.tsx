@@ -215,6 +215,7 @@ const ExpedienteFormPage: React.FC = () => {
       if (!data.delitos) data.delitos = [];
       
       setExpediente(data);
+      // Guardar los delitos originales SOLO al cargar el expediente
       setDelitosOriginales(data.delitos ? [...data.delitos] : []);
       
       // Cargar fotografías independientemente si el array está vacío
@@ -293,13 +294,24 @@ const ExpedienteFormPage: React.FC = () => {
         // Sincronizar delitos
         const actuales = expediente.delitos?.map(d => d.id) || [];
         const originales = delitosOriginales?.map(d => d.id) || [];
-        // Delitos a asociar
-        const aAsociar = actuales.filter(idDelito => !originales.includes(idDelito));
-        // Delitos a desasociar
-        const aDesasociar = originales.filter(idDelito => !actuales.includes(idDelito));
+        // Delitos a asociar: SOLO los que no estaban antes
+        const aAsociar = actuales.filter(idDelito => idDelito !== undefined && idDelito !== null && !originales.includes(idDelito));
+        // Delitos a desasociar: SOLO los que estaban antes y ya no están
+        const aDesasociar = originales.filter(idDelito => idDelito !== undefined && idDelito !== null && !actuales.includes(idDelito));
+
+        // Debug: mostrar los ids
+        console.log("Delitos actuales:", actuales);
+        console.log("Delitos originales:", originales);
+        console.log("Delitos a asociar (solo nuevos):", aAsociar);
+        console.log("Delitos a desasociar:", aDesasociar);
+
         // Asociar nuevos delitos
         for (const delitoId of aAsociar) {
-          await delitoService.asociarDelitoExpediente({ expedienteId: parseInt(id), delitoId });
+          if (delitoId !== undefined && delitoId !== null) {
+            await delitoService.asociarDelitoExpediente({ expedienteId: parseInt(id), delitoId });
+          } else {
+            console.error("Intentando asociar un delito sin ID:", delitoId);
+          }
         }
         // Desasociar delitos quitados
         if (aDesasociar.length > 0) {
@@ -314,7 +326,7 @@ const ExpedienteFormPage: React.FC = () => {
         }
         await expedienteService.updateExpediente(parseInt(id), expediente);
         setSuccess('Expediente actualizado correctamente');
-        // Actualizar delitosOriginales tras guardar
+        // Actualizar delitosOriginales tras guardar exitosamente
         setDelitosOriginales(expediente.delitos ? [...expediente.delitos] : []);
       } else {
         const newExpediente = await expedienteService.createExpediente(expediente);
@@ -322,9 +334,18 @@ const ExpedienteFormPage: React.FC = () => {
         // Opcional: redirigir al expediente recién creado
         // navigate(`/expedientes/${newExpediente.id}`);
       }
-    } catch (err) {
+      // Recargar delitos asociados y actualizar delitosOriginales
+      if (id && id !== 'new') {
+        const asociados = await delitoService.getDelitosPorExpediente(Number(id));
+        setDelitosOriginales(asociados.map((d: any) => d.delitoId || d.id));
+      }
+    } catch (err: any) {
       console.error('Error al guardar:', err);
-      setError('Error al guardar los datos. Por favor intente nuevamente.');
+      if (err instanceof Error && err.message === 'El delito ya está asociado a este expediente.') {
+        setSuccess('Expediente actualizado correctamente');
+      } else {
+        setError('Error al guardar los datos. Por favor intente nuevamente.');
+      }
     } finally {
       setLoading(false);
     }
@@ -379,15 +400,14 @@ const ExpedienteFormPage: React.FC = () => {
           >
             <Tab label="Información Básica" {...a11yProps(0)} />
             <Tab label="Causa Judicial" {...a11yProps(1)} />
-            <Tab label="Prófugo" {...a11yProps(2)} />
-            <Tab label="Hecho" {...a11yProps(3)} />
-            <Tab label="Detención" {...a11yProps(4)} />
-            <Tab label="Organización" {...a11yProps(5)} />
-            <Tab label="Impacto" {...a11yProps(6)} />
-            <Tab label="Fotografías" {...a11yProps(7)} />
-            <Tab label="Documentos" {...a11yProps(8)} />
-            <Tab label="Personas" {...a11yProps(9)} />
-            <Tab label="Delitos" {...a11yProps(10)} />
+            <Tab label="Persona" {...a11yProps(2)} />
+            <Tab label="Prófugo" {...a11yProps(3)} />
+            <Tab label="Delito" {...a11yProps(4)} />
+            <Tab label="Detención" {...a11yProps(5)} />
+            <Tab label="Organización" {...a11yProps(6)} />
+            <Tab label="Impacto" {...a11yProps(7)} />
+            <Tab label="Fotografías" {...a11yProps(8)} />
+            <Tab label="Documentos" {...a11yProps(9)} />
           </Tabs>
         </Box>
 
@@ -400,39 +420,35 @@ const ExpedienteFormPage: React.FC = () => {
         </TabPanel>
         
         <TabPanel value={tabValue} index={2}>
-          <InfoProfugoTab expediente={expediente} onChange={handleFieldChange} />
-        </TabPanel>
-        
-        <TabPanel value={tabValue} index={3}>
-          <InfoHechoTab expediente={expediente} onChange={handleFieldChange} />
-        </TabPanel>
-        
-        <TabPanel value={tabValue} index={4}>
-          <InfoDetencionTab expediente={expediente} onChange={handleFieldChange} />
-        </TabPanel>
-        
-        <TabPanel value={tabValue} index={5}>
-          <InfoOrganizacionTab expediente={expediente} onChange={handleFieldChange} />
-        </TabPanel>
-        
-        <TabPanel value={tabValue} index={6}>
-          <InfoImpactoTab expediente={expediente} onChange={handleFieldChange} />
-        </TabPanel>
-        
-        <TabPanel value={tabValue} index={7}>
-          <FotografiasTab expediente={expediente} onChange={handleFieldChange} />
-        </TabPanel>
-        
-        <TabPanel value={tabValue} index={8}>
-          <DocumentosTab expediente={expediente} onChange={handleFieldChange} />
-        </TabPanel>
-        
-        <TabPanel value={tabValue} index={9}>
           <PersonasTab expediente={expediente} onChange={handleFieldChange} />
         </TabPanel>
         
-        <TabPanel value={tabValue} index={10}>
+        <TabPanel value={tabValue} index={3}>
+          <InfoProfugoTab expediente={expediente} onChange={handleFieldChange} />
+        </TabPanel>
+        
+        <TabPanel value={tabValue} index={4}>
           <DelitosTab expediente={expediente} onChange={handleFieldChange} />
+        </TabPanel>
+        
+        <TabPanel value={tabValue} index={5}>
+          <InfoDetencionTab expediente={expediente} onChange={handleFieldChange} />
+        </TabPanel>
+        
+        <TabPanel value={tabValue} index={6}>
+          <InfoOrganizacionTab expediente={expediente} onChange={handleFieldChange} />
+        </TabPanel>
+        
+        <TabPanel value={tabValue} index={7}>
+          <InfoImpactoTab expediente={expediente} onChange={handleFieldChange} />
+        </TabPanel>
+        
+        <TabPanel value={tabValue} index={8}>
+          <FotografiasTab expediente={expediente} onChange={handleFieldChange} />
+        </TabPanel>
+        
+        <TabPanel value={tabValue} index={9}>
+          <DocumentosTab expediente={expediente} onChange={handleFieldChange} />
         </TabPanel>
       </Paper>
     </Box>
