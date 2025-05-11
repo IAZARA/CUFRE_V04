@@ -13,13 +13,17 @@ interface InfoDetencionTabProps {
 }
 
 const fuerzasDetencion = [
-  'Policía Federal',
-  'Policía Provincial',
-  'Gendarmería Nacional',
-  'Prefectura Naval',
-  'Policía de Seguridad Aeroportuaria',
+  'S/D',
+  'GNA',
+  'PFA',
+  'PSA',
+  'PNA',
+  'SPF',
+  'POL LOCAL',
   'INTERPOL',
-  'Otra'
+  'AMERIPOL',
+  'EUROPOL',
+  'BLOQUE DE BÚSQUEDA CUFRE'
 ];
 
 const InfoDetencionTab: React.FC<InfoDetencionTabProps> = ({ expediente, onChange }) => {
@@ -70,7 +74,7 @@ const InfoDetencionTab: React.FC<InfoDetencionTabProps> = ({ expediente, onChang
             select
             label="Fuerza que realizó la Detención"
             name="fuerzaDetencion"
-            value={expediente.fuerzaDetencion || ''}
+            value={expediente.fuerzaDetencion || 'S/D'}
             onChange={handleChange}
             margin="normal"
           >

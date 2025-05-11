@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import java.util.List;
 
 @Data
 @Builder
@@ -19,4 +20,7 @@ public class PersonaExpedienteDTO {
     
     // Datos de la persona (para respuestas anidadas)
     private PersonaDTO persona;
+
+    // Lista de domicilios asociados a la persona
+    private List<DomicilioDTO> domicilios;
 } 

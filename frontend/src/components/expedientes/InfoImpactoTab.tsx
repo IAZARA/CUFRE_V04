@@ -29,8 +29,7 @@ const institucionesSensibles = [
   'SINAGOGA',
   'MEZQUITA',
   'OTRO',
-  'NINGUNA',
-  'SIN_DATO'
+  'NINGUNA'
 ];
 
 const recursosLimitados = [

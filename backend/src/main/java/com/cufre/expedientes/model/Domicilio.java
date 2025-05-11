@@ -14,7 +14,8 @@ import jakarta.persistence.*;
 public class Domicilio {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "domicilio_seq")
+    @SequenceGenerator(name = "domicilio_seq", sequenceName = "DOMICILIO_SEQ", allocationSize = 1)
     @Column(name = "ID")
     private Long id;
     

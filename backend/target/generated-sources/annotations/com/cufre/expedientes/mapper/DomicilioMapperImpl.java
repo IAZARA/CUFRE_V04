@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-05-11T11:19:39-0300",
+    date = "2025-05-11T12:48:59-0300",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 23.0.2 (Homebrew)"
 )
 @Component
@@ -48,7 +48,6 @@ public class DomicilioMapperImpl implements DomicilioMapper {
 
         Domicilio domicilio = new Domicilio();
 
-        domicilio.setId( domicilioDTO.getId() );
         domicilio.setCalle( domicilioDTO.getCalle() );
         domicilio.setNumero( domicilioDTO.getNumero() );
         domicilio.setPiso( domicilioDTO.getPiso() );
@@ -71,7 +70,6 @@ public class DomicilioMapperImpl implements DomicilioMapper {
             return domicilio;
         }
 
-        domicilio.setId( domicilioDTO.getId() );
         domicilio.setCalle( domicilioDTO.getCalle() );
         domicilio.setNumero( domicilioDTO.getNumero() );
         domicilio.setPiso( domicilioDTO.getPiso() );

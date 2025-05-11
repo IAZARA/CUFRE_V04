@@ -13,7 +13,11 @@ import {
   TableHead,
   TableRow,
   IconButton,
-  Chip
+  Chip,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions
 } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import {
@@ -73,6 +77,15 @@ const PersonasTab: React.FC<PersonasTabProps> = ({ expediente, onChange }) => {
   const [nuevoDomicilio, setNuevoDomicilio] = useState<Partial<Domicilio>>(domicilioVacio);
   const [editandoDomicilioIdx, setEditandoDomicilioIdx] = useState<number | null>(null);
 
+  const [personaSeleccionada, setPersonaSeleccionada] = useState<PersonaExpediente | null>(null);
+  const [domiciliosPersona, setDomiciliosPersona] = useState<Domicilio[]>([]);
+
+  const [personaEnEdicion, setPersonaEnEdicion] = useState<PersonaExpediente | null>(null);
+  const [mostrarFormularioDomicilio, setMostrarFormularioDomicilio] = useState<number | null>(null);
+  const [domicilioEnEdicion, setDomicilioEnEdicion] = useState<Domicilio | null>(null);
+
+  const [openDomicilioModal, setOpenDomicilioModal] = useState(false);
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setNewPersona(prev => ({
@@ -100,53 +113,44 @@ const PersonasTab: React.FC<PersonasTabProps> = ({ expediente, onChange }) => {
     setLoading(true);
     setError(null);
     try {
-      // Construir el DTO para el backend con los campos correctos, incluyendo domicilios
       const personaExpedienteDTO = {
         persona: {
           numeroDocumento: newPersona.dni,
           tipoDocumento: 'DNI',
           nombre: newPersona.nombre,
-          apellido: newPersona.apellido,
-          domicilios: newPersona.domicilios || []
+          apellido: newPersona.apellido
         },
         tipoRelacion: newPersona.tipoRelacion,
         observaciones: newPersona.informacionAdicional || ''
       };
-      const response = await expedienteService.addPersona(expediente.id, personaExpedienteDTO);
-      // Recargar la lista de personas desde el backend
+      if (personaEnEdicion && personaEnEdicion.persona?.id) {
+        await expedienteService.updatePersona(personaEnEdicion.persona.id, personaExpedienteDTO.persona);
+      } else {
+        await expedienteService.addPersona(expediente.id, personaExpedienteDTO);
+      }
       const personasActualizadas = await expedienteService.getPersonas(expediente.id);
       onChange('personas', personasActualizadas);
-      setNewPersona({
-        dni: '',
-        nombre: '',
-        apellido: '',
-        tipoRelacion: '',
-        informacionAdicional: '',
-        domicilios: []
-      });
+      setNewPersona({ dni: '', nombre: '', apellido: '', tipoRelacion: '', informacionAdicional: '', domicilios: [] });
       setEditing(false);
-      setEditIndex(-1);
+      setPersonaEnEdicion(null);
     } catch (err) {
-      setError('Error al agregar persona. Intenta nuevamente.');
+      setError('Error al guardar persona. Intenta nuevamente.');
     } finally {
       setLoading(false);
     }
   };
 
-  const handleEditPersona = (index: number) => {
-    const persona = expediente.personas[index];
-    
+  const handleEditarPersona = (persona: PersonaExpediente) => {
+    setPersonaEnEdicion(persona);
     setNewPersona({
       dni: persona.persona?.numeroDocumento || '',
       nombre: persona.persona?.nombre || '',
       apellido: persona.persona?.apellido || '',
       tipoRelacion: persona.tipoRelacion,
       informacionAdicional: persona.observaciones || '',
-      domicilios: persona.domicilios || []
+      domicilios: []
     });
-    
     setEditing(true);
-    setEditIndex(index);
   };
 
   const handleDeletePersona = (id: number | undefined) => {
@@ -205,25 +209,100 @@ const PersonasTab: React.FC<PersonasTabProps> = ({ expediente, onChange }) => {
     setNuevoDomicilio(domicilioVacio);
   };
 
-  const handleEditarDomicilio = (idx: number) => {
-    setNuevoDomicilio({ ...(newPersona.domicilios?.[idx] || domicilioVacio) });
-    setEditandoDomicilioIdx(idx);
+  const handleEditarDomicilio = (domicilio: Domicilio) => {
+    setDomicilioEnEdicion(domicilio);
+    setNuevoDomicilio(domicilio);
+    setOpenDomicilioModal(true);
   };
 
-  const handleEliminarDomicilio = (idx: number) => {
-    setNewPersona(prev => ({
-      ...prev,
-      domicilios: (prev.domicilios as Partial<Domicilio>[] || []).filter((_, i) => i !== idx) as any
-    }));
-    if (editandoDomicilioIdx === idx) {
-      setNuevoDomicilio(domicilioVacio);
-      setEditandoDomicilioIdx(null);
+  const handleEliminarDomicilio = async (personaId: number, domicilioId: number) => {
+    if (typeof expediente.id !== 'number') return;
+    setLoading(true);
+    setError(null);
+    try {
+      await expedienteService.deleteDomicilio(domicilioId);
+      const personasActualizadas = await expedienteService.getPersonas(expediente.id);
+      onChange('personas', personasActualizadas);
+    } catch (err) {
+      setError('Error al eliminar domicilio. Intenta nuevamente.');
+    } finally {
+      setLoading(false);
     }
   };
 
-  const handleCancelarEdicionDomicilio = () => {
+  const handleMostrarFormularioDomicilio = (personaId: number) => {
+    setMostrarFormularioDomicilio(personaId);
     setNuevoDomicilio(domicilioVacio);
-    setEditandoDomicilioIdx(null);
+    setDomicilioEnEdicion(null);
+  };
+
+  const handleGuardarDomicilio = async () => {
+    if (!mostrarFormularioDomicilio || !nuevoDomicilio.calle || !nuevoDomicilio.numero || !nuevoDomicilio.localidad) return;
+    if (typeof expediente.id !== 'number') return;
+    setLoading(true);
+    setError(null);
+    try {
+      if (domicilioEnEdicion && typeof domicilioEnEdicion.id === 'number') {
+        await expedienteService.updateDomicilio(domicilioEnEdicion.id, nuevoDomicilio);
+      } else {
+        await expedienteService.addDomicilio(mostrarFormularioDomicilio, nuevoDomicilio);
+      }
+      const personasActualizadas = await expedienteService.getPersonas(expediente.id);
+      onChange('personas', personasActualizadas);
+      setMostrarFormularioDomicilio(null);
+      setNuevoDomicilio(domicilioVacio);
+      setDomicilioEnEdicion(null);
+    } catch (err) {
+      setError('Error al guardar domicilio. Intenta nuevamente.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSeleccionarPersona = async (persona: PersonaExpediente) => {
+    setPersonaSeleccionada(persona);
+    // Usar domicilios directamente del objeto personaSeleccionada
+    if (Array.isArray(persona.domicilios)) {
+      setDomiciliosPersona(persona.domicilios);
+    } else {
+      setDomiciliosPersona([]);
+    }
+  };
+
+  const handleAgregarDomicilioPersona = () => {
+    setDomicilioEnEdicion(null);
+    setNuevoDomicilio({});
+    setOpenDomicilioModal(true);
+  };
+
+  const handleCloseDomicilioModal = () => {
+    setOpenDomicilioModal(false);
+    setDomicilioEnEdicion(null);
+    setNuevoDomicilio({});
+  };
+
+  const handleChangeDomicilio = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNuevoDomicilio({ ...nuevoDomicilio, [e.target.name]: e.target.value });
+  };
+
+  const handleGuardarDomicilioModal = async () => {
+    if (!personaSeleccionada || typeof personaSeleccionada.persona?.id !== 'number') return;
+    try {
+      if (domicilioEnEdicion && typeof domicilioEnEdicion.id === 'number') {
+        await expedienteService.updateDomicilio(domicilioEnEdicion.id, nuevoDomicilio);
+      } else {
+        await expedienteService.addDomicilio(personaSeleccionada.persona.id, nuevoDomicilio);
+      }
+      // Refrescar domicilios
+      const personasActualizadas = await expedienteService.getPersonas(expediente.id!);
+      const personaActualizada = personasActualizadas.find(p => p.persona.id === personaSeleccionada.persona?.id);
+      setPersonaSeleccionada(personaActualizada || null);
+      setOpenDomicilioModal(false);
+      setDomicilioEnEdicion(null);
+      setNuevoDomicilio({});
+    } catch (error) {
+      // Manejo de error
+    }
   };
 
   return (
@@ -290,99 +369,6 @@ const PersonasTab: React.FC<PersonasTabProps> = ({ expediente, onChange }) => {
             rows={2}
           />
           
-          <Box sx={{ border: '1px solid #eee', borderRadius: 1, p: 2, mb: 2 }}>
-            <Typography variant="subtitle2" gutterBottom>Domicilios</Typography>
-            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, mb: 1 }}>
-              <Box sx={{ width: { xs: '100%', sm: '33%', md: '25%' } }}>
-                <TextField label="Calle" name="calle" value={nuevoDomicilio.calle || ''} onChange={handleDomicilioInputChange} fullWidth />
-              </Box>
-              <Box sx={{ width: { xs: '50%', sm: '16%', md: '12%' } }}>
-                <TextField label="Número" name="numero" value={nuevoDomicilio.numero || ''} onChange={handleDomicilioInputChange} fullWidth />
-              </Box>
-              <Box sx={{ width: { xs: '50%', sm: '16%', md: '12%' } }}>
-                <TextField label="Piso" name="piso" value={nuevoDomicilio.piso || ''} onChange={handleDomicilioInputChange} fullWidth />
-              </Box>
-              <Box sx={{ width: { xs: '50%', sm: '16%', md: '12%' } }}>
-                <TextField label="Departamento" name="departamento" value={nuevoDomicilio.departamento || ''} onChange={handleDomicilioInputChange} fullWidth />
-              </Box>
-              <Box sx={{ width: { xs: '50%', sm: '16%', md: '12%' } }}>
-                <TextField label="Código Postal" name="codigoPostal" value={nuevoDomicilio.codigoPostal || ''} onChange={handleDomicilioInputChange} fullWidth />
-              </Box>
-            </Box>
-            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, mb: 1 }}>
-              <Box sx={{ width: { xs: '100%', sm: '25%', md: '20%' } }}>
-                <TextField label="Localidad" name="localidad" value={nuevoDomicilio.localidad || ''} onChange={handleDomicilioInputChange} fullWidth />
-              </Box>
-              <Box sx={{ width: { xs: '100%', sm: '25%', md: '20%' } }}>
-                <TextField label="Provincia" name="provincia" value={nuevoDomicilio.provincia || ''} onChange={handleDomicilioInputChange} fullWidth />
-              </Box>
-              <Box sx={{ width: { xs: '100%', sm: '25%', md: '20%' } }}>
-                <TextField label="País" name="pais" value={nuevoDomicilio.pais || ''} onChange={handleDomicilioInputChange} fullWidth />
-              </Box>
-              <Box sx={{ width: { xs: '100%', sm: '25%', md: '20%' } }}>
-                <TextField
-                  select
-                  label="Tipo"
-                  name="tipo"
-                  value={nuevoDomicilio.tipo || ''}
-                  onChange={handleDomicilioInputChange}
-                  fullWidth
-                >
-                  <MenuItem value="">Seleccionar</MenuItem>
-                  <MenuItem value="Principal">Principal</MenuItem>
-                  <MenuItem value="Secundario">Secundario</MenuItem>
-                  <MenuItem value="Otro">Otro</MenuItem>
-                </TextField>
-              </Box>
-            </Box>
-            <Box sx={{ width: '100%', mb: 2 }}>
-              <TextField label="Observaciones" name="observaciones" value={nuevoDomicilio.observaciones || ''} onChange={handleDomicilioInputChange} fullWidth multiline minRows={2} />
-            </Box>
-            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, alignItems: 'center' }}>
-              <Box sx={{ width: { xs: '100%', sm: '33%', md: '20%' } }}>
-                <Button
-                  variant={editandoDomicilioIdx !== null ? 'contained' : 'outlined'}
-                  color="primary"
-                  onClick={handleAgregarODomicilio}
-                  disabled={!nuevoDomicilio.calle || !nuevoDomicilio.numero || !nuevoDomicilio.localidad}
-                  fullWidth
-                  sx={{ height: '100%' }}
-                >
-                  {editandoDomicilioIdx !== null ? 'Actualizar' : 'Agregar'}
-                </Button>
-              </Box>
-              {editandoDomicilioIdx !== null && (
-                <Box sx={{ width: { xs: '100%', sm: '33%', md: '20%' } }}>
-                  <Button variant="outlined" color="inherit" onClick={handleCancelarEdicionDomicilio} fullWidth sx={{ height: '100%' }}>
-                    Cancelar
-                  </Button>
-                </Box>
-              )}
-            </Box>
-            {(newPersona.domicilios || []).length === 0 ? (
-              <Typography color="text.secondary" sx={{ fontStyle: 'italic' }}>
-                No hay domicilios cargados.
-              </Typography>
-            ) : (
-              <Box>
-                {(newPersona.domicilios || []).map((dom, idx) => (
-                  <Box key={idx} sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
-                    <Typography sx={{ flex: 1 }}>
-                      {dom.calle} {dom.numero} {dom.piso && `Piso ${dom.piso}`} {dom.departamento && `Dpto. ${dom.departamento}`} - {dom.localidad}, {dom.provincia} {dom.pais && `(${dom.pais})`} {dom.tipo && `- ${dom.tipo}`}
-                      {dom.observaciones && ` - ${dom.observaciones}`}
-                    </Typography>
-                    <IconButton size="small" color="primary" onClick={() => handleEditarDomicilio(idx)}>
-                      <EditIcon fontSize="small" />
-                    </IconButton>
-                    <IconButton size="small" color="error" onClick={() => handleEliminarDomicilio(idx)}>
-                      <DeleteIcon fontSize="small" />
-                    </IconButton>
-                  </Box>
-                ))}
-              </Box>
-            )}
-          </Box>
-          
           <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
             {editing && (
               <Button 
@@ -419,59 +405,246 @@ const PersonasTab: React.FC<PersonasTabProps> = ({ expediente, onChange }) => {
         <TableContainer component={Paper} variant="outlined">
           <Table>
             <TableHead>
-              <TableRow>
-                <TableCell>DNI/ID</TableCell>
-                <TableCell>Nombre Completo</TableCell>
-                <TableCell>Relación</TableCell>
-                <TableCell>Información</TableCell>
-                <TableCell align="right">Acciones</TableCell>
+              <TableRow sx={{ backgroundColor: '#e3f2fd' }}>
+                <TableCell sx={{ color: '#1565c0', fontWeight: 'bold' }}>DNI/ID</TableCell>
+                <TableCell sx={{ color: '#1565c0', fontWeight: 'bold' }}>Nombre Completo</TableCell>
+                <TableCell sx={{ color: '#1565c0', fontWeight: 'bold' }}>Relación</TableCell>
+                <TableCell sx={{ color: '#1565c0', fontWeight: 'bold' }}>Información</TableCell>
+                <TableCell align="right" sx={{ color: '#1565c0', fontWeight: 'bold' }}>Acciones</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {expediente.personas.map((persona, personaIdx) => (
-                <TableRow key={persona.id || personaIdx} hover>
-                  <TableCell>{persona.persona?.numeroDocumento || '-'}</TableCell>
-                  <TableCell>{[persona.persona?.nombre, persona.persona?.apellido].filter(Boolean).join(' ') || '-'}</TableCell>
-                  <TableCell>
-                    <Chip 
-                      label={
-                        persona.tipoRelacion && persona.tipoRelacion.trim().toLowerCase().includes('imputado')
-                          ? 'Prófugo'
-                          : persona.tipoRelacion || '-'
-                      }
-                      color={
-                        persona.tipoRelacion && persona.tipoRelacion.trim().toLowerCase().includes('imputado') ? 'error' :
-                        persona.tipoRelacion === 'Víctima' ? 'warning' :
-                        persona.tipoRelacion === 'Testigo' ? 'info' : 'default'
-                      }
-                      size="small"
-                    />
-                  </TableCell>
-                  <TableCell>{persona.observaciones || '-'}</TableCell>
-                  <TableCell align="right">
-                    <IconButton 
-                      size="small" 
-                      color="primary" 
-                      onClick={() => handleEditPersona(personaIdx)}
-                      aria-label="Editar persona"
-                    >
-                      <EditIcon />
-                    </IconButton>
-                    <IconButton 
-                      size="small" 
-                      color="error" 
-                      onClick={() => handleDeletePersona(persona.id)}
-                      aria-label="Eliminar persona"
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
+                <React.Fragment key={persona.id || personaIdx}>
+                  <TableRow
+                    hover
+                    sx={{
+                      backgroundColor: '#fff',
+                      fontWeight: 'bold',
+                      borderBottom: '2px solid #e3f2fd',
+                      '&:hover': { backgroundColor: '#f5f5f5' }
+                    }}
+                  >
+                    <TableCell sx={{ fontWeight: 'bold' }}>{persona.persona?.numeroDocumento || '-'}</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>{[persona.persona?.nombre, persona.persona?.apellido].filter(Boolean).join(' ') || '-'}</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>
+                      <Chip 
+                        label={
+                          persona.tipoRelacion && persona.tipoRelacion.trim().toLowerCase().includes('imputado')
+                            ? 'Prófugo'
+                            : persona.tipoRelacion || '-'
+                        }
+                        color={
+                          persona.tipoRelacion && persona.tipoRelacion.trim().toLowerCase().includes('imputado') ? 'error' :
+                          persona.tipoRelacion === 'Víctima' ? 'warning' :
+                          persona.tipoRelacion === 'Testigo' ? 'info' : 'default'
+                        }
+                        size="small"
+                      />
+                    </TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>{persona.observaciones || '-'}</TableCell>
+                    <TableCell align="right">
+                      <IconButton 
+                        size="small" 
+                        color="primary" 
+                        onClick={() => handleEditarPersona(persona)}
+                        aria-label="Seleccionar persona"
+                      >
+                        <EditIcon />
+                      </IconButton>
+                      <IconButton 
+                        size="small" 
+                        color="error" 
+                        onClick={() => handleDeletePersona(persona.id)}
+                        aria-label="Eliminar persona"
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                  {/* Domicilios de la persona */}
+                  {Array.isArray(persona.domicilios) && persona.domicilios.length > 0 && (
+                    <TableRow>
+                      <TableCell colSpan={5} sx={{ p: 0, background: '#f5f5f5', borderLeft: '4px solid #1976d2' }}>
+                        <Box sx={{ display: 'flex', alignItems: 'center', pl: 2, pt: 1 }}>
+                          <span style={{ color: '#1976d2', marginRight: 8 }}><span role="img" aria-label="casa">🏠</span></span>
+                          <Typography variant="subtitle2" color="primary" sx={{ fontWeight: 600 }}>
+                            Domicilios
+                          </Typography>
+                        </Box>
+                        <Table size="small" sx={{ ml: 4, width: '98%' }}>
+                          <TableHead>
+                            <TableRow>
+                              <TableCell>Domicilio</TableCell>
+                              <TableCell align="right">Acciones</TableCell>
+                            </TableRow>
+                          </TableHead>
+                          <TableBody>
+                            {persona.domicilios.map((dom, idx) => (
+                              <TableRow key={dom.id || idx}>
+                                <TableCell>{[dom.calle, dom.numero].filter(Boolean).join(' ')}</TableCell>
+                                <TableCell align="right">
+                                  {typeof dom.id === 'number' && (
+                                    <>
+                                      <IconButton
+                                        size="small"
+                                        color="primary"
+                                        onClick={() => handleEditarDomicilio(dom)}
+                                        aria-label="Editar domicilio"
+                                      >
+                                        <EditIcon fontSize="small" />
+                                      </IconButton>
+                                      <IconButton
+                                        size="small"
+                                        color="error"
+                                        onClick={() => handleEliminarDomicilio(persona.persona!.id as number, dom.id as number)}
+                                        aria-label="Eliminar domicilio"
+                                      >
+                                        <DeleteIcon fontSize="small" />
+                                      </IconButton>
+                                    </>
+                                  )}
+                                </TableCell>
+                              </TableRow>
+                            ))}
+                            {/* Botón para agregar domicilio al final de la lista */}
+                            <TableRow>
+                              <TableCell colSpan={2} align="right">
+                                <Button
+                                  variant="outlined"
+                                  color="primary"
+                                  startIcon={<AddIcon />}
+                                  onClick={() => {
+                                    setPersonaSeleccionada(persona);
+                                    handleAgregarDomicilioPersona();
+                                  }}
+                                >
+                                  Agregar Domicilio
+                                </Button>
+                              </TableCell>
+                            </TableRow>
+                          </TableBody>
+                        </Table>
+                      </TableCell>
+                    </TableRow>
+                  )}
+                  {/* Si no hay domicilios, igual muestra el botón */}
+                  {(!Array.isArray(persona.domicilios) || persona.domicilios.length === 0) && (
+                    <TableRow>
+                      <TableCell colSpan={5} align="right" sx={{ background: '#f5f5f5', borderLeft: '4px solid #1976d2' }}>
+                        <Box sx={{ display: 'flex', alignItems: 'center', pl: 2, pt: 1, pb: 1 }}>
+                          <span style={{ color: '#1976d2', marginRight: 8 }}><span role="img" aria-label="casa">🏠</span></span>
+                          <Typography variant="subtitle2" color="primary" sx={{ fontWeight: 600, flexGrow: 1 }}>
+                            Domicilios
+                          </Typography>
+                          <Button
+                            variant="outlined"
+                            color="primary"
+                            startIcon={<AddIcon />}
+                            onClick={() => {
+                              setPersonaSeleccionada(persona);
+                              handleAgregarDomicilioPersona();
+                            }}
+                          >
+                            Agregar Domicilio
+                          </Button>
+                        </Box>
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </React.Fragment>
               ))}
             </TableBody>
           </Table>
         </TableContainer>
       )}
+
+      {personaSeleccionada && (
+        <Paper variant="outlined" sx={{ p: 2, mt: 2 }}>
+          <Typography variant="subtitle1" gutterBottom>
+            Domicilios de {personaSeleccionada.persona?.nombre} {personaSeleccionada.persona?.apellido}
+          </Typography>
+          <TableContainer component={Paper} variant="outlined">
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>DNI/ID</TableCell>
+                  <TableCell>Domicilio</TableCell>
+                  <TableCell align="right">Acciones</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {domiciliosPersona.map((dom, idx) => (
+                  <TableRow key={idx}>
+                    <TableCell>{dom.id || '-'}</TableCell>
+                    <TableCell>{[dom.calle, dom.numero].filter(Boolean).join(' ')}</TableCell>
+                    <TableCell align="right">
+                      {typeof personaSeleccionada?.persona?.id === 'number' && typeof dom.id === 'number' && (
+                        <>
+                          <IconButton
+                            size="small"
+                            color="primary"
+                            onClick={() => handleEditarDomicilio(dom)}
+                            aria-label="Editar domicilio"
+                          >
+                            <EditIcon fontSize="small" />
+                          </IconButton>
+                          <IconButton
+                            size="small"
+                            color="error"
+                            onClick={() => handleEliminarDomicilio(personaSeleccionada.persona!.id as number, dom.id as number)}
+                            aria-label="Eliminar domicilio"
+                          >
+                            <DeleteIcon fontSize="small" />
+                          </IconButton>
+                        </>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2, mt: 2 }}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => personaSeleccionada?.persona?.id !== undefined && handleMostrarFormularioDomicilio(personaSeleccionada.persona.id!)}
+              disabled={loading || !nuevoDomicilio.calle || !nuevoDomicilio.numero || !nuevoDomicilio.localidad}
+              startIcon={<AddIcon />}
+            >
+              {loading ? 'Guardando...' : 'Agregar Domicilio'}
+            </Button>
+          </Box>
+        </Paper>
+      )}
+
+      <Dialog open={openDomicilioModal} onClose={handleCloseDomicilioModal} maxWidth="sm" fullWidth>
+        <DialogTitle>{domicilioEnEdicion ? 'Editar domicilio' : 'Agregar domicilio'}</DialogTitle>
+        <DialogContent>
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, mb: 1 }}>
+            <TextField label="Calle" name="calle" value={nuevoDomicilio.calle || ''} onChange={handleChangeDomicilio} fullWidth />
+            <TextField label="Número" name="numero" value={nuevoDomicilio.numero || ''} onChange={handleChangeDomicilio} fullWidth />
+            <TextField label="Piso" name="piso" value={nuevoDomicilio.piso || ''} onChange={handleChangeDomicilio} fullWidth />
+            <TextField label="Departamento" name="departamento" value={nuevoDomicilio.departamento || ''} onChange={handleChangeDomicilio} fullWidth />
+            <TextField label="Código Postal" name="codigoPostal" value={nuevoDomicilio.codigoPostal || ''} onChange={handleChangeDomicilio} fullWidth />
+            <TextField label="Localidad" name="localidad" value={nuevoDomicilio.localidad || ''} onChange={handleChangeDomicilio} fullWidth />
+            <TextField label="Provincia" name="provincia" value={nuevoDomicilio.provincia || ''} onChange={handleChangeDomicilio} fullWidth />
+            <TextField label="País" name="pais" value={nuevoDomicilio.pais || ''} onChange={handleChangeDomicilio} fullWidth />
+            <TextField select label="Tipo" name="tipo" value={nuevoDomicilio.tipo || ''} onChange={handleChangeDomicilio} fullWidth>
+              <MenuItem value="">Seleccionar</MenuItem>
+              <MenuItem value="Principal">Principal</MenuItem>
+              <MenuItem value="Secundario">Secundario</MenuItem>
+              <MenuItem value="Otro">Otro</MenuItem>
+            </TextField>
+            <TextField label="Observaciones" name="observaciones" value={nuevoDomicilio.observaciones || ''} onChange={handleChangeDomicilio} fullWidth multiline minRows={2} />
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDomicilioModal}>Cancelar</Button>
+          <Button onClick={handleGuardarDomicilioModal} variant="contained" color="primary">Guardar</Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };

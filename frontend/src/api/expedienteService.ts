@@ -218,6 +218,37 @@ const expedienteService = {
     }
   },
 
+  addDomicilio: async (personaId: number, domicilio: any): Promise<any> => {
+    try {
+      // Eliminar el campo id si existe
+      const { id, ...domicilioSinId } = domicilio;
+      const response = await axios.post(`/domicilios/persona/${personaId}`, domicilioSinId);
+      return response.data;
+    } catch (error) {
+      console.error(`Error al agregar domicilio a la persona con ID ${personaId}:`, error);
+      throw error;
+    }
+  },
+
+  updateDomicilio: async (domicilioId: number, domicilio: any): Promise<any> => {
+    try {
+      const response = await axios.put(`/domicilios/${domicilioId}`, domicilio);
+      return response.data;
+    } catch (error) {
+      console.error(`Error al actualizar domicilio con ID ${domicilioId}:`, error);
+      throw error;
+    }
+  },
+
+  deleteDomicilio: async (domicilioId: number): Promise<void> => {
+    try {
+      await axios.delete(`/domicilios/${domicilioId}`);
+    } catch (error) {
+      console.error(`Error al eliminar domicilio con ID ${domicilioId}:`, error);
+      throw error;
+    }
+  },
+
   // Búsquedas específicas
   searchByNumero: async (numero: string) => {
     const response = await axios.get(`/expedientes/search?numero=${numero}`);

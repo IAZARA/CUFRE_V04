@@ -145,6 +145,9 @@ export interface Expediente {
   impactoPercepcion: string;
   
   fotoPrincipalId?: number;
+
+  // Nombres completos de los prófugos asociados a este expediente
+  profugos?: string[];
 }
 
 export interface ExpedienteDelito {

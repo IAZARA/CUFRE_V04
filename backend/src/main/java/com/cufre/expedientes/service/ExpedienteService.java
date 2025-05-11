@@ -31,17 +31,20 @@ public class ExpedienteService extends AbstractBaseService<Expediente, Expedient
     private final DelitoService delitoService;
     private final ExpedienteDelitoService expedienteDelitoService;
     private final PersonaMapper personaMapper;
+    private final DomicilioService domicilioService;
 
     public ExpedienteService(
             ExpedienteRepository repository, 
             ExpedienteMapper mapper,
             DelitoService delitoService,
             ExpedienteDelitoService expedienteDelitoService,
-            PersonaMapper personaMapper) {
+            PersonaMapper personaMapper,
+            DomicilioService domicilioService) {
         super(repository, mapper);
         this.delitoService = delitoService;
         this.expedienteDelitoService = expedienteDelitoService;
         this.personaMapper = personaMapper;
+        this.domicilioService = domicilioService;
     }
 
     @Override
@@ -310,6 +313,8 @@ public class ExpedienteService extends AbstractBaseService<Expediente, Expedient
                     dto.setObservaciones(personaExpediente.getObservaciones());
                     // Añadir información básica de la persona
                     dto.setPersona(personaMapper.toDto(personaExpediente.getPersona()));
+                    // Poblar domicilios
+                    dto.setDomicilios(domicilioService.findByPersonaId(personaExpediente.getPersona().getId()));
                     return dto;
                 })
                 .collect(java.util.stream.Collectors.toList());
@@ -363,13 +368,28 @@ public class ExpedienteService extends AbstractBaseService<Expediente, Expedient
     @Transactional(readOnly = true)
     public List<ExpedienteDTO> findAll() {
         List<Expediente> expedientes = repository.findAll();
-        for (Expediente expediente : expedientes) {
-            // Inicializar la colección de personas vinculadas
+        List<ExpedienteDTO> dtos = expedientes.stream().map(this::toDto).collect(java.util.stream.Collectors.toList());
+        // Poblar el campo 'profugos' en cada DTO
+        for (int i = 0; i < expedientes.size(); i++) {
+            Expediente expediente = expedientes.get(i);
+            ExpedienteDTO dto = dtos.get(i);
             if (expediente.getPersonaExpedientes() != null) {
-                expediente.getPersonaExpedientes().size();
+                List<String> profugos = expediente.getPersonaExpedientes().stream()
+                    .filter(pe -> pe.getTipoRelacion() != null && pe.getTipoRelacion().trim().equalsIgnoreCase("Imputado"))
+                    .map(pe -> {
+                        if (pe.getPersona() != null) {
+                            String nombre = pe.getPersona().getNombre() != null ? pe.getPersona().getNombre() : "";
+                            String apellido = pe.getPersona().getApellido() != null ? pe.getPersona().getApellido() : "";
+                            return (nombre + " " + apellido).trim();
+                        }
+                        return null;
+                    })
+                    .filter(n -> n != null && !n.isEmpty())
+                    .collect(java.util.stream.Collectors.toList());
+                dto.setProfugos(profugos);
             }
         }
-        return expedientes.stream().map(this::toDto).collect(java.util.stream.Collectors.toList());
+        return dtos;
     }
 
     /**

@@ -17,8 +17,10 @@ public interface DomicilioMapper {
     DomicilioDTO toDto(Domicilio domicilio);
     
     @Mapping(target = "persona", ignore = true)
+    @Mapping(target = "id", ignore = true)
     Domicilio toEntity(DomicilioDTO domicilioDTO);
     
     @Mapping(target = "persona", ignore = true)
+    @Mapping(target = "id", ignore = true)
     Domicilio updateEntity(DomicilioDTO domicilioDTO, @org.mapstruct.MappingTarget Domicilio domicilio);
 } 

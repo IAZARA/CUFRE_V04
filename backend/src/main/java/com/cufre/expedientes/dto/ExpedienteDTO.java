@@ -110,4 +110,7 @@ public class ExpedienteDTO {
     private List<FotografiaDTO> fotografias = new ArrayList<>();
     private Long fotoPrincipalId;
     private List<DocumentoDTO> documentos = new ArrayList<>();
+    
+    // Nombres completos de los prófugos asociados a este expediente
+    private List<String> profugos = new ArrayList<>();
 }

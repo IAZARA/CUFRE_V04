@@ -119,6 +119,17 @@ const ExpedientesPage: React.FC = () => {
     }
   };
 
+  // Mapeo de fuerza asignada a imagen
+  const fuerzaIconos: Record<string, { src: string; alt: string }> = {
+    PFA: { src: '/images/icon1.png', alt: 'Policía Federal Argentina' },
+    GNA: { src: '/images/Insignia_de_la_Gendarmería_de_Argentina.svg.png', alt: 'Gendarmería Nacional Argentina' },
+    PNA: { src: '/images/icon3.png', alt: 'Prefectura Naval Argentina' },
+    PSA: { src: '/images/icon4.png', alt: 'Policía de Seguridad Aeroportuaria' },
+    INTERPOOL: { src: '/images/interpol.png', alt: 'Interpol' },
+    SPF: { src: '/images/Logo_SPF.png', alt: 'Servicio Penitenciario Federal' },
+    CUFRE: { src: '/images/logo-cufre-2.png', alt: 'CUFRE' },
+  };
+
   if (loading) {
     return (
       <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50vh' }}>
@@ -147,7 +158,7 @@ const ExpedientesPage: React.FC = () => {
         </Alert>
       )}
 
-      <Paper sx={{ mb: 3 }}>
+      <Paper sx={{ mb: 3, boxShadow: 3, borderRadius: 2 }}>
         <Box sx={{ p: 2 }}>
           <TextField
             fullWidth
@@ -164,49 +175,89 @@ const ExpedientesPage: React.FC = () => {
             }}
           />
         </Box>
-
         <TableContainer>
           <Table stickyHeader>
             <TableHead>
-              <TableRow>
-                <TableCell>Número</TableCell>
-                <TableCell>Carátula</TableCell>
-                <TableCell>Fecha de Inicio</TableCell>
-                <TableCell>Estado</TableCell>
-                <TableCell>Prófugo</TableCell>
-                <TableCell align="center">Acciones</TableCell>
+              <TableRow sx={{ backgroundColor: '#e3f2fd' }}>
+                <TableCell sx={{ color: '#1565c0', fontWeight: 'bold' }}>Número Expediente</TableCell>
+                <TableCell sx={{ color: '#1565c0', fontWeight: 'bold' }}>Número Causa</TableCell>
+                <TableCell sx={{ color: '#1565c0', fontWeight: 'bold' }}>Fecha de Inicio</TableCell>
+                <TableCell sx={{ color: '#1565c0', fontWeight: 'bold' }}>Estado</TableCell>
+                <TableCell sx={{ color: '#1565c0', fontWeight: 'bold' }}>Prófugo</TableCell>
+                <TableCell sx={{ color: '#1565c0', fontWeight: 'bold' }}>Fuerza Asignada</TableCell>
+                <TableCell align="center" sx={{ color: '#1565c0', fontWeight: 'bold' }}>Acciones</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {filteredExpedientes.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={6} align="center">
+                  <TableCell colSpan={7} align="center">
                     No se encontraron expedientes
                   </TableCell>
                 </TableRow>
               ) : (
                 filteredExpedientes
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((expediente) => {
+                  .map((expediente, idx) => {
                     const estadoInfo = getEstadoInfo(expediente.estadoSituacion);
-                    // Buscar persona vinculada como Prófugo
-                    const profugo = expediente.personas?.find(
-                      p => ['prófugo', 'profugo', 'imputado'].includes((p.tipoRelacion || '').toLowerCase())
-                    );
-                    const profugoNombre = profugo
-                      ? ((profugo.persona?.nombre || profugo.nombre || '') + ' ' + (profugo.persona?.apellido || profugo.apellido || '')).trim() || 'S/D'
-                      : 'S/D';
+                    // Chip de estado
+                    let chipColor = 'default';
+                    if (estadoInfo.label === 'CAPTURA VIGENTE') chipColor = 'error';
+                    else if (estadoInfo.label === 'DETENIDO') chipColor = 'success';
+                    else if (estadoInfo.label === 'SIN EFECTO') chipColor = 'warning';
+                    // Prófugo visual
+                    const tieneProfugo = Array.isArray(expediente.profugos) && expediente.profugos.length > 0;
+                    // Alternar color de fila
+                    const rowBg = idx % 2 === 0 ? '#fff' : '#fafafa';
                     return (
-                      <TableRow key={expediente.id} hover sx={{ backgroundColor: estadoInfo.color }}>
-                        <TableCell>{expediente.numero}</TableCell>
-                        <TableCell>{expediente.caratula}</TableCell>
+                      <TableRow
+                        key={expediente.id}
+                        hover
+                        sx={{
+                          backgroundColor: rowBg,
+                          '&:hover': { backgroundColor: '#e3f2fd' },
+                          transition: 'background 0.2s',
+                        }}
+                      >
+                        <TableCell sx={{ fontWeight: 'bold' }}>{expediente.numero}</TableCell>
+                        <TableCell>{expediente.numeroCausa}</TableCell>
                         <TableCell>{expediente.fechaIngreso || expediente.fechaInicio}</TableCell>
                         <TableCell>
-                          {estadoInfo.label}
+                          <Chip
+                            label={estadoInfo.label}
+                            color={chipColor as any}
+                            size="small"
+                            sx={{ fontWeight: 'bold', fontSize: 14 }}
+                          />
                         </TableCell>
-                        <TableCell>{profugoNombre}</TableCell>
+                        <TableCell>
+                          {tieneProfugo ? (
+                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                              <span style={{ color: '#1565c0', fontWeight: 700, fontSize: 15 }}>
+                                <span role="img" aria-label="persona">👤</span>
+                                {expediente.profugos!.map(n => n.toUpperCase()).join(', ')}
+                              </span>
+                            </Box>
+                          ) : (
+                            <span style={{ color: '#888' }}>S/D</span>
+                          )}
+                        </TableCell>
                         <TableCell align="center">
-                          <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                          {(() => {
+                            const fuerza = (expediente.fuerzaAsignada || '').toUpperCase();
+                            const icono = fuerzaIconos[fuerza];
+                            if (icono) {
+                              return (
+                                <Tooltip title={fuerza} arrow>
+                                  <img src={icono.src} alt={icono.alt} style={{ height: 32, display: 'block', margin: '0 auto' }} />
+                                </Tooltip>
+                              );
+                            }
+                            return expediente.fuerzaAsignada || '-';
+                          })()}
+                        </TableCell>
+                        <TableCell align="center">
+                          <Box sx={{ display: 'flex', justifyContent: 'center', gap: 1 }}>
                             <Tooltip title="Ver detalles">
                               <IconButton onClick={() => handleEdit(expediente.id!)}>
                                 <VisibilityIcon />
@@ -234,7 +285,6 @@ const ExpedientesPage: React.FC = () => {
             </TableBody>
           </Table>
         </TableContainer>
-        
         <TablePagination
           rowsPerPageOptions={[5, 10, 25, 50]}
           component="div"
