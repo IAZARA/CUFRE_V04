@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import javax.mail.MessagingException;
 
 /**
  * Servicio para la gestión de usuarios
@@ -22,10 +23,12 @@ import java.util.Optional;
 public class UsuarioService extends AbstractBaseService<Usuario, UsuarioDTO, Long, UsuarioRepository, UsuarioMapper> {
 
     private final PasswordEncoder passwordEncoder;
+    private final EmailService emailService;
 
-    public UsuarioService(UsuarioRepository repository, UsuarioMapper mapper, PasswordEncoder passwordEncoder) {
+    public UsuarioService(UsuarioRepository repository, UsuarioMapper mapper, PasswordEncoder passwordEncoder, EmailService emailService) {
         super(repository, mapper);
         this.passwordEncoder = passwordEncoder;
+        this.emailService = emailService;
     }
 
     @Override
@@ -60,6 +63,13 @@ public class UsuarioService extends AbstractBaseService<Usuario, UsuarioDTO, Lon
         usuario.setContrasena(passwordEncoder.encode(password));
         usuario = repository.save(usuario);
         log.info("Usuario creado: {}", usuario.getNombre());
+        // Enviar email de bienvenida
+        try {
+            emailService.enviarBienvenida(usuario.getNombre(), usuario.getApellido(), usuario.getEmail());
+            log.info("Email de bienvenida enviado a {}", usuario.getEmail());
+        } catch (MessagingException e) {
+            log.error("No se pudo enviar el email de bienvenida a {}: {}", usuario.getEmail(), e.getMessage());
+        }
         return toDto(usuario);
     }
 
