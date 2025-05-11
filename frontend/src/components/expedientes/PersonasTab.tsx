@@ -15,6 +15,7 @@ import {
   IconButton,
   Chip
 } from '@mui/material';
+import Grid from '@mui/material/Grid';
 import {
   Add as AddIcon,
   Delete as DeleteIcon,
@@ -41,6 +42,19 @@ const tiposRelacion = [
   { value: 'Otro', label: 'Otro' }
 ];
 
+const domicilioVacio: Partial<Domicilio> = {
+  calle: '',
+  numero: '',
+  piso: '',
+  departamento: '',
+  codigoPostal: '',
+  localidad: '',
+  provincia: '',
+  pais: '',
+  observaciones: '',
+  tipo: ''
+};
+
 const PersonasTab: React.FC<PersonasTabProps> = ({ expediente, onChange }) => {
   const [newPersona, setNewPersona] = useState<Partial<PersonaExpediente>>({
     dni: '',
@@ -56,11 +70,22 @@ const PersonasTab: React.FC<PersonasTabProps> = ({ expediente, onChange }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const [nuevoDomicilio, setNuevoDomicilio] = useState<Partial<Domicilio>>(domicilioVacio);
+  const [editandoDomicilioIdx, setEditandoDomicilioIdx] = useState<number | null>(null);
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setNewPersona(prev => ({
       ...prev,
       [name]: value
+    }));
+  };
+
+  const handleDomicilioInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value, type, checked } = e.target;
+    setNuevoDomicilio(prev => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value
     }));
   };
 
@@ -158,6 +183,49 @@ const PersonasTab: React.FC<PersonasTabProps> = ({ expediente, onChange }) => {
     setEditIndex(-1);
   };
 
+  const handleAgregarODomicilio = () => {
+    if (!nuevoDomicilio.calle || !nuevoDomicilio.numero || !nuevoDomicilio.localidad) return;
+    if (editandoDomicilioIdx !== null) {
+      setNewPersona(prev => ({
+        ...prev,
+        domicilios: (prev.domicilios as Partial<Domicilio>[] || []).map((d, idx) =>
+          idx === editandoDomicilioIdx ? { ...nuevoDomicilio } : d
+        ) as any
+      }));
+      setEditandoDomicilioIdx(null);
+    } else {
+      setNewPersona(prev => ({
+        ...prev,
+        domicilios: [
+          ...((prev.domicilios as Partial<Domicilio>[] || [])),
+          { ...nuevoDomicilio }
+        ] as any
+      }));
+    }
+    setNuevoDomicilio(domicilioVacio);
+  };
+
+  const handleEditarDomicilio = (idx: number) => {
+    setNuevoDomicilio({ ...(newPersona.domicilios?.[idx] || domicilioVacio) });
+    setEditandoDomicilioIdx(idx);
+  };
+
+  const handleEliminarDomicilio = (idx: number) => {
+    setNewPersona(prev => ({
+      ...prev,
+      domicilios: (prev.domicilios as Partial<Domicilio>[] || []).filter((_, i) => i !== idx) as any
+    }));
+    if (editandoDomicilioIdx === idx) {
+      setNuevoDomicilio(domicilioVacio);
+      setEditandoDomicilioIdx(null);
+    }
+  };
+
+  const handleCancelarEdicionDomicilio = () => {
+    setNuevoDomicilio(domicilioVacio);
+    setEditandoDomicilioIdx(null);
+  };
+
   return (
     <Box>
       <Typography variant="h6" gutterBottom>
@@ -221,6 +289,99 @@ const PersonasTab: React.FC<PersonasTabProps> = ({ expediente, onChange }) => {
             multiline
             rows={2}
           />
+          
+          <Box sx={{ border: '1px solid #eee', borderRadius: 1, p: 2, mb: 2 }}>
+            <Typography variant="subtitle2" gutterBottom>Domicilios</Typography>
+            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, mb: 1 }}>
+              <Box sx={{ width: { xs: '100%', sm: '33%', md: '25%' } }}>
+                <TextField label="Calle" name="calle" value={nuevoDomicilio.calle || ''} onChange={handleDomicilioInputChange} fullWidth />
+              </Box>
+              <Box sx={{ width: { xs: '50%', sm: '16%', md: '12%' } }}>
+                <TextField label="Número" name="numero" value={nuevoDomicilio.numero || ''} onChange={handleDomicilioInputChange} fullWidth />
+              </Box>
+              <Box sx={{ width: { xs: '50%', sm: '16%', md: '12%' } }}>
+                <TextField label="Piso" name="piso" value={nuevoDomicilio.piso || ''} onChange={handleDomicilioInputChange} fullWidth />
+              </Box>
+              <Box sx={{ width: { xs: '50%', sm: '16%', md: '12%' } }}>
+                <TextField label="Departamento" name="departamento" value={nuevoDomicilio.departamento || ''} onChange={handleDomicilioInputChange} fullWidth />
+              </Box>
+              <Box sx={{ width: { xs: '50%', sm: '16%', md: '12%' } }}>
+                <TextField label="Código Postal" name="codigoPostal" value={nuevoDomicilio.codigoPostal || ''} onChange={handleDomicilioInputChange} fullWidth />
+              </Box>
+            </Box>
+            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, mb: 1 }}>
+              <Box sx={{ width: { xs: '100%', sm: '25%', md: '20%' } }}>
+                <TextField label="Localidad" name="localidad" value={nuevoDomicilio.localidad || ''} onChange={handleDomicilioInputChange} fullWidth />
+              </Box>
+              <Box sx={{ width: { xs: '100%', sm: '25%', md: '20%' } }}>
+                <TextField label="Provincia" name="provincia" value={nuevoDomicilio.provincia || ''} onChange={handleDomicilioInputChange} fullWidth />
+              </Box>
+              <Box sx={{ width: { xs: '100%', sm: '25%', md: '20%' } }}>
+                <TextField label="País" name="pais" value={nuevoDomicilio.pais || ''} onChange={handleDomicilioInputChange} fullWidth />
+              </Box>
+              <Box sx={{ width: { xs: '100%', sm: '25%', md: '20%' } }}>
+                <TextField
+                  select
+                  label="Tipo"
+                  name="tipo"
+                  value={nuevoDomicilio.tipo || ''}
+                  onChange={handleDomicilioInputChange}
+                  fullWidth
+                >
+                  <MenuItem value="">Seleccionar</MenuItem>
+                  <MenuItem value="Principal">Principal</MenuItem>
+                  <MenuItem value="Secundario">Secundario</MenuItem>
+                  <MenuItem value="Otro">Otro</MenuItem>
+                </TextField>
+              </Box>
+            </Box>
+            <Box sx={{ width: '100%', mb: 2 }}>
+              <TextField label="Observaciones" name="observaciones" value={nuevoDomicilio.observaciones || ''} onChange={handleDomicilioInputChange} fullWidth multiline minRows={2} />
+            </Box>
+            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, alignItems: 'center' }}>
+              <Box sx={{ width: { xs: '100%', sm: '33%', md: '20%' } }}>
+                <Button
+                  variant={editandoDomicilioIdx !== null ? 'contained' : 'outlined'}
+                  color="primary"
+                  onClick={handleAgregarODomicilio}
+                  disabled={!nuevoDomicilio.calle || !nuevoDomicilio.numero || !nuevoDomicilio.localidad}
+                  fullWidth
+                  sx={{ height: '100%' }}
+                >
+                  {editandoDomicilioIdx !== null ? 'Actualizar' : 'Agregar'}
+                </Button>
+              </Box>
+              {editandoDomicilioIdx !== null && (
+                <Box sx={{ width: { xs: '100%', sm: '33%', md: '20%' } }}>
+                  <Button variant="outlined" color="inherit" onClick={handleCancelarEdicionDomicilio} fullWidth sx={{ height: '100%' }}>
+                    Cancelar
+                  </Button>
+                </Box>
+              )}
+            </Box>
+            {(newPersona.domicilios || []).length === 0 ? (
+              <Typography color="text.secondary" sx={{ fontStyle: 'italic' }}>
+                No hay domicilios cargados.
+              </Typography>
+            ) : (
+              <Box>
+                {(newPersona.domicilios || []).map((dom, idx) => (
+                  <Box key={idx} sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
+                    <Typography sx={{ flex: 1 }}>
+                      {dom.calle} {dom.numero} {dom.piso && `Piso ${dom.piso}`} {dom.departamento && `Dpto. ${dom.departamento}`} - {dom.localidad}, {dom.provincia} {dom.pais && `(${dom.pais})`} {dom.tipo && `- ${dom.tipo}`}
+                      {dom.observaciones && ` - ${dom.observaciones}`}
+                    </Typography>
+                    <IconButton size="small" color="primary" onClick={() => handleEditarDomicilio(idx)}>
+                      <EditIcon fontSize="small" />
+                    </IconButton>
+                    <IconButton size="small" color="error" onClick={() => handleEliminarDomicilio(idx)}>
+                      <DeleteIcon fontSize="small" />
+                    </IconButton>
+                  </Box>
+                ))}
+              </Box>
+            )}
+          </Box>
           
           <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
             {editing && (

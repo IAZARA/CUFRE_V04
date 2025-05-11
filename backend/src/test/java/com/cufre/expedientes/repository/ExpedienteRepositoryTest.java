@@ -5,6 +5,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.junit.jupiter.api.BeforeEach;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -18,6 +20,14 @@ public class ExpedienteRepositoryTest {
 
     @Autowired
     private ExpedienteRepository expedienteRepository;
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+
+    @BeforeEach
+    public void limpiarTabla() {
+        jdbcTemplate.execute("DELETE FROM EXPEDIENTE");
+    }
 
     @Test
     public void testFindByNumero() {

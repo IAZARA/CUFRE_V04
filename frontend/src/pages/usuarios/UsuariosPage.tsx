@@ -23,7 +23,6 @@ import {
   InputLabel,
   Select,
   MenuItem,
-  Grid,
   Alert,
   CircularProgress
 } from '@mui/material';
@@ -33,7 +32,8 @@ import {
   Edit as EditIcon,
   Delete as DeleteIcon,
   Block as BlockIcon,
-  CheckCircle as CheckCircleIcon
+  CheckCircle as CheckCircleIcon,
+  PersonAddRounded
 } from '@mui/icons-material';
 import usuarioService from '../../api/usuarioService';
 import { Usuario, Rol } from '../../types/usuario.types';
@@ -63,6 +63,15 @@ const UsuariosPage: React.FC = () => {
     activo: true
   });
   const [isEditMode, setIsEditMode] = useState(false);
+
+  const rolLabels: Record<string, string> = {
+    [Rol.SUPERUSUARIO]: 'Superusuario',
+    [Rol.ADMINISTRADOR]: 'Administrador',
+    [Rol.OPERADOR]: 'Operador',
+    [Rol.VISUALIZADOR]: 'Visualizador',
+    [Rol.USUARIOCARGA]: 'Usuario Carga',
+    [Rol.USUARIOCONSULTA]: 'Usuario Consulta',
+  };
 
   useEffect(() => {
     fetchUsuarios();
@@ -315,7 +324,7 @@ const UsuariosPage: React.FC = () => {
                       <TableCell>{usuario.email}</TableCell>
                       <TableCell align="center">
                         <Chip 
-                          label={usuario.rol} 
+                          label={rolLabels[usuario.rol] || usuario.rol} 
                           color={getChipColor(usuario.rol)} 
                           size="small" 
                         />
@@ -373,79 +382,89 @@ const UsuariosPage: React.FC = () => {
 
       {/* Diálogo para crear/editar usuario */}
       <Dialog open={openDialog} onClose={handleCloseDialog} maxWidth="md" fullWidth>
-        <DialogTitle>
+        <DialogTitle sx={{ display: 'flex', alignItems: 'center', gap: 2, fontSize: 28, fontWeight: 700, pb: 0 }}>
+          <PersonAddRounded color="primary" sx={{ fontSize: 36 }} />
           {isEditMode ? 'Editar Usuario' : 'Crear Nuevo Usuario'}
         </DialogTitle>
-        <DialogContent>
-          <div className="grid-container" style={{ marginTop: '8px' }}>
-            <div className="grid-item width-6 width-xs-12">
-              <TextField
-                fullWidth
-                required
-                label="Nombre"
-                name="nombre"
-                value={currentUsuario.nombre}
-                onChange={handleInputChange}
-              />
-            </div>
-            <div className="grid-item width-6 width-xs-12">
-              <TextField
-                fullWidth
-                required
-                label="Apellido"
-                name="apellido"
-                value={currentUsuario.apellido}
-                onChange={handleInputChange}
-              />
-            </div>
-            <div className="grid-item full-width">
-              <TextField
-                fullWidth
-                required
-                label="Email"
-                name="email"
-                type="email"
-                value={currentUsuario.email}
-                onChange={handleInputChange}
-              />
-            </div>
-            <div className="grid-item width-6 width-xs-12">
-              <FormControl fullWidth>
-                <InputLabel id="rol-label">Rol</InputLabel>
-                <Select
-                  labelId="rol-label"
-                  name="rol"
-                  value={currentUsuario.rol}
-                  label="Rol"
-                  onChange={handleSelectChange}
-                >
-                  {user?.rol === Rol.SUPERUSUARIO && (
-                    <MenuItem value={Rol.SUPERUSUARIO}>{Rol.SUPERUSUARIO}</MenuItem>
-                  )}
-                  {(user?.rol === Rol.SUPERUSUARIO || user?.rol === Rol.ADMINISTRADOR) && (
-                    <MenuItem value={Rol.ADMINISTRADOR}>{Rol.ADMINISTRADOR}</MenuItem>
-                  )}
-                  <MenuItem value={Rol.OPERADOR}>{Rol.OPERADOR}</MenuItem>
-                  <MenuItem value={Rol.VISUALIZADOR}>{Rol.VISUALIZADOR}</MenuItem>
-                </Select>
-              </FormControl>
-            </div>
-            <div className="grid-item width-6 width-xs-12">
-              <TextField
-                fullWidth
-                required={!isEditMode}
-                label={isEditMode ? 'Nueva Contraseña (opcional)' : 'Contraseña'}
-                name="password"
-                type="text"
-                value={currentUsuario.password}
-                onChange={handleInputChange}
-                helperText={isEditMode ? 'Dejar en blanco para mantener la actual' : 'Contraseña por defecto: Minseg2025-'}
-              />
-            </div>
-          </div>
+        <Typography variant="subtitle1" sx={{ pl: 7, pb: 2, color: 'text.secondary' }}>
+          Complete los datos del usuario
+        </Typography>
+        <DialogContent sx={{ background: 'linear-gradient(135deg, #f8fafc 0%, #e3e8ee 100%)', p: 0 }}>
+          <Box component={Paper} elevation={3} sx={{ borderRadius: 3, p: { xs: 2, sm: 4 }, m: 2 }}>
+            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
+              <Box sx={{ width: { xs: '100%', sm: '48%' } }}>
+                <TextField
+                  fullWidth
+                  required
+                  label="Nombre"
+                  name="nombre"
+                  value={currentUsuario.nombre}
+                  onChange={handleInputChange}
+                  sx={{ mb: 2 }}
+                />
+              </Box>
+              <Box sx={{ width: { xs: '100%', sm: '48%' } }}>
+                <TextField
+                  fullWidth
+                  required
+                  label="Apellido"
+                  name="apellido"
+                  value={currentUsuario.apellido}
+                  onChange={handleInputChange}
+                  sx={{ mb: 2 }}
+                />
+              </Box>
+              <Box sx={{ width: '100%' }}>
+                <TextField
+                  fullWidth
+                  required
+                  label="Email"
+                  name="email"
+                  type="email"
+                  value={currentUsuario.email}
+                  onChange={handleInputChange}
+                  sx={{ mb: 2 }}
+                />
+              </Box>
+              <Box sx={{ width: { xs: '100%', sm: '48%' } }}>
+                <FormControl fullWidth sx={{ mb: 2 }}>
+                  <InputLabel id="rol-label">Rol</InputLabel>
+                  <Select
+                    labelId="rol-label"
+                    name="rol"
+                    value={currentUsuario.rol}
+                    label="Rol"
+                    onChange={handleSelectChange}
+                  >
+                    {user?.rol === Rol.SUPERUSUARIO && (
+                      <MenuItem value={Rol.SUPERUSUARIO}>{rolLabels[Rol.SUPERUSUARIO]}</MenuItem>
+                    )}
+                    {(user?.rol === Rol.SUPERUSUARIO || user?.rol === Rol.ADMINISTRADOR) && (
+                      <MenuItem value={Rol.ADMINISTRADOR}>{rolLabels[Rol.ADMINISTRADOR]}</MenuItem>
+                    )}
+                    <MenuItem value={Rol.USUARIOCARGA}>{rolLabels[Rol.USUARIOCARGA]}</MenuItem>
+                    <MenuItem value={Rol.USUARIOCONSULTA}>{rolLabels[Rol.USUARIOCONSULTA]}</MenuItem>
+                  </Select>
+                </FormControl>
+              </Box>
+              <Box sx={{ width: { xs: '100%', sm: '48%' } }}>
+                <TextField
+                  fullWidth
+                  required={!isEditMode}
+                  label={isEditMode ? 'Nueva Contraseña (opcional)' : 'Contraseña'}
+                  name="password"
+                  type="text"
+                  value={currentUsuario.password}
+                  onChange={handleInputChange}
+                  helperText={isEditMode ? 'Dejar en blanco para mantener la actual' : 'Contraseña por defecto: Minseg2025-'}
+                  sx={{ mb: 2 }}
+                />
+              </Box>
+            </Box>
+          </Box>
         </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseDialog} color="inherit">
+        <DialogActions sx={{ px: 4, pb: 3, pt: 0 }}>
+          <Button onClick={handleCloseDialog} variant="outlined" color="inherit" sx={{ borderRadius: 2, px: 3, py: 1, fontWeight: 500 }}>
             Cancelar
           </Button>
           <Button 
@@ -453,6 +472,7 @@ const UsuariosPage: React.FC = () => {
             variant="contained" 
             color="primary"
             disabled={loading}
+            sx={{ borderRadius: 2, px: 3, py: 1, fontWeight: 600 }}
           >
             {loading ? <CircularProgress size={24} /> : 'Guardar'}
           </Button>

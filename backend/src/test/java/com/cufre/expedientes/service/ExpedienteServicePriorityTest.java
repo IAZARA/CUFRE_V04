@@ -4,6 +4,8 @@ import com.cufre.expedientes.dto.ExpedienteDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.junit.jupiter.api.BeforeEach;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -12,6 +14,14 @@ public class ExpedienteServicePriorityTest {
 
     @Autowired
     private ExpedienteService expedienteService;
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+
+    @BeforeEach
+    public void limpiarTabla() {
+        jdbcTemplate.execute("DELETE FROM EXPEDIENTE");
+    }
 
     @Test
     void testPrioridadConCamposDeImpacto() {

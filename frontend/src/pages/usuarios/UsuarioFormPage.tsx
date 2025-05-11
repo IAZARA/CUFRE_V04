@@ -42,13 +42,11 @@ const UsuarioFormPage: React.FC = () => {
 
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const ROL_LABELS: Record<Rol, string> = {
+  const rolLabels: Record<string, string> = {
     [Rol.SUPERUSUARIO]: 'Superusuario',
     [Rol.ADMINISTRADOR]: 'Administrador',
-    [Rol.OPERADOR]: 'Operador',
-    [Rol.VISUALIZADOR]: 'Visualizador',
-    [Rol.USUARIOCARGA]: 'Usuario Carga',
-    [Rol.USUARIOCONSULTA]: 'Usuario Consulta',
+    [Rol.OPERADOR]: 'Usuario Carga',
+    [Rol.VISUALIZADOR]: 'Usuario Consulta',
   };
 
   // Cargar usuario si estamos en modo edición
@@ -232,13 +230,11 @@ const UsuarioFormPage: React.FC = () => {
                     setUsuario(prev => ({ ...prev, rol: e.target.value as Rol }));
                   }}
                 >
-                  {Object.values(Rol)
-                    .filter(rol => rol !== Rol.OPERADOR && rol !== Rol.VISUALIZADOR)
-                    .map((rol) => (
-                      (rol !== Rol.SUPERUSUARIO || user?.rol === Rol.SUPERUSUARIO) && (
-                        <MenuItem key={rol} value={rol}>{ROL_LABELS[rol]}</MenuItem>
-                      )
-                    ))}
+                  {Object.values(Rol).map((rol) => (
+                    <MenuItem key={rol} value={rol}>
+                      {rolLabels[rol] || rol}
+                    </MenuItem>
+                  ))}
                 </Select>
               </FormControl>
             </div>
