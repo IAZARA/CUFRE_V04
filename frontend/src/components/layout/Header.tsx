@@ -51,23 +51,6 @@ const Header: React.FC<HeaderProps> = ({ open, toggleDrawer }) => {
         >
           Sistema de Gestión de Expedientes Judiciales
         </Typography>
-        
-        <IconButton color="inherit" sx={{ mr: 2 }}>
-          <Badge badgeContent={4} color="error">
-            <NotificationsIcon />
-          </Badge>
-        </IconButton>
-        
-        {user && (
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <Typography variant="body2" sx={{ mr: 2 }}>
-              {user.nombre} ({user.rol})
-            </Typography>
-            <Avatar sx={{ bgcolor: 'secondary.main' }}>
-              {user.nombre.charAt(0).toUpperCase()}
-            </Avatar>
-          </Box>
-        )}
       </Toolbar>
     </AppBar>
   );

@@ -9,7 +9,11 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
-  Collapse
+  Collapse,
+  Box,
+  Avatar,
+  Typography,
+  Button
 } from '@mui/material';
 import {
   ChevronLeft as ChevronLeftIcon,
@@ -46,7 +50,7 @@ interface SidebarProps {
 const Sidebar: React.FC<SidebarProps> = ({ open, handleDrawerClose }) => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   
   const [expedientesOpen, setExpedientesOpen] = useState(false);
   const [delitosOpen, setDelitosOpen] = useState(false);
@@ -71,6 +75,8 @@ const Sidebar: React.FC<SidebarProps> = ({ open, handleDrawerClose }) => {
         '& .MuiDrawer-paper': {
           width: drawerWidth,
           boxSizing: 'border-box',
+          backgroundColor: '#1c2536',
+          color: '#fff',
         },
       }}
       variant="persistent"
@@ -78,11 +84,21 @@ const Sidebar: React.FC<SidebarProps> = ({ open, handleDrawerClose }) => {
       open={open}
     >
       <DrawerHeader>
-        <IconButton onClick={handleDrawerClose}>
+        <IconButton onClick={handleDrawerClose} sx={{ color: '#fff' }}>
           <ChevronLeftIcon />
         </IconButton>
       </DrawerHeader>
       <Divider />
+      {user && (
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', py: 2 }}>
+          <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 2 }}>
+            {user.nombre}
+          </Typography>
+          <Button variant="outlined" color="error" size="small" onClick={logout}>
+            Cerrar sesión
+          </Button>
+        </Box>
+      )}
       <List>
         <ListItem disablePadding>
           <ListItemButton 
@@ -93,28 +109,28 @@ const Sidebar: React.FC<SidebarProps> = ({ open, handleDrawerClose }) => {
               mb: 1,
               px: 2,
               py: 1.5,
-              color: location.pathname === '/dashboard' ? 'primary.main' : 'text.secondary',
-              backgroundColor: location.pathname === '/dashboard' ? 'primary.50' : 'transparent',
+              color: '#fff',
+              backgroundColor: location.pathname === '/dashboard' ? 'rgba(255,255,255,0.08)' : 'transparent',
               '&:hover': {
-                backgroundColor: 'primary.100',
-                color: 'primary.main'
+                backgroundColor: 'rgba(255,255,255,0.15)',
+                color: '#fff'
               }
             }}
           >
-            <ListItemIcon sx={{ color: 'inherit', minWidth: 0, mr: 2 }}>
+            <ListItemIcon sx={{ color: '#fff', minWidth: 0, mr: 2 }}>
               <SpaceDashboardRoundedIcon fontSize="medium" />
             </ListItemIcon>
-            <ListItemText primary="Dashboard" primaryTypographyProps={{ fontWeight: 500 }} />
+            <ListItemText primary="Dashboard" primaryTypographyProps={{ fontWeight: 500, color: '#fff' }} />
           </ListItemButton>
         </ListItem>
 
         {/* Expedientes (expandible) */}
         <ListItem disablePadding>
           <ListItemButton onClick={handleExpedientesClick} sx={{ borderRadius: 2, mb: 1, px: 2, py: 1.5 }}>
-            <ListItemIcon sx={{ color: '#ff9800', minWidth: 0, mr: 2 }}>
+            <ListItemIcon sx={{ color: '#fff', minWidth: 0, mr: 2 }}>
               <FolderOpenRoundedIcon fontSize="medium" />
             </ListItemIcon>
-            <ListItemText primary="Expedientes" primaryTypographyProps={{ fontWeight: 500 }} />
+            <ListItemText primary="Expedientes" primaryTypographyProps={{ fontWeight: 500, color: '#fff' }} />
             {expedientesOpen ? <ExpandLess /> : <ExpandMore />}
           </ListItemButton>
         </ListItem>
@@ -125,20 +141,20 @@ const Sidebar: React.FC<SidebarProps> = ({ open, handleDrawerClose }) => {
               selected={location.pathname === '/expedientes'}
               onClick={() => handleNavigation('/expedientes')}
             >
-              <ListItemIcon sx={{ color: '#4caf50', minWidth: 0, mr: 2 }}>
+              <ListItemIcon sx={{ color: '#fff', minWidth: 0, mr: 2 }}>
                 <DescriptionRoundedIcon fontSize="small" />
               </ListItemIcon>
-              <ListItemText primary="Lista Expedientes" />
+              <ListItemText primary="Lista Expedientes" primaryTypographyProps={{ fontWeight: 500, color: '#fff' }} />
             </ListItemButton>
             <ListItemButton 
               sx={{ pl: 5, borderRadius: 2, mb: 1 }}
               selected={location.pathname === '/expedientes/crear'}
               onClick={() => handleNavigation('/expedientes/crear')}
             >
-              <ListItemIcon sx={{ color: '#4caf50', minWidth: 0, mr: 2 }}>
+              <ListItemIcon sx={{ color: '#fff', minWidth: 0, mr: 2 }}>
                 <NoteAddRoundedIcon fontSize="small" />
               </ListItemIcon>
-              <ListItemText primary="Crear Expediente" />
+              <ListItemText primary="Crear Expediente" primaryTypographyProps={{ fontWeight: 500, color: '#fff' }} />
             </ListItemButton>
           </List>
         </Collapse>
@@ -146,10 +162,10 @@ const Sidebar: React.FC<SidebarProps> = ({ open, handleDrawerClose }) => {
         {/* Delitos (expandible) */}
         <ListItem disablePadding>
           <ListItemButton onClick={handleDelitosClick} sx={{ borderRadius: 2, mb: 1, px: 2, py: 1.5 }}>
-            <ListItemIcon sx={{ color: '#e91e63', minWidth: 0, mr: 2 }}>
+            <ListItemIcon sx={{ color: '#fff', minWidth: 0, mr: 2 }}>
               <GavelRoundedIcon fontSize="medium" />
             </ListItemIcon>
-            <ListItemText primary="Delitos" primaryTypographyProps={{ fontWeight: 500 }} />
+            <ListItemText primary="Delitos" primaryTypographyProps={{ fontWeight: 500, color: '#fff' }} />
             {delitosOpen ? <ExpandLess /> : <ExpandMore />}
           </ListItemButton>
         </ListItem>
@@ -160,20 +176,20 @@ const Sidebar: React.FC<SidebarProps> = ({ open, handleDrawerClose }) => {
               selected={location.pathname === '/delitos'}
               onClick={() => handleNavigation('/delitos')}
             >
-              <ListItemIcon sx={{ color: '#9c27b0', minWidth: 0, mr: 2 }}>
+              <ListItemIcon sx={{ color: '#fff', minWidth: 0, mr: 2 }}>
                 <GavelRoundedIcon fontSize="small" />
               </ListItemIcon>
-              <ListItemText primary="Lista Delitos" />
+              <ListItemText primary="Lista Delitos" primaryTypographyProps={{ fontWeight: 500, color: '#fff' }} />
             </ListItemButton>
             <ListItemButton 
               sx={{ pl: 5, borderRadius: 2, mb: 1 }}
               selected={location.pathname === '/delitos/crear'}
               onClick={() => handleNavigation('/delitos/crear')}
             >
-              <ListItemIcon sx={{ color: '#9c27b0', minWidth: 0, mr: 2 }}>
+              <ListItemIcon sx={{ color: '#fff', minWidth: 0, mr: 2 }}>
                 <NoteAddRoundedIcon fontSize="small" />
               </ListItemIcon>
-              <ListItemText primary="Crear Delito" />
+              <ListItemText primary="Crear Delito" primaryTypographyProps={{ fontWeight: 500, color: '#fff' }} />
             </ListItemButton>
           </List>
         </Collapse>
@@ -185,10 +201,10 @@ const Sidebar: React.FC<SidebarProps> = ({ open, handleDrawerClose }) => {
             onClick={() => handleNavigation('/estadisticas')}
             sx={{ borderRadius: 2, mb: 1, px: 2, py: 1.5 }}
           >
-            <ListItemIcon sx={{ color: '#00bcd4', minWidth: 0, mr: 2 }}>
+            <ListItemIcon sx={{ color: '#fff', minWidth: 0, mr: 2 }}>
               <BarChartRoundedIcon fontSize="medium" />
             </ListItemIcon>
-            <ListItemText primary="Estadísticas" primaryTypographyProps={{ fontWeight: 500 }} />
+            <ListItemText primary="Estadísticas" primaryTypographyProps={{ fontWeight: 500, color: '#fff' }} />
           </ListItemButton>
         </ListItem>
 
@@ -199,10 +215,10 @@ const Sidebar: React.FC<SidebarProps> = ({ open, handleDrawerClose }) => {
             onClick={() => handleNavigation('/mas-buscados')}
             sx={{ borderRadius: 2, mb: 1, px: 2, py: 1.5 }}
           >
-            <ListItemIcon sx={{ color: '#f44336', minWidth: 0, mr: 2 }}>
+            <ListItemIcon sx={{ color: '#fff', minWidth: 0, mr: 2 }}>
               <PersonSearchRoundedIcon fontSize="medium" />
             </ListItemIcon>
-            <ListItemText primary="Más Buscados" primaryTypographyProps={{ fontWeight: 500 }} />
+            <ListItemText primary="Más Buscados" primaryTypographyProps={{ fontWeight: 500, color: '#fff' }} />
           </ListItemButton>
         </ListItem>
 
@@ -214,10 +230,10 @@ const Sidebar: React.FC<SidebarProps> = ({ open, handleDrawerClose }) => {
               onClick={() => handleNavigation('/usuarios')}
               sx={{ borderRadius: 2, mb: 1, px: 2, py: 1.5 }}
             >
-              <ListItemIcon sx={{ color: '#757575', minWidth: 0, mr: 2 }}>
+              <ListItemIcon sx={{ color: '#fff', minWidth: 0, mr: 2 }}>
                 <GroupRoundedIcon fontSize="medium" />
               </ListItemIcon>
-              <ListItemText primary="Usuarios" primaryTypographyProps={{ fontWeight: 500 }} />
+              <ListItemText primary="Usuarios" primaryTypographyProps={{ fontWeight: 500, color: '#fff' }} />
             </ListItemButton>
           </ListItem>
         )}

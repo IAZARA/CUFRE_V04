@@ -76,30 +76,43 @@ const MainLayout: React.FC = () => {
               Comando Unificado Federal De Recaptura de Evadidos
             </Typography>
           </Box>
-          <IconButton color="inherit">
-            <NotificationsIcon />
-          </IconButton>
-          <IconButton color="inherit">
-            <SettingsIcon />
-          </IconButton>
-          <IconButton 
-            color="inherit"
-            onClick={handleLogout}
-          >
-            <LogoutIcon />
-          </IconButton>
-          <Box sx={{ display: 'flex', alignItems: 'center', ml: 1 }}>
-            <AccountCircleIcon sx={{ mr: 1 }} />
-            <Typography variant="body2">
-              {user?.nombre}
-            </Typography>
-          </Box>
         </Toolbar>
       </AppBar>
       <Sidebar open={open} handleDrawerClose={handleDrawerClose} />
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+      <Box
+        component="main"
+        sx={{
+          flexGrow: 1,
+          p: 3,
+          minHeight: '100vh',
+          display: 'flex',
+          flexDirection: 'column',
+          position: 'relative',
+          overflow: 'hidden',
+        }}
+      >
+        {/* Marca de agua */}
+        <Box
+          sx={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            zIndex: 0,
+            pointerEvents: 'none',
+            background: 'url("/logo-cufre-2.png") center center no-repeat',
+            backgroundSize: '50% auto',
+            opacity: 0.07,
+          }}
+        />
         <Toolbar />
-        <Outlet />
+        <Box sx={{ flexGrow: 1, position: 'relative', zIndex: 1 }}>
+          <Outlet />
+        </Box>
+        <Box component="footer" sx={{ textAlign: 'center', py: 2, color: 'text.secondary', fontSize: 14, position: 'relative', zIndex: 1 }}>
+          2025 - Dirección Nacional Gestión de Bases de Datos de Seguridad
+        </Box>
       </Box>
     </Box>
   );

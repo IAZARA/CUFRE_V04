@@ -19,7 +19,9 @@ import {
   Gavel as GavelIcon,
   BarChart as BarChartIcon,
   Person as PersonIcon,
-  ArrowForward as ArrowForwardIcon
+  ArrowForward as ArrowForwardIcon,
+  CalendarToday as CalendarTodayIcon,
+  AccessTime as AccessTimeIcon
 } from '@mui/icons-material';
 import estadisticaService from '../api/estadisticaService';
 import expedienteService from '../api/expedienteService';
@@ -41,6 +43,7 @@ const Dashboard: React.FC = () => {
   const [expedientesRecientes, setExpedientesRecientes] = useState<any[]>([]);
   const navigate = useNavigate();
   const { user } = useAuth();
+  const [fechaHora, setFechaHora] = useState(new Date());
 
   useEffect(() => {
     const fetchDashboardData = async () => {
@@ -61,6 +64,11 @@ const Dashboard: React.FC = () => {
     };
 
     fetchDashboardData();
+  }, []);
+
+  useEffect(() => {
+    const timer = setInterval(() => setFechaHora(new Date()), 1000);
+    return () => clearInterval(timer);
   }, []);
 
   // Datos simulados para cuando la API no está disponible
@@ -103,6 +111,14 @@ const Dashboard: React.FC = () => {
     navigate(path);
   };
 
+  // Saludo dinámico según la hora
+  const getSaludo = () => {
+    const hora = new Date().getHours();
+    if (hora >= 6 && hora < 12) return 'Buen día';
+    if (hora >= 12 && hora < 19) return 'Buenas tardes';
+    return 'Buenas noches';
+  };
+
   if (loading) {
     return (
       <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50vh' }}>
@@ -113,11 +129,23 @@ const Dashboard: React.FC = () => {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <Typography variant="h4" gutterBottom>
-        Dashboard
-      </Typography>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+        <Typography variant="h4" sx={{ m: 0 }}>
+          {getSaludo()}, {user?.nombre}.
+        </Typography>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', fontSize: 22, fontWeight: 500, color: 'primary.main' }}>
+            <CalendarTodayIcon sx={{ mr: 1, fontSize: 28 }} />
+            {fechaHora.toLocaleDateString()}
+          </Box>
+          <Box sx={{ display: 'flex', alignItems: 'center', fontSize: 22, fontWeight: 500, color: 'primary.main' }}>
+            <AccessTimeIcon sx={{ mr: 1, fontSize: 28 }} />
+            {fechaHora.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false })}
+          </Box>
+        </Box>
+      </Box>
       <Typography variant="subtitle1" color="textSecondary" paragraph>
-        Bienvenido, {user?.nombre}. Aquí tienes un resumen del sistema.
+        Aquí tienes un resumen del sistema.
       </Typography>
 
       <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3, mb: 4 }}>
