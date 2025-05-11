@@ -1,0 +1,514 @@
+orden,DELITO,ART. CP,TIPO DE PENA,AÑOS PENA,VALORACIÓN ASIGNADA
+18,Delitos contra las personas (dolosos) - Homicidio calificado,80,Reclusión o Prisión,Perpetua,1000
+233,Delitos contra las personas (dolosos) - Homicidio calificado por el vínculo,80,Reclusión o Prision Perpetua,Perpetua,1000
+234,"Delitos contra las personas (dolosos) - Homicidio con ensañamiento, alevosia, insidia",80,Reclusión o Prision Perpetua,Perpetua,1000
+235,Delitos contra las personas (dolosos) - Homicidio por precio o promesa remuneratoria,80,Reclusión o Prision Perpetua,Perpetua,1000
+237,Delitos contra las personas (dolosos) - Homicidio utilizando medio catastrófico,80,Reclusión o Prision Perpetua,Perpetua,1000
+238,Delitos contra las personas (dolosos) - Homicidio premeditado,80,Reclusión o Prision Perpetua,Perpetua,1000
+239,"Delitos contra las personas (dolosos) - Homicidio ""criminis causae""",80,Reclusión o Prision Perpetua,Perpetua,1000
+240,"Delitos contra las personas (dolosos) - Homicidio por placer, codicia, odio racial o religioso",80,Reclusión o Prision Perpetua,Perpetua,1000
+364,"Delitos contra la seguridad de la Nación - Traición agravada - Traición agravada, cuando se procura el sometimiento total o parcial de la Nación o su menoscabo",215 inc 1,Reclusión o Prisión,Perpetua,1000
+365,"Delitos contra la seguridad de la Nación - Traición agravada - Traición agravada, cuando el traidor induciere al enemigo a hacer la guerra contra la República",215 inc 2,Reclusión o Prisión,Perpetua,1000
+454,Delitos contra la integridad sexual - Abuso sexual - Abuso sexual seguido de muerte,124,Reclusión o Prisión,Perpetua,1000
+470,"Delitos contra los poderes públicos y el orden constitucional - Traición a la patria, concesión de poderes tiránicos",227,Reclusión o Prisión,Perpetua,1000
+471,Delitos contra los poderes públicos y el orden constitucional - Consentimiento y colaboración en los atentados contra el orden constitucional y la vida democrática,227 bis,Reclusión o Prisión,Perpetua,1000
+488,Delitos de lesa humanidad (Ataque generalizado o sistemático contra una población civil),24.584,Prisión,Perpetua,1000
+489,Delitos de lesa humanidad (Ataque generalizado o sistemático contra una población civil) - Asesinato,24.584,Prisión,Perpetua,1000
+490,Delitos de lesa humanidad (Ataque generalizado o sistemático contra una población civil) - Exterminio,24.584,Prisión,Perpetua,1000
+491,Delitos de lesa humanidad (Ataque generalizado o sistemático contra una población civil) - Esclavitud,24.584,Prisión,Perpetua,1000
+492,Delitos de lesa humanidad (Ataque generalizado o sistemático contra una población civil) - Deportación o traslado forzoso de población,24.584,Prisión,Perpetua,1000
+493,Delitos de lesa humanidad (Ataque generalizado o sistemático contra una población civil) - Encarcelación u otra privación grave de la libertad física,24.584,Prisión,Perpetua,1000
+494,Delitos de lesa humanidad (Ataque generalizado o sistemático contra una población civil) - Tortura,24.584,Prisión,Perpetua,1000
+495,Delitos de lesa humanidad (Ataque generalizado o sistemático contra una población civil) - Violación,24.584,Prisión,Perpetua,1000
+496,Delitos de lesa humanidad (Ataque generalizado o sistemático contra una población civil) - Esclavitud sexual,24.584,Prisión,Perpetua,1000
+497,Delitos de lesa humanidad (Ataque generalizado o sistemático contra una población civil) - Prostitución forzada,24.584,Prisión,Perpetua,1000
+498,Delitos de lesa humanidad (Ataque generalizado o sistemático contra una población civil) - Embarazo Forzado,24.584,Prisión,Perpetua,1000
+499,Delitos de lesa humanidad (Ataque generalizado o sistemático contra una población civil) - Esterilización Forzada,24.584,Prisión,Perpetua,1000
+500,Delitos de lesa humanidad (Ataque generalizado o sistemático contra una población civil) - Violencia Sexual,24.584,Prisión,Perpetua,1000
+501,Delitos de lesa humanidad (Ataque generalizado o sistemático contra una población civil) - Persecución de un grupo o colectividad con identidad propia,24.584,Prisión,Perpetua,1000
+503,Delitos de lesa humanidad (Ataque generalizado o sistemático contra una población civil) - El crimen de apartheid,art. 142 ter,Prisión,Perpetua,1000
+504,Delitos de lesa humanidad (Ataque generalizado o sistemático contra una población civil) - Actos inhumanos contra la integridad física o la salud mental o física,24.584,Prisión,Perpetua,1000
+505,Delitos de lesa humanidad (Ataque generalizado o sistemático contra una población civil) - Genocidio,24.584,Prisión,Perpetua,1000
+532,Delitos contra las personas (dolosos) - Homicidio calificado - Femicidio,art. 80 inc. 11,Reclusión o Prisión,Perpetua,1000
+579,"Delitos contra las personas (dolosos) - Homicidio por abuso de su función o cargo, cuando fuere miembro integrante de la fuerza de seguridad, policiales o del servicio penitenciario",art. 80,Prisión o Reclusión Perpetua ,Perpetua,1000
+580,Delitos contra las personas (dolosos) - Homicidio con el propósito de causar sufrimiento a una persona con la que se mantiene o ha mantenido una relación,art. 80,Prisión o Reclusión Perpetua ,Perpetua,1000
+630,Delitos contra la libertad - Torturas - Tortura seguida de muerte,art. 144 ter,Prisión o Reclusión Perpetua ,Perpetua,1000
+137,Delitos contra la seguridad de la Nación - Traición,214,Reclusión o Prisión,Perpetua,900
+20,Delitos contra las personas (dolosos) - Homicidio en estado de emoción violenta calificado,82,Reclusión o Prisión,10a - 25a,850
+23,Delitos contra las personas (dolosos) - Homicidio preterintencional calificado,82,Reclusión o Prisión,10a - 25a,850
+77,Delitos contra la libertad - Privación ilegal de la libertad por funcionario público,142 bis,Reclusión o Prisión,10a - 25a,850
+78,Delitos contra la libertad - Privación ilegal de la libertad por funcionario público calificada,142 ter,Reclusión o Prisión e Inhabilitación Absoluta,10a - 25a,850
+98,Delitos contra la propiedad - Secuestro extorsivo calificado,170,Reclusión o Prisión,10a - 25a,850
+121,"Delitos contra la seguridad pública - Alteración peligrosa de aguas potables, alimentos o medicinas, seguida de muerte",201 bis,Reclusión o Prisión,10a - 25a,850
+271,Delitos contra la libertad - Torturas,144 ter,Reclusión o Prisión,8a - 25a,850
+350,Delitos contra la seguridad pública - Piratería - Piratería seguida de muerte,199,Reclusión o Prisión,10a - 25a,850
+353,Delitos contra la seguridad pública - Suministro infiel de medicamentos por negligencia (seguida de muerte), 201 bis,Reclusión o Prisión,10a - 25a,850
+,Delitos contra la seguridad pública - Suministro infiel de medicamentos por negligencia (lesiones gravisimas), 201 bis,Reclusión o Prisión,3a - 15a,850
+,Delitos contra la seguridad pública - Suministro infiel de medicamentos por negligencia (lesiones graves), 201 bis,Reclusión o Prisión,3a - 10a,850
+430,Delitos contra la propiedad - Robo seguido de muerte - Homicidio en ocasión de robo,165,Reclusión o Prisión,10a - 25a,850
+502,Delitos de lesa humanidad (Ataque generalizado o sistemático contra una población civil) - Desaparición forzada de personas,art. 142 ter,Reclusión o Prisión e Inhabilitación Absoluta,10a - 25a,850
+,Delitos contra la seguridad pública - Atentado contra la seguridad de medios de transporte culposo,"196, inc. 4°",Reclusión o Prisión,10a - 25a,850
+,Delitos contra la seguridad pública - Piratería seguida de muerte,199,Reclusión o Prisión,10a - 25a,850
+,"Delitos contra la seguridad pública - Naufragio, varamiento o desastre aéreo calificado","190, 3er. párr. ",Reclusión o Prisión,10a - 25a,850
+254,Delitos contra la integridad sexual - Violación seguida de muerte,119,Prisión,8a - 20a,800
+255,Delitos contra la integridad sexual - Estupro seguido de muerte,119,Prisión,8a - 20a,800
+96,Delitos contra la propiedad - Robo seguido de muerte,165,Reclusión o Prisión,5a - 15a,750
+17,Delitos contra las personas (dolosos) - Homicidio simple,79,Reclusión o Prisión,8a - 25a,700
+335,"Delitos contra la seguridad pública - Incendio, explosión e inundación - Incendio, explosión e inundación seguida de muerte",art. 186 inc. 5,Reclusión o Prisión,8a - 20a,700
+361,Delitos contra el orden público - Incitación a la violencia colectiva,210 bis,Reclusión o Prisión,5a - 20a,700
+363,Delitos contra la seguridad de la Nación - Traición agravada,214,Reclusión o Prisión,10a - 25a,700
+417,Delitos contra la propiedad - Robo calificado - Robo a mano armada,166,Reclusión o Prisión,5a-15a +1/3,700
+441,"Delitos contra las personas (dolosos) - Homicidio calificado - Homicidio calificado a miembros de seguridad, policial o penitenciaría",80 inc. 8,Reclusión o Prisión,8a - 25a,700
+464,Delitos contra la propiedad - Usurpación - Incendio o estrago culposo seguido de muerte,186 inc 5,Reclusión o Prisión,8a - 20a,700
+535,Delitos previstos por Leyes Especiales y Decretos Ley - Ley N° 26.842 Prevención y sanción de la trata de personas y asistencia a sus victimas,145bis/ter inc,Prisión,4a - 15a,700
+537,Delitos previstos por Leyes Especiales y Decretos Ley - Ley Antiterrorismo - Financiación del terrorismo,306,Prisión,5a - 15a,700
+565,Delitos previstos por Leyes de Estupefacientes - Ley N° 23.737 Organizador o financista de comercialización o contrabando de estupefacientes,art.  7 ,Prisión,8a - 20a,700
+567,"Delitos previstos por Leyes de Estupefacientes - Ley N° 23.737 a) En perjuicio de mujeres embarazadas, de personas disminuídas psíquicamente o de menores de 18 años",art. 11 ,Reclusión o Prisión,aumentadas en un tercio del máximo a la mitad del mínimo,700
+568,"Delitos previstos por Leyes de Estupefacientes - Ley N° 23.737 b) Con violencia, intimidación o engaño",art. 11 ,Reclusión o Prisión,aumentadas en un tercio del máximo a la mitad del mínimo,700
+569,Delitos previstos por Leyes de Estupefacientes - Ley N° 23.737 c) con intervención de tres o más personas organizadas,art. 11 ,Reclusión o Prisión,aumentadas en un tercio del máximo a la mitad del mínimo,700
+570,Delitos previstos por Leyes de Estupefacientes - Ley N° 23.737 d) intervención de funcionario público encargado de la prevención o persecución de los delitos aquí previstos y/o encargado de la guarda de presos,art. 11 ,Reclusión o Prisión,aumentadas en un tercio del máximo a la mitad del mínimo,700
+571,"Delitos previstos por Leyes de Estupefacientes - Ley N° 23.737 e) dentro de un estableciemiento de enseñanza, centro asistencial, lugar de detención, intitución deportiva, cultural o social o en las inmediaciones",art. 11 ,Reclusión o Prisión,aumentadas en un tercio del máximo a la mitad del mínimo,700
+572,"Delitos previstos por Leyes de Estupefacientes - Ley N° 23.737 f) intervención de un docente, educador o empleado de establecimientos educacionales en general",art. 11 ,Reclusión o Prisión,aumentadas en un tercio del máximo a la mitad del mínimo,700
+587,Delitos contra la integridad sexual - Abuso sexual con grave daño a la salud física o mental de la víctima,art. 119,Reclusión o Prisión,8a - 20a,700
+588,"Delitos contra la integridad sexual - Abuso sexual  cometido por ascendiente, descendiente, a fin en línea recta, hermano, tutor, curador, ministro de algún culto reconocido o no, encargado de la educación o de la guarda",art. 119,Reclusión o Prisión,8a - 20a,700
+589,"Delitos contra la integridad sexual - Abuso sexual cometido por autor que tuviere conocimiento de ser portador de una enfermedad de transmisión sexual grave, y hubiere existido peligro de contagio.",art. 119,Reclusión o Prisión,8a - 20a,700
+590,"Delitos contra la integridad sexual - Abuso sexual cometido por dos o más personas,  o con armas.",art. 119,Reclusión o Prisión,8a - 20a,700
+591,Delitos contra la integridad sexual - Abuso sexual cometido  por personal perteneciente a las fuerzas policiales o de seguridad en ocasión de sus funciones.,art. 119,Reclusión o Prisión,8a - 20a,700
+629,Delitos previstos por Leyes de Estupefacientes - trafico,varios delitos,Prisión,4a - 15a,700
+,Delitos contra la libertad - trata de personas con fines de explotación calificado,145 ter inc 7 ii,Prisión,10a - 15a,700
+,Delitos contra la seguridad pública - Incendio calificado,186 inc. 5°,Reclusión o Prisión,8a - 20a,700
+,Delitos contra la libertad - Privación ilegal de la libertad por funcionario público calificada,144 ter,Reclusión o Prisión e Inhabilitación Absoluta y Perpetua,8a - 25a,700
+,Trata de personas con fines de explotación calificado (cuando la víctima es menor de 18 años,art145,Prisión,10a - 15a,700
+245,Delitos contra las personas (dolosos) - Duelo irregular,98,Prisión,1a - 6a / 8a - 25a,600
+360,Delitos contra el orden público - Asociación ilícita agravada,210,Reclusión o Prisión,3a - 10a,600
+534,Delitos contra el orden económico y financiero,309-303,Prisión y Multa,1a - 4a / 2a - 6a,600
+249,Delitos contra las personas (dolosos) - Abandono de parientes y conyuge,107,Prisión,6a - 20a,560
+26,Delitos contra las personas (dolosos) - Aborto con consentimiento seguido de muerte,85,Prisión,3a - 15a,550
+32,Delitos contra las personas (dolosos) - Lesiones gravísimas calificadas,92,Reclusión o Prisión,3a - 15a,550
+63,Delitos contra la integridad sexual - Promoción o facilitación de la prostitución calificada,125,Reclusión o Prisión,10a - 15a,550
+208,Delitos previstos por Leyes Especiales y Decretos Ley - Ley N° 20.974 Potencial humano,31,Prisión,5a - 10a,550
+110,Delitos contra la seguridad pública - Incendio calificado,186 incs. 3° y 4° ,Reclusión o Prisión,3a - 15a,525
+115,"Delitos contra la seguridad pública - Naufragio, varamiento o desastre aéreo calificado","190, 2do. y 3er. párrs.",Reclusión o Prisión,6a - 15a,525
+119,Delitos contra la seguridad pública - Piratería,198,Reclusión o Prisión,3a - 15a,525
+122,Delitos contra la seguridad pública - Propagación de una enfermedad peligrosa y contagiosa,202,Reclusión o Prisión,3a - 15a,525
+138,Delitos contra la seguridad de la Nación - Provocación de hostilidades o de enemistad internacional,219,Reclusión o Prisión,3a - 15a,525
+139,Delitos contra los poderes públicos y el orden constitucional - Atentado contra la vida democrática o la independencia económica de la Nación,226,Prisión,5a - 15a,525
+189,"Delitos contra la fé pública - Falsificación de moneda, billetes de banco, títulos al portador y documentos de crédito",282,Reclusión o Prisión,3a - 15a,525
+226,Delitos previstos por Leyes de Estupefacientes - Ley Nº 23.737 de Estupefacientes - Comercialización,5,Prisión,4a - 15a,525
+248,Delitos contra las personas (dolosos) - Abandono de persona seguido de muerte,106 3er párrafo,Reclusión o Prisión,5a - 15a,525
+263,"Delitos contra la libertad - Sustracción, retención u ocultamiento de persona",142 bis,Prisión,5a - 15a,525
+265,Delitos contra la libertad - Desaparición de menor por su guardador,147,Prisión,5a - 15a,525
+286,Delitos contra la propiedad - Robo calificado - Robo calificado por lesiones,166,Prisión,5a - 15a,525
+287,"Delitos contra la propiedad - Robo calificado - Robo con arma, en despoblado y en banda",166 inc 2,Prisión,5a - 15a,525
+288,Delitos contra la propiedad - Robo agravado,167,Prisión,3a - 10a,525
+333,"Delitos contra la seguridad pública - Incendio, explosión e inundación - Incendio, explosión e inundación con peligro para bienes determinados (bienes públicos, arsenal,astillero, etc.)",art. 186 inc. 3,Reclusión o Prisión,3a - 15a,525
+334,"Delitos contra la seguridad pública - Incendio, explosión e inundación - Incendio, explosión e inundación con peligro de muerte",art. 186 inc. 4,Reclusión o Prisión,3a - 15a,525
+343,Delitos contra la seguridad pública - Piratería - Piratería naval,198 inc a,Reclusión o Prisión,3a - 15a,525
+344,Delitos contra la seguridad pública - Piratería - Piratería aérea,198 inc b,Reclusión o Prisión,3a - 15a,525
+345,Delitos contra la seguridad pública - Piratería - Usurpación de comando,198 inc c,Reclusión o Prisión,3a - 15a,525
+346,Delitos contra la seguridad pública - Piratería - Connivencia con piratas,198 inc d,Reclusión o Prisión,3a - 15a,525
+347,Delitos contra la seguridad pública - Piratería - Oposición a la defensa contra piratas, 198 inc e,Reclusión o Prisión,3a - 15a,525
+348,Delitos contra la seguridad pública - Piratería - Equipamiento de barco o aeronave pirata,198 inc f,Reclusión o Prisión,3a - 15a,525
+349,Delitos contra la seguridad pública - Piratería - Tráfico y auxilio a aeronave pirata,198 inc g,Reclusión o Prisión,3a - 15a,525
+381,Delitos contra la fé pública - Falsificación o adulteración de documentos - Uso de documento falsificado o adulterado,282,Reclusión o Prisión,3a - 15a,525
+437,Delitos contra la integridad sexual - Violación calificada,119,Reclusión o Prisión,6a - 15a,525
+444,Delitos contra las personas (dolosos) - Aborto - Aborto sin consentimiento seguido de muerte,85 inc 1,Prisión,3a - 15a,525
+478,Otros - violacion,119,Reclusión o Prisión,6a - 15a,525
+551,"Delitos previstos por Leyes de Estupefacientes - Ley N° 23.737 a) Siembra, cultivo de plantas o  semillas, materia prima o elementos para la producción de estupefacientes",art. 5,Prisión y Multa,4a - 15a,525
+552,"Delitos previstos por Leyes de Estupefacientes - Ley N° 23.737 b) Producción, fabricación, extracción o preparación de estupefacientes",art. 5,Prisión y Multa,4a - 15a,525
+562,"Delitos previstos por Leyes de Estupefacientes - Ley N° 23.737 c) Comercio con estupefacientes o materias primas para su producción o fabricación o los tenga con fines de comercialización, distribución, almacenamiento o transporte o dé en pago",art. 5,Prisión y Multa,4a - 15a,525
+563,"Delitos previstos por Leyes de Estupefacientes - Ley N° 23.737 d) Comercio, distribución, almacenamiento transporte o dé en pago plantas o sus semillas para producción de estupefacientes",art. 5,Prisión y Multa,4a - 15a,525
+585,Delitos contra la integridad sexual - Abuso sexual agravado por acceso carnal,art. 119,Reclusión o Prisión,6a - 15a,525
+592,"Delitos contra la integridad sexual - Abuso sexual cometido contra un menor de 18 años, aprovechando la situación de convivencia preexistente con el mismo.",art. 119,Reclusión o Prisión,6a - 15a,525
+627,Delitos previstos por Leyes Especiales y Decretos Ley - Ley 17.285 Código Aeronáutico,217,Prisión,3a - 15a,525
+,Delitos contra la administración pública - Prevaricato,"269, 2do. párr.",Reclusión o Prisión,3a - 15a,525
+,Delitos contra la libertad - trata de personas con fines de explotación calificado,145 ter inc 7 i,Prisión,8a - 12a,525
+,Delitos contra las personas (dolosos) - Abandono de persona calificado (muerte),106,Reclusión o Prisión,5a -15a,510
+97,Delitos contra la propiedad - Secuestro extorsivo,170,Reclusión o Prisión,5a - 15a,510
+113,Delitos contra la seguridad pública - Fabricación o tenencia de materiales peligrosos,189 bis,Reclusión o Prisión,5a - 15a,510
+53,Delitos contra la integridad sexual - Violación agravada,119,Reclusión o Prisión,4a - 10a,500
+74,Delitos contra la libertad - Reducción a servidumbre o condición análoga,140,Reclusión o Prisión,4a - 15a,500
+79,"Delitos contra la libertad - Sustración, retención, ocultamiento de menores, desaparición o retención ilegal",146-147,Reclusión o Prisión,5a - 15a,500
+111,Delitos contra la seguridad pública - Estragos,187,Reclusión o Prisión,3a - 10a,500
+128,Delitos contra el orden público - Asociación ilícita,210,Reclusión o Prisión,3a - 10a,500
+131,Delitos contra el orden público - Intimidación pública calificada,"211, 2do. párr. ",Prisión,3a - 10a,500
+167,Delitos contra la administración pública - Cohecho calificado,257,Reclusión o Prisión,4a - 12a,500
+206,Delitos previstos por Leyes Especiales y Decretos Ley - Ley N° 14.878 Impuesto vitivinícola,31,Prisión,3a - 10a,500
+332,"Delitos contra la seguridad pública - Incendio, explosión e inundación - Destrucción a bienes rurales",art. 186 inc. 2,Reclusión o Prisión,3a - 10a,500
+374,Delitos contra la seguridad de la Nación - Infidelidad diplomática,225,Reclusión o Prisión,3a - 10a,500
+413,"Delitos previstos por Leyes Especiales y Decretos Ley - Ley Nº 25.086, de Armas",189 bis,Reclusión o Prisión,5a - 15a,500
+418,"Delitos contra la propiedad - Robo calificado - Robo con arma, en poblado y en banda",167,Reclusión o Prisión,3a - 10a,500
+436,Delitos contra la integridad sexual - Abuso sexual agravado,119,Reclusión o Prisión,4a - 10a,500
+438,Delitos previstos por Leyes de Estupefacientes - Ley Nº 22.415 Contrabando de estupefacientes,Cod.Adua 866,Reclusión o Prisión,3a - 12a,500
+442,Delitos contra las personas (dolosos) - Aborto - Aborto sin consentimiento,85 inc 1,Prisión,3a - 10a,500
+557,Delitos contra el orden económico y financiero - Financiación del terrorismo,306,Prisión,5a - 15a,500
+583,Delitos contra la integridad sexual - Abuso sexual con sometimiento  sexual gravemente ultrajante para la víctima,art. 119,Reclusión o Prisión,4a - 10a,500
+29,Delitos contra las personas (dolosos) - Lesiones graves,90,Reclusión o Prisión,1a - 6a,450
+30,Delitos contra las personas (dolosos) - Lesiones graves calificadas,92,Reclusión o Prisión,3a - 10a,450
+31,Delitos contra las personas (dolosos) - Lesiones gravísimas,91,Reclusión o Prisión,3a - 10a,450
+35,Delitos contra las personas (dolosos) - Homicidio en riña,95,Reclusión o Prisión,2a - 6a,450
+36,Delitos contra las personas (dolosos) - Homicidio en riña calificado,95,Reclusión o Prisión,2a - 6a,450
+45,Delitos contra las personas (dolosos) - Abandono de persona calificado,106,Reclusión o Prisión,3a - 10a,450
+54,Delitos contra la integridad sexual - Estupro,120,Reclusión o Prisión,3a - 6a,450
+58,Delitos contra la integridad sexual - Promoción o facilitación de la corrupción de menores calificada,125,Reclusión o Prisión,6a - 15a,450
+62,Delitos contra la integridad sexual - Proxenetismo agravado,127,Prisión,5a - 10a,450
+68,Delitos contra la integridad sexual - Rapto calificado,130,Prisión,2a - 6a,450
+70,Delitos contra el estado civil - Matrimonio ilegal unilateral,135,Prisión,2a - 6a,450
+72,Delitos contra el estado civil - Suposición de parto,139,Prisión,2a - 6a,450
+76,Delitos contra la libertad - Privación ilegal de la libertad calificada,142,Reclusión o Prisión,2a - 6a,450
+93,Delitos contra la propiedad - Hurto calificado,163,Prisión,1a - 6a,450
+99,Delitos contra la propiedad - Defraudaciones menores,172,Prisión,1m - 6m,450
+102,Delitos contra la propiedad - Quiebra fraudulenta,176,Prisión,2a - 6a,450
+109,"Delitos contra la seguridad pública - Incendio, explosión e inundación",186 incs. 1° y 2°,Reclusión o Prisión,3a - 10a,450
+126,Delitos contra el orden público - Instigación pública a cometer delitos determinados,209,Prisión,2a - 6a,450
+130,Delitos contra el orden público - Intimidación pública,211,Prisión,2a - 6a,450
+140,Delitos contra los poderes públicos y el orden constitucional - Sedición,229,Prisión,1a - 6a,450
+147,Delitos contra la administración pública - Inducir a engaño a una autoridad judicial,172,Prisión,1m - 6m,450
+166,Delitos contra la administración pública - Cohecho,256,Reclusión o Prisión,1a - 6a,450
+170,Delitos contra la administración pública - Peculado,261,Reclusión o Prisión,2a - 10a,450
+172,Delitos contra la administración pública - Negociaciones incompatibles con el ejercicio de funciones públicas,265,Reclusión o Prisión,1a - 6a,450
+175,Delitos contra la administración pública - Enriquecimiento ilícito de funcionarios y empleados,268 (1),Reclusión o Prisión,1a - 6a,450
+179,Delitos contra la administración pública - Falso testimonio calificado,"275, 2do. párr.",Reclusión o Prisión,1a - 10a,450
+181,Delitos contra la administración pública - Encubrimiento calificado,"277, inc. 3",Prisión,1a - 6a,450
+194,Delitos contra la fé pública - Falsificación o adulteración de documentos calificada,"292, 2do. párr.",Reclusión o Prisión,3a - 8a,450
+196,Delitos contra la fé pública - Falsedad ideológica en documentos calificada,"292, 2do. párr.",Reclusión o Prisión,3a - 8a,450
+198,Delitos contra la fé pública - Falsedad en certificado médico calificada,"295, 2do. párr.",Prisión,1a - 4a,450
+201,Delitos contra la fé pública - Pago con cheque sin provisión de fondos,302,Prisión,6m - 4a,450
+202,Delitos previstos por Leyes Especiales y Decretos Ley - Ley N° 11.723 Propiedad intelectual,71,Prisión,1m - 6a,450
+207,Delitos previstos por Leyes Especiales y Decretos Ley - Ley N° 19.359 Régimen cambiario,2,Prisión y Multa,1a - 8a,450
+209,Delitos previstos por Leyes Especiales y Decretos Ley - Ley N° 22.415 Represión contrabando-Encubrimiento,863,Prisión,2a - 8a,450
+214,Delitos previstos por Leyes Especiales y Decretos Ley - Ley N° 24.721 Hurto de automóvil dejado en vía pública,1,Prisión,1a - 6a,450
+215,Delitos previstos por Leyes Especiales y Decretos Ley - Ley N° 27430 Régimen penal tributario,279,Prisión,2a - 6a (evasión simple); 3a y 6m - 9a (evasión agravada),450
+241,Delitos contra las personas (dolosos) - Aborto cometido por profesional,85,Prisión,3a - 10a,450
+250,"Delitos contra las personas (dolosos) - Abandono ""honoris causa""",106,Reclusión o Prisión,2a - 6a,450
+269,"Delitos contra la libertad - Privación abusiva de libertad, vejaciones, severidades y apremios ilegales",144 bis inc 3,Prisión,1a - 5a,450
+272,Delitos contra la libertad - Omisión de evitar o denunciar torturas,144 quater,Prisión,3a - 10a,450
+289,Delitos contra la propiedad - Robo agravado - Robo en despoblado,167 inc 1,Prisión,3a - 10a,450
+290,Delitos contra la propiedad - Robo agravado - Robo en poblado y en banda,167 inc 2,Prisión,3a - 10a,450
+291,Delitos contra la propiedad - Robo agravado - Robo por efracción,167 inc 3,Prisión,3a - 10a,450
+292,Delitos contra la propiedad - Robo agravado - Robo agravado por las circunstancias del hurto calificado,167 inc 4,Prisión,3a - 10a,450
+293,Delitos contra la propiedad - Chantaje o extorsión mediante amenazas de imputaciones contra el honor,169,Reclusión o Prisión,3a - 8a,450
+294,Delitos contra la propiedad - Sustracción de cadáveres,171,Prisión,2a - 6a,450
+295,Delitos contra la propiedad - Defraudaciones,172,Prisión,1m - 6a,450
+296,"Delitos contra la propiedad - Defraudaciones - Defraudación en la sustancia, calidad o cantidad de cosas",172 inc 1,Prisión,1m - 6a,450
+297,Delitos contra la propiedad - Defraudaciones - Depositario infiel,173 inc 2,Prisión,1m - 6a,450
+298,Delitos contra la propiedad - Defraudaciones - Suscripción engañosa de documento,173 inc 3,Prisión,1m - 6a,450
+299,Delitos contra la propiedad - Defraudaciones - Abuso de firma en blanco,173 inc 4,Prisión,1m - 6a,450
+300,Delitos contra la propiedad - Defraudaciones - Hurto impropio,173 inc 5,Prisión,1m - 6a,450
+301,Delitos contra la propiedad - Defraudaciones - Defraudación por contrato simulado y falsos recibos,173 inc6,Prisión,1m - 6m,450
+303,Delitos contra la propiedad - Defraudaciones - Supresión de documentos,art.173 inc. 8,Prisión,1m - 6a,450
+304,Delitos contra la propiedad - Defraudaciones - Estelionato,art. 173 inc. 9,Prisión,1m - 6a,450
+305,Delitos contra la propiedad - Defraudaciones - Remuneración pretextada a un juez o funcionario,art. 173 inc. 10,Prisión,1m - 6a,450
+306,Delitos contra la propiedad - Defraudaciones - Desbaratamiento de derechos acordados,art. 173 inc. 11,Prisión,1m - 6a,450
+308,Delitos contra la propiedad - Defraudaciones agravadas - Estafa de seguros,art. 174 inc. 1,Prisión,2a - 6a,450
+309,Delitos contra la propiedad - Defraudaciones agravadas - Circunvención de incapaces,art. 174 inc. 2,Prisión,2a - 6a,450
+310,Delitos contra la propiedad - Defraudaciones agravadas - Defraudación por uso de pesas y medidas falsas,art. 174 inc. 3,Prisión,2a - 6a,450
+311,Delitos contra la propiedad - Defraudaciones agravadas - Fraude en materiales de construcción,art.174 inc.4,Prisión,2a - 6a,450
+312,Delitos contra la propiedad - Defraudaciones agravadas - Fraude en perjuicio de la administración pública,art. 174 inc 5,Prisión,2a - 6a,450
+331,"Delitos contra la seguridad pública - Incendio, explosión e inundación - Incendio, explosión e inundación con peligro común para los bienes",art. 186 inc. 1,Reclusión o Prisión,3a - 10a,450
+351,Delitos contra la seguridad pública - Tráfico de medicamentos o mercaderías peligrosas para la salud,200,Reclusión o Prisión,3a - 10a,450
+352,Delitos contra la seguridad pública - Suministro infiel de medicamentos,201,Reclusión o Prisión,3a - 10a,450
+366,Delitos contra la seguridad de la Nación - Cospiración para la traición,216,Reclusión o Prisión,1a - 8a,450
+367,Delitos contra la seguridad de la Nación - Actos contra aliados,218,Reclusión o Prisión,1a - 8a,450
+404,Delitos contra la propiedad - Defraudaciones - Retención indebida,173 inc 2 ,Prisión,1m - 6m,450
+456,"Delitos contra la propiedad - Defraudaciones - Defraudación por el titular fiduciario, el administrador de fondos comunes o dador de un contrato de leasing",173 inc 12,Prisión,1m - 6m,450
+457,"Delitos contra la propiedad - Defraudaciones - Defraudación de un autorizado para ejecutar un inmueble, cuando no corresponde ejecutarlo",173 inc 13,Prisión,1m - 6m,450
+458,Delitos contra la propiedad - Defraudaciones - Defraudación de tenedor de letras hipotecarias que no consigna los pagos recibidos,173 inc 14,Prisión,1m - 6m,450
+459,Delitos contra la propiedad - Defraudaciones agravadas - Fraude en el desenvolvimiento de un establecimiento o explotación comercial,174 inc 6,Prisión,2a - 6a,450
+525,Delitos contra la libertad - Art. 145 bis. Incorporado por Art. 10 de la Ley 26.364,art.  145 bis ,Prisión,4a - 8a,450
+526,Delitos contra la libertad - Art. 145 ter. Incorporado por Art. 11 de la Ley 26.364 (inc 2),art.  145 ter,Prisión,5a - 10a,450
+527,Delitos contra la libertad - Art. 145 ter. Incorporado por Art. 11 de la Ley 26.364 (inc 3),art.  145 ter,Prisión,5a - 10a,450
+528,Delitos contra el orden económico y financiero - Poner en circularción bienes provenientes de un ilícito,art. 303,Prisión,3a - 10a,450
+543,Delitos previstos por Leyes Especiales y Decretos Ley - Contaminación Culposa,55 de la Ley 24.051,Reclusión o Prisión,3a - 10a,450
+544,Delitos previstos por Leyes Especiales y Decretos Ley - Contrabando simple. Art. 863,art. 863,Prisión,2a - 8a,450
+545,Delitos previstos por Leyes Especiales y Decretos Ley - Contrabando simple. Art. 864,art. 864,Prisión,2a - 8a,450
+546,Delitos previstos por Leyes Especiales y Decretos Ley - Contrabando agravado o calificado. Art. 865,art. 865,Prisión,4a - 10a,450
+547,Delitos previstos por Leyes Especiales y Decretos Ley - Contrabando agravado o calificado,art. 865,Prisión,4a - 10a,450
+564,"Delitos previstos por Leyes de Estupefacientes - Ley N° 23.737 e) entrega, suministro, aplicación o facilitación de estupefacientes a otro a título gratuito u oneroso",art. 5,Prisión y Multa,3a - 12a,450
+566,"Delitos previstos por Leyes de Estupefacientes - Ley N° 23.737 Facilitación de lugar o elementos, para la guarda o la comercialización de estupeacientes",art. 10,Prisión o Reclusión + Multa,3a - 12a,450
+575,"Delitos contra la propiedad - Defraudaciones - Defraudación mediante tarjetas de compra, crédito o débito, cuando la misma hubiere sido falsificada, adulterada, hurtada, robada, perdida u obtenida  del legítimo emisor mediante engaño, o mediante el uso no autorizado de sus datos",art. 173 inc. 15,Prisión,1a - 6a,450
+576,Delitos contra la propiedad - Defraudaciones - Defraudación mediante cualquier técnica de manipulación informática,art. 173 inc. 16,Prisión,2a - 6a,450
+610,Delitos contra la propiedad - 1-1 Abigeato,art 167 quater,Reclusión o Prisión,4a - 10a,450
+611,Delitos contra la propiedad - 1-2 Abigeato en ocasión de transporte de ganado,art 167 quater inc 4,Reclusión o Prisión,4a - 10a,450
+612,Delitos contra la propiedad - 2- Abigeato de cinco o más cabezas de ganado en trasnsporte motorizado,art 167 ter,Prisión,3a - 8a,450
+,Delitos previstos por Leyes Especiales y Decretos Ley - Ley Nº 23.771-Fraude en exenciones o desgravaciones impositivas,art 4 de la ley,Prisión,2a - 8a,450
+,Delitos contra la libertad - Tráfico ilegal de personas,145,Prisión,2a - 6a,450
+,Delitos contra la seguridad pública - Atentado contra la seguridad de medios de transporte culposo,"196, inc. 2°",Prisión,2a - 6a,450
+,Delitos contra la administración pública - Enriquecimiento ilícito de funcionarios y empleados,268 (2),Prisión,2a - 6a,450
+,Delitos contra la libertad - Privación ilegal de la libertad por funcionario público calificada,144 quater,Prisión,3a - 10a,450
+,Delitos contra la libertad - Privación ilegal de la libertad por funcionario público calificada,144 quater inc 3,"Prisión, inhabilitación especial perpetua e inhabilitación oara portar armas de todo tipo",3a - 10a,450
+,Delitos contra la seguridad pública - Atentado contra la seguridad de medios de transporte culposo,"196, inc. 3°",Prisión,3a - 10a,450
+,Delitos contra la libertad - trata de personas con fines de explotación calificado,145 ter,Prisión,5a - 10a,450
+25,Delitos contra las personas (dolosos) - Aborto,85,Prisión,3a - 10a,400
+57,Delitos contra la integridad sexual - Promoción o facilitación de la corrupción de menores,125,Reclusión o Prisión,3a - 10a,400
+191,"Delitos contra la fé pública - Falsificación de sellos, timbres y marcas",288,Reclusión o Prisión,1a - 6a,400
+193,Delitos contra la fé pública - Falsificación o adulteración de documentos,"292, 1er. párr.",Reclusión o Prisión,6m - 6a,400
+195,Delitos contra la fé pública - Falsedad ideológica en documentos,"292, 1er. párr.",Reclusión o Prisión,1a - 6a,400
+211,Delitos previstos por Leyes Especiales y Decretos Ley - Ley N° 23.184 y Ley N° 24.192 Espectáculos deportivos,ARTICULO 3º,Prisión,1a - 6a,400
+219,Delitos contra la propiedad - Estafa,172,Prisión,1m - 6a,400
+224,Delitos previstos por Leyes de Estupefacientes - Ley Nº 23.737 de Estupefacientes - Tenencia,14,Prisión,1a - 6a,400
+227,Delitos contra la propiedad - Extorsión,168,Prisión,5a - 10a,400
+261,Delitos contra el estado civil - Matrimonio ilegal,136,Conducta punible del oficial público del Registro Civil.,2a - 6a,400
+264,Delitos contra la libertad - Plagio político (Conducción fuera de las fronteras),142 bis,Prisión,2a - 6a,400
+280,Delitos contra la propiedad - Hurto calificado - Abigeato,167 Ter,Prisión,2a - 6a,400
+281,Delitos contra la propiedad - Hurto calificado - Hurto calamitoso,163 inc 2,Prisión,1a - 6a,400
+282,"Delitos contra la propiedad - Hurto calificado - Hurto con ganzúa, llave falsa u otro instrumento",163 inc 3,Prisión,1a - 6a,400
+283,Delitos contra la propiedad - Hurto calificado - Hurto con escalamiento,163 inc 4,Prisión,1a - 6a,400
+284,Delitos contra la propiedad - Hurto calificado - Hurto de carga transportada,163 inc 5,Prisión,1a - 6a,400
+285,Delitos contra la propiedad - Robo calificado,164,Prisión,1m - 6a,400
+540,Delitos previstos por Leyes Especiales y Decretos Ley - No concurrencia o abandono de funciones electorales (Código Electoral),132,Prisión,6m - 2a,400
+548,Delitos previstos por Leyes Especiales y Decretos Ley - Contrabando agravado o calificado. Art. 867,art. 867,Prisión,4a - 12a,400
+554,Delitos previstos por Leyes Especiales y Decretos Ley - realizado en el marco del Programa Global Entry,1,Prisión,2a - 6a,400
+593,Delitos previstos por Leyes Especiales y Decretos Ley - Ley N° 25.871 Migraciones. Promover o facilitar el tráfico ilegal de personas.,29,Prisión,3a - 10a,400
+625,Delitos contra la integridad sexual - Tenencia de Pornografía Infantil,Ley 27.436,Prisión,3a - 6a,400
+,Delitos contra la libertad - Privación ilegal de la libertad por funcionario público calificada,144,Reclusión o Prisión e Inhabilitación Especial por Doble Tiempo,1a - 5a,400
+,Delitos contra la libertad - Privación ilegal de la libertad por funcionario público calificada,144 bis,Reclusión o Prisión e Inhabilitación Especial por Doble Tiempo,1a - 5a,400
+,Delitos contra la libertad - trata de personas con fines de explotación,145 bis,Prisión,4a - 8a,400
+34,Delitos contra las personas (dolosos) - Lesiones en estado de emoción violenta calificadas,91 y 93,Reclusión o Prisión,1a - 4a,350
+37,Delitos contra las personas (dolosos) - Lesiones graves o gravisimas en riña,95,Reclusión o Prisión,1a - 4a,350
+38,Delitos contra las personas (dolosos) - Lesiones en riña calificadas,95,Reclusión o Prisión,1a - 4a,350
+43,Delitos contra las personas (dolosos) - Disparo de arma de fuego y agresión agravada,105,Reclusión o Prisión,1a - 4a,350
+44,Delitos contra las personas (dolosos) - Abandono de persona,106,Reclusión o Prisión,2a - 6a,350
+52,Delitos contra la integridad sexual - Violación,119,Reclusión o Prisión,6m - 4a,350
+59,Delitos contra la integridad sexual - Promoción y facilitación de la prostitución  o corrupción de mayores,125 Bis,Prisión,4a - 6a,350
+60,Delitos contra la integridad sexual - Corrupción o prostitución de mayores,125bis,Prisión,4a - 6a,350
+61,Delitos contra la integridad sexual - Proxenetismo,127,Prisión,4a - 6a,350
+65,Delitos contra la integridad sexual - Publicaciones y reproducciones obscenas,128,Prisión,3a - 6a,350
+67,Delitos contra la integridad sexual - Rapto,130,Prisión,1a - 4a,350
+69,Delitos contra el estado civil - Matrimonio ilegal bilateral,134,Prisión,1a - 4a,350
+71,Delitos contra el estado civil - Supresión y suposición del estado civil,138,Prisión,1a - 4a,350
+95,Delitos contra la propiedad - Robo,164,Prisión,1m - 6m,350
+101,Delitos contra la propiedad - Usura calificada,175 bis,Prisión,3a - 6a,350
+104,Delitos contra la propiedad - Concurso civil,179,Prisión,1a - 4a,350
+145,Delitos contra la administración pública - Resistencia a la autoridad calificada,240 bis,Prisión,1a - 4a,350
+155,Delitos contra la administración pública - Usurpación de autoridad calificada,"246, 5to. párr.",Prisión,1a - 4a,350
+165,Delitos contra la administración pública - Sustración de elementos probatorios,255,Prisión,1m - 4a,350
+173,Delitos contra la administración pública - Exacciones ilegales,266,Prisión,1a - 4a,350
+174,Delitos contra la administración pública - Exacciones ilegales calificadas,267,Prisión,1a - 4a,350
+177,Delitos contra la administración pública - Denegación y retardo de justicia,273,Inhabilitación absoluta,1a - 4a,350
+184,Delitos contra la administración pública - Favorecimiento de evasión,"281, primera parte",Prisión,1m - 4a,350
+185,Delitos contra la administración pública - Favorecimiento de evasión calificado,"281, segunda parte",Reclusión o Prisión e Inhabilitación Absoluta,"1m - 4a , e inhabilitación absoluta por el triple de tiempo de la condena",350
+244,Delitos contra las personas (dolosos) - Lesiones leves en riña,95,Prisión,1a - 4a,350
+246,Delitos contra las personas (dolosos) - Disparo de arma de fuego y agresión en estado de emoción violenta,81,Prisión,3a - 6a,350
+253,Delitos contra la integridad sexual - Estupro agravado,120,Prisión,6m - 4a,350
+256,Delitos contra la integridad sexual - Trata de mujeres,130,Prisión,1a - 4a,350
+257,Delitos contra la integridad sexual - Trata de menores,131,Prisión,6m - 4a,350
+258,Delitos contra la integridad sexual - Rapto impropio.,130,Prisión,1a - 4a,350
+260,Delitos contra el estado civil - Simulación de matrimonio,134,Prisión,1a - 4a,350
+262,Delitos contra el estado civil - Supresión y suposición de estado civil agravado,138,Prisión,1a - 4a,350
+302,Delitos contra la propiedad - Defraudaciones - Administración fraudulenta,art. 173 inc. 7,Prisión,1m - 6a,350
+317,Delitos contra la propiedad - Quiebra de personas jurídicas,179,Prisión,1a - 4a,350
+336,Delitos contra la seguridad pública - Peligro de desastre. Entorpecimiento de las defensas.,art. 188,Prisión,1a - 6a,350
+354,Delitos contra la seguridad pública - Omisión de los deberes de funcionario de estalecimiento destinado al expendio de medicamentos.,203,Prisión o multa,6m - 5a,350
+362,Delitos contra el orden público - Agrupaciones con fines de luchas ideológicas imponiendo ideas por la fuerza o el temor,211,Prisión,2a - 6a,350
+368,Delitos contra la seguridad de la Nación - Violación de compromisos internacionales,219,Prisión,2a - 6a,350
+391,Delitos previstos por Leyes Especiales y Decretos Ley - Decreto Ley 6582/58 Robo de automotor,Sanciona la inscripción de automotor robado,Prisión,1a - 6a,350
+409,Delitos contra la administración pública - Cohecho/dadivas,256,Prisión e inhabilitación,1a - 6a,350
+419,Delitos contra la seguridad pública - Tenencia ilegal de arma de guerra o material peligroso. Tenencia ilegal de arma de fuego sin la debida autorización legal. Portación. - Portación de arma de fuego de uso civil,189 bis,Reclusión o Prisión,2a - 6a,350
+421,Delitos contra el estado civil - Supresión y suposición de estado civil agravado - Facilitación o promoción de la supresión y suposición del estado civil y de la identidad,139,Reclusión o Prisión,2a - 6a,350
+424,Delitos contra la integridad sexual - Promoción o facilitación de la prostitución,125 bis,Prisión,4a - 6a,350
+425,Delitos contra las personas (dolosos) - Homicidio en exceso de la legitima defensa,84,Prisión e inhabilitación,1a - 5a,350
+431,"Delitos contra la administración pública - Falsificación de sellos, timbres y marcas",288,Reclusión o Prisión,1a - 6a,350
+433,Delitos previstos por Leyes Especiales y Decretos Ley - Ley Nº 25.246 Lavado de dinero,303,Prisión,3a - 10a,350
+434,Delitos previstos por Leyes Especiales y Decretos Ley - Ley Nº 24.051 Ley de Residuos Peligrosos,200,Reclusión o Prisión,3a - 10a,350
+443,Delitos contra las personas (dolosos) - Aborto - Aborto con consentimiento,85 inc 2,Prisión,3m - 1a,350
+466,Delitos contra la seguridad pública - Proporcionar un arma de fuego a quien no es legítimo usuario,189 bis inc4,Prisión,1a - 6a,350
+477,Delitos previstos por Leyes Especiales y Decretos Ley - Tráfico ilegal de personas,145 bis,Prisión,4a - 8a,350
+533,Delitos previstos por Leyes Especiales y Decretos Ley - Ley de Servicio de comunicaciones móviles,13,Prisión,1a - 6a,350
+536,Delitos contra la libertad - Trabajo Infantil,148bis,Prisión,1a - 4a,350
+553,Delitos previstos por Leyes Especiales y Decretos Ley - Ley 25.871 Migraciones,117,Prisión,1a - 6a,350
+573,Delitos previstos por Leyes de Estupefacientes - Ley N° 23.737 Párrafo 2 - Tenencia de estupefacientes para uso personal,art. 14,Prisión y Multa,1a - 6a,350
+574,Delitos previstos por Leyes de Estupefacientes - Ley N° 23.737 Confabulación,art. 29 bis,Reclusión o Prisión,1a - 6a,350
+581,Delitos contra la integridad sexual - Grooming,art. 131,Prisión,6m - 4a,350
+582,"Delitos contra la integridad sexual - Abuso sexual con violencia, amenaza, abuso coactivo o intimidatorio de una relación de dependencia, de autoridad, o de poder, o aprovechamiento de que la víctima por cualquier causa no haya podido consentir libremente la acción.",art. 119,Reclusión o Prisión,6m - 4a,350
+607,Delitos previstos por Leyes de Estupefacientes - Ley N° 23.737 a) Difundir publicamente el uso de estupefacientes,art. 12 ,Prisión y Multa,2a - 6a,350
+608,Delitos previstos por Leyes de Estupefacientes - Ley N° 23.737 b) Usar estupefacientes con ostentación y trascendencia al público,art. 12 ,Prisión y Multa,2a - 6a,350
+613,Delitos contra la propiedad - Hurto calificado - Hurto de vehículo dejado en la vía pública,art. 163 inc. 6,Prisión,1a - 6a,350
+617,Delitos previstos por Leyes Especiales y Decretos Ley - Ley de Trabajo Infantil,148bis,Prisión y Multa,1a - 4a,350
+618,Delitos contra el orden económico y financiero - Intermediación financiera no autorizada,310,Prisión,2a - 4a,350
+619,Delitos contra la administración pública - Cohecho - Cohecho Activo,art. 258,Prisión,1a - 6a,350
+620,Delitos contra la administración pública - Cohecho - Cohecho Pasivo,art. 256,Prisión o Reclusión e Inhabilitación Especial Perpetua,1a - 6a,350
+621,Delitos contra la administración pública - Soborno Trasnacional,art. 258 bis,Prisión,1a - 6a,350
+624,Delitos previstos por Leyes Especiales y Decretos Ley - Ley 24769 Regimen penal tributario (deroga la 23771),Art 1 - art2,Prisión,2a - 6a,350
+626,Delitos previstos por Leyes Especiales y Decretos Ley - PROHIBICIÓN DE CARRERAS DE PERROS,Ley 27330/16,Prisión y Multa,3m - 4a,350
+,Delitos contra la libertad - Privación ilegal de la libertad por funcionario público calificada,144 quinto,Prisión e inhabilitación especial,6m - 2a  / 3a -6a ,350
+,"Delitos contra la seguridad pública - Propagación de una enfermedad peligrosa y contagiosa, culposa.",203,Prisión,6m - 5a,350
+,Delitos previstos por Leyes Especiales y Decretos Ley - Ley N° 26.388-Producción y distribución de contenido ilegal,128,Prisión,6m - 4a,350
+,Trata de personas con fines de explotación calificado,art145,Prisión,5a - 10a,350
+120,"Delitos contra la seguridad pública - Alteración peligrosa de aguas potables, alimentos o medicinas",200,Reclusión o Prisión,3a - 10a,340
+22,Delitos contra las personas (dolosos) - Homicidio preterintencional,81 Inc 1° B,Reclusión o Prisión,1a - 3a,300
+56,Delitos contra la integridad sexual - Acceso carnal fraudulento,119,Reclusión o Prisión,4a - 10a,300
+178,Delitos contra la administración pública - Falso testimonio,275,Prisión,1m - 4a,300
+217,Delitos previstos por Leyes Especiales y Decretos Ley - Decreto-Ley N° 6.618/57 ratificado Ley N° 14.467 y Mod. Ley N° 16.962 (Ley Prov. Bs As 4847) Juegos de azar,Artículo 1 del Decreto-Ley N° 6.618/57,Prisión y Multa,2m - 1a / 1m 3a +multa,300
+326,Delitos contra la propiedad - Daño agravado - Daño con el fin de impedir el libre ejercicio de la autoridad o en venganza de sus determinaciones,art. 184 inc. 1,Prisión,3m - 4a,300
+327,"Delitos contra la propiedad - Daño agravado - Daño para producir infección, contagio en aves u otros animales domésticos",art. 184 inc. 2,Prisión,3m - 4a,300
+328,Delitos contra la propiedad - Daño agravado - Daño empleando sustancias venenosas o corrosivas,art. 184 inc. 3,Prisión,3m - 4a,300
+329,Delitos contra la propiedad - Daño agravado - Daño cometido en despoblado y en banda,art. 184 inc. 4,Prisión,3m - 4a,300
+330,"Delitos contra la propiedad - Daño agravado - Daño ejecutado en cosas de valor científico, cultural, militar o religioso, e instalaciones públicas.",art. 184 inc. 5,Prisión,3m - 4a,300
+376,Delitos contra la seguridad pública - Tenencia ilegal de arma de guerra o material peligroso. Tenencia ilegal de arma de fuego sin la debida autorización legal. Portación.,189 bis ter,Reclusión o Prisión,3a - 8a,300
+420,Delitos contra la administración pública - Abandono de servicio por funcionario público - Omisión o retardo de acto de algún oficio,273,inhabilitación absoluta,1a - 4a,300
+465,"Delitos contra la seguridad pública - Tenencia ilegal de arma de guerra o material peligroso. Tenencia ilegal de arma de fuego sin la debida autorización legal. Portación. - Acopio de armas o municiones, piezas o instrumental",189 bis,Reclusión o Prisión,3m - 6m / 8m -6m,300
+596,Delitos previstos por Leyes Especiales y Decretos Ley - Ley N° 25.871 Migraciones. Promover o facilitar la permanencia ilegal de extranjeros con el fin de obtener un beneficio.,117,Reclusión o Prisión,1a - 6a,300
+,Delitos previstos por Leyes Especiales y Decretos Ley - Ley Nº 23.771-Evasión agravada,art 2 de la ley,Prisión,6m - 6a,300
+,Delitos previstos por Leyes Especiales y Decretos Ley - Ley Nº 23.771-Evasión de aportes a la seguridad social,art 3 de la ley,Prisión,2a - 6a,300
+,Delitos previstos por Leyes Especiales y Decretos Ley - Ley Nº 23.771-Retención indebida de tributos o aportes,art 8 de la ley,Prisión,2a - 6a,300
+114,"Delitos contra la seguridad pública - Naufragio, varamiento o desastre aéreo",190,Prisión,2a - 8a,280
+337,Delitos contra la seguridad pública - Atentados ferroviarios,CP. Art. 191.,Reclusión o Prisión,2a - 6a,250
+511,Delitos previstos por Leyes Especiales y Decretos Ley - Ley de trata de personas,art145,Prisión,4a - 8a,250
+,Delitos previstos por Leyes Especiales y Decretos Ley - Ley de trata de personas -Trata de personas con fines de explotació,art145,Prisión,4a - 8a  / 5a -10a / 10a - 15a,250
+19,Delitos contra las personas (dolosos) - Homicidio en estado de emoción violenta,81 inc1° A,Reclusión o Prisión,1a - 3a,200
+15,Delitos contra las personas (culposos) - Homicidio culposo,84,Reclusión o Prisión,1a - 5a,150
+24,Delitos contra las personas (dolosos) - Instigación o ayuda al suicidio,83,Prisión,1a - 4a,150
+192,"Delitos contra la fé pública - Falsificación de sellos, timbres y marcas calificada",291,Reclusión o Prisión,1a - 6a,150
+370,"Delitos contra la seguridad de la Nación - Revelación de secretos, espionaje",222,Reclusión o Prisión,1a - 6a,150
+39,Delitos contra las personas (dolosos) - Duelo regular,97 Inc.2,Prisión,1a - 4a,120
+41,Delitos contra las personas (dolosos) - Disparo de arma de fuego con herida,104,Prisión,1a - 3a,120
+16,Delitos contra las personas (culposos) - Lesiones culposas,94,Reclusión o Prisión,1m - 3a,100
+40,Delitos contra las personas (dolosos) - Disparo de arma de fuego sin herir,104,Prisión,1a - 3a,100
+75,Delitos contra la libertad - Privación ilegal de la libertad,141,Reclusión o Prisión,6m - 3a,100
+100,Delitos contra la propiedad - Usura,175 bis,Prisión y Multa,1a - 3a,100
+105,"Delitos contra la propiedad - Insolvencia fraudulenta, concurso civil fraudulento","179, 2do. párr.",Prisión,6m - 3a,100
+108,Delitos contra la propiedad - Turbación de tenencia,181,Prisión,6m - 3a,100
+116,Delitos contra la seguridad pública - Atentado contra la seguridad de medios de transporte culposo,196,Prisión,6m - 3a,100
+117,Delitos contra la seguridad pública - Entorpecimiento de transporte o servicio público,191,Prisión,6m - 3a,100
+162,Delitos contra la administración pública - Abandono de servicio por funcionario público,"252, 2do. párr.",Prisión,1a - 3a,100
+197,Delitos contra la fé pública - Falsedad en certificado médico,"295, 1er. párr.",Prisión,1m - 1a,100
+259,Delitos contra la integridad sexual - Rapto de menor impúber,130 2do párrafo,Prisión,6m - 2a,100
+371,Delitos contra la seguridad de la Nación - Menosprecio a los símbolos patrios,222 parrafo 2do,Prisión,1a - 4a,100
+372,Delitos contra la seguridad de la Nación - Revelación culposa de secretos,222 parrafo 3do,Prisión,1a - 4a,100
+,Delitos contra la seguridad pública - Tenencia ilegal de arma de guerra o material peligroso. Tenencia ilegal de arma de fuego sin la debida autorización legal. Portación.,189 bis ter,Reclusión o Prisión,2a - 4a,100
+410,"Delitos contra la fé pública - Falsificación, cercenamiento o adulteración de títulos de la deuda nacional, provincial o municipal",285,Reclusión o Prisión,1a - 5a,100
+412,Delitos contra la fé pública - Cercenamiento o alteración de moneda,283,Reclusión o Prisión,1a - 5a,100
+435,Delitos contra la integridad sexual - Abuso sexual,119,Reclusión o Prisión,6m - 4a,100
+468,Delitos contra los poderes públicos y el orden constitucional - Atentado contra la vida democrática o la independencia económica de la Nación realizada por militar,226,Prisión,5a - 15a,100
+469,Delitos contra los poderes públicos y el orden constitucional - Amenaza pública de rebelión,226 bis,Prisión,1a - 4a,100
+555,Delitos contra la integridad sexual - Ley 26.904 (Grooming),art. 131,Prisión,6m - 4a,100
+615,Delitos previstos por Leyes Especiales y Decretos Ley - Ley N° 25.743 De protección del patrimonio arqueológico y paleontológico,46-48,"prisión o reclusión, inhabilitación especial de hasta tres (3) años",1m - 1a,100
+,Delitos contra la libertad - Privación ilegal de la libertad por funcionario público calificada,144 quater inc 2,"Prisión, inhabilitación especial perpetua e inhabilitación oara portar armas de todo tipo",1a - 5a,100
+88,Delitos contra la libertad - Violación de secreto profesional,157,Prisión e inhabilitación especial,1m - 2a  / (*Inahbilitación especial 1a-4a),85
+28,Delitos contra las personas (dolosos) - Lesiones leves calificadas,92,Reclusión o Prisión,6m - 2a,75
+84,Delitos contra la libertad - Violación de domicilio calificada,150,Prisión,6m - 2a,75
+33,Delitos contra las personas (dolosos) - Lesiones en estado de emoción violenta,89 y 93,Reclusión o Prisión,15d - 6m / 6m - 3a,70
+118,Delitos contra la seguridad pública - Entorpecimiento de transporte o servicio público culposo,196,Prisión,6m - 3a,70
+180,Delitos contra la administración pública - Encubrimiento,"277, inc. 1",Prisión,6m - 3a,70
+203,Delitos previstos por Leyes Especiales y Decretos Ley - Ley N° 12.331 Profilaxis enfermedades venereas,17,Prisión,1a - 3a,70
+319,Delitos contra la propiedad - Usurpación,art. 181,Prisión,6m - 3a,70
+325,Delitos contra la propiedad - Daño agravado,art. 183,Prisión y Multa,1a - 3a,70
+338,Delitos contra la seguridad pública - Interrupción del telégrafo o del teléfono ferroviario,art. 192,Prisión,1a - 3a,70
+355,Delitos contra la seguridad pública - Venta de medicamentos sin autorización,204,Prisión,6m - 3a,70
+377,Delitos contra las personas (dolosos) - Abuso de armas,104,Prisión,1a - 3a,70
+405,Delitos contra la administración pública - Receptación sospechosa,277 inc b ,Prisión,6m - 3a,70
+450,Delitos contra el honor - Publicación o reproducción de injurias o calumnias - Proporcionar a sabiendas datos falsos en un archivo de datos personales,117 bis inc 2,Prisión,6m - 3a,70
+451,Delitos contra el honor - Publicación o reproducción de injurias o calumnias - Proporción a sabiendas de datos falsos en un archivo de datos personales,117 bis inc 2,Prisión,6m - 3a,70
+461,Delitos contra la propiedad - Destrucción o alteración de términos o límites,181 inc2 ,Prisión,6m - 3a,70
+463,Delitos contra la propiedad - Usurpación - Turbación de la posesión,181 inc 3,Prisión,6m - 3a,70
+516,Delitos previstos por Leyes Especiales y Decretos Ley - Penalización de actos discriminatorios,art.3,Prisión,1m - 3a,70
+597,"Delitos contra la administración pública - b) Encubrimiento por ocultar, alterar o hacer desaparecer los rastros, pruebas o instrumentos del delito.",art. 277,Prisión,6m - 3a,70
+598,"Delitos contra la administración pública - c) Encubrimiento por adquirir, recibir u ocultar dinero, cosas o efectos provenientes de un delito.",art. 277,Prisión,6m - 3a,70
+599,Delitos contra la administración pública - d) Encubrimiento por no denunciar la perpetración de un delito.,art. 277,Prisión,6m - 3a,70
+600,Delitos contra la administración pública - e) Encubrimiento por asegurar o ayudar al autor o partícipe a asegurar el producto o provecho del delito,art. 277,Prisión,6m - 3a,70
+602,Delitos contra la administración pública - a) Encubrimiento de delito especialmente grave,art. 277,Prisión,6m - 3a,70
+603,Delitos contra la administración pública - b) Encubrimiento con ánimo de lucro.,art. 277,Prisión,6m - 3a,70
+604,Delitos contra la administración pública - c) Encubrimiento con habitualidad.,art. 277,Prisión,6m - 3a,70
+605,Delitos contra la administración pública - d) Encubrimiento de funcionario público,art. 277,Prisión,6m - 3a,70
+609,Delitos contra la seguridad pública - Prueba ilegal de velocidad con un vehículo automotor,"CP, Art. 193 BIS, PÁR. 1.",Prisión e Inhabilitación especial,6m - 3a,70
+,Delitos contra la administración pública - a) Encubrimiento por ayudar a alguien a eludir investigaciones,art. 277,Prisión,6m - 3a,70
+,Delitos previstos por Leyes Especiales y Decretos Ley - Ley N° 26.388-Ciberacoso,128,Prisión,1m - 3a,70
+81,Delitos contra la libertad - Ocultamiento de un menor sustraído o fugado,149,Prisión,6m - 2a,65
+82,Delitos contra la libertad - Amenazas y coacciones agravadas,149 bis,Prisión,6m - 2a,65
+83,Delitos contra la libertad - Violación de domicilio,150,Prisión,6m - 2a,65
+85,Delitos contra la libertad - Allanamiento ilegal de domicilio,151,Prisión e inhabilitación especial,6m - 2a,65
+92,Delitos contra la propiedad - Hurto,162,Prisión,1m - 2a,65
+27,Delitos contra las personas (dolosos) - Lesiones leves,89,Prisión,1m - 1a,50
+143,Delitos contra la administración pública - Atentado a la autoridad calificado,238,Prisión,6m - 2a,50
+160,Delitos contra la administración pública - Abuso de autoridad e incumplimiento de los deberes de los funcionarios públicos,248,Prisión,1m - 2a,50
+161,Delitos contra la administración pública - Abuso de autoridad y violación de los deberes de los funcionarios públicos calificado,248 bis,Inhabilitación absoluta ,6m - 2a,50
+163,Delitos contra la administración pública - Violación de sellos y documentos,254,Prisión,6m - 2a,50
+164,Delitos contra la administración pública - Violación de sellos y documentos calificada,254,Prisión e inhabilitación especial,6m - 2a,50
+168,Delitos contra la administración pública - Malversación de caudales públicos,"260, primera parte",Inhabilitación especial,1m - 3a,50
+187,Delitos contra la administración pública - Quebrantamiento de inhabilitación,281 bis,Prisión,2m - 2a,50
+199,Delitos contra la fé pública - Fraude al comercio y a la industria,300,Prisión,6m - 2a,50
+204,Delitos previstos por Leyes Especiales y Decretos Ley - Ley N° 13.944 Incumplimiento de los deberes de asistencia familiar,1,Prisión,1m - 2a,50
+216,Delitos previstos por Leyes Especiales y Decretos Ley - Decreto-Ley N° 15.348/46 Prenda con Registro,45,Prisión,15d - 1a,50
+225,Delitos previstos por Leyes de Estupefacientes - Ley Nº 23.737 de Estupefacientes - Consumo,5 inc e),Prisión,1m - 2a,50
+242,Delitos contra las personas (dolosos) - Aborto preterintencional,87,Prisión,6m - 3a,50
+266,Delitos contra la libertad - Amenazas y coacciones,149 bis,Prisión,6m - 2a,50
+273,Delitos contra la libertad - Torturas posibilitadas por negligencia,144 quinto,Prisión,6m - 2a,50
+274,"Delitos contra la libertad - Revelación de hechos, actuaciones y documentos",157,Prisión,1m - 2a,50
+320,Delitos contra la propiedad - Usurpación de aguas,"CP, Art. 182.",Prisión,15d - 1a,50
+356,Delitos contra la seguridad pública - Violación de medidas contra epidemias,205,Prisión,6m - 2a,50
+369,Delitos contra la seguridad de la Nación - Violación de inmunidades,221,Reclusión o Prisión,6m - 2a,50
+616,"Delitos previstos por Leyes Especiales y Decretos Ley - Sustrajere, destruyere o sustituyere las boletas de sufragio (Código Electoral Nacional)",-,Prisión,1a - 3a,50
+628,Delitos previstos por Leyes Especiales y Decretos Ley - Ley 19.945 Código Electoral Nacional,varios delitos,Prisión,1a - 3a,50
+,Delitos contra la libertad - Privación ilegal de la libertad por funcionario público calificada,143,Reclusión o Prisión e Inhabilitación Especial por Doble Tiempo,1a - 3a,50
+,Delitos previstos por Leyes Especiales y Decretos Ley - Ley N° 26.388-Interceptación de comunicaciones electrónicas,153,Prisión,1m - 1a,50
+80,Delitos contra la libertad - Inducción a la fuga de un menor,148,Prisión,1m - 1a,30
+89,"Delitos contra la libertad - Compulsión a la huelga, boicot o ""lock-aout"". Compulsión asociativa.",158,Prisión,1m - 1a,30
+103,Delitos contra la propiedad - Quiebra culposa,177,Prisión,1m - 1a,30
+112,Delitos contra la seguridad pública - Incendio o estrago culposo,189,Prisión,1m - 1a,30
+124,Delitos contra la seguridad pública - Ejercicio ilegal de la medicina,208,Prisión,15d - 1a,30
+133,Delitos contra el orden público - Apología del crimen,213,Prisión,1m - 1a,30
+142,Delitos contra la administración pública - Atentado a la autoridad,237,Prisión,1m - 1a,30
+144,Delitos contra la administración pública - Resistencia a la autoridad,239,Prisión,15d - 1a,30
+152,Delitos contra la administración pública - Falsa denuncia,245,Prisión,2m - 1a,30
+154,Delitos contra la administración pública - Usurpación de autoridad,246,Prisión,1m - 1a,30
+156,Delitos contra la administración pública - Usurpación de títulos u honores,"247, 1er. párr.",Prisión,15d - 1a,30
+182,Delitos contra la administración pública - Evasión,280,Prisión,1m - 1a,30
+205,Delitos previstos por Leyes Especiales y Decretos Ley - Ley 14.346 Malos tratos y actos de crueldad a los animales,1,Prisión,15d - 1a,30
+213,Delitos previstos por Leyes Especiales y Decretos Ley - Ley N° 24.270 Impedimento u obstrucción de contacto de menores de edad con sus padres no convivientes,1,Prisión,1m - 1a,30
+228,Delitos previstos por Leyes Especiales y Decretos Ley - Ley Nº 22.421 de Fauna Silvestre,24,Prisión,1m - 1a,30
+243,"Delitos contra las personas (dolosos) - Aborto de la mujer, propio o consentido",85,Prisión,3m - 1a,30
+268,Delitos contra la libertad - Publicación indebida de correspondencia,153 3er párrafo,Prisión,1m - 1a,30
+318,Delitos contra la propiedad - Colusión,art. 180,Prisión,1m - 1a,30
+321,Delitos contra la propiedad - Usurpación de aguas - Sustracción de aguas,art. 182 inc. 1,Prisión,15d - 1a,30
+322,Delitos contra la propiedad - Usurpación de aguas - Estorbo en la utilización de aguas,art. 182 inc. 2,Prisión,15d - 1a,30
+323,Delitos contra la propiedad - Usurpación de aguas - Interrupción de las aguas,art. 182 inc. 3,Prisión,15d - 1a,30
+324,Delitos contra la propiedad - Daños,art. 183,Prisión,15d - 1a,30
+339,Delitos contra la seguridad pública - Arrojamiento de cuerpos contundentes contra un tren,art. 193,Prisión,1m - 1a,30
+341,Delitos contra la seguridad pública - Abandono de servico de transporte,art. 195,Prisión,1m - 1a,30
+357,Delitos contra la seguridad pública - Ejercicio ilegal de la medicina - Curanderismo,208 inc 1,Prisión,15d - 1a,30
+358,Delitos contra la seguridad pública - Ejercicio ilegal de la medicina - Charlatanismo o abuso de título legítimo,208 inc 2,Prisión,15d - 1a,30
+359,Delitos contra la seguridad pública - Ejercicio ilegal de la medicina - Ejercicio ilegal de la medicina por préstamo de nombre,208 inc 3,Prisión,15d - 1a,30
+373,Delitos contra la seguridad de la Nación - Reproducciones prohibidas e intrusión,223,Prisión e inhabilitación,1m - 1a,30
+378,Delitos previstos por Leyes Especiales y Decretos Ley - Ley Nº 22.362 de Marcas y designaciones,Ley Nº 22.362 Art. 31,Prisión,3m - 2a,30
+379,Delitos contra las personas (dolosos) - Lesiones,89,Prisión,1m - 1a,30
+401,Delitos previstos por Leyes Especiales y Decretos Ley - Ley Nº 12962 de Prenda con Registro,45,Prisión,15d - 1a,30
+432,Delitos contra la administración pública - Resistencia o desobediencia a un funcionario público,239,Prisión,15d - 1a,30
+449,Delitos contra el honor - Publicación o reproducción de injurias o calumnias - Insertar datos falsos en un archivo de datos personales,157 bis inc 3,Prisión,1m - 2a,30
+455,Delitos contra la libertad - Revelación de datos personales,157 bis inc 2,Prisión,1m - 2a,30
+475,"Delitos previstos por Leyes Especiales y Decretos Ley - Ley Nº 26052, modifica Ley Nº 23737",art. 5,Prisión,6m - 3a,30
+614,Delitos previstos por Leyes de Estupefacientes - Ley N° 23.737 Párrafo 1 - Tenencia de estupefacientes,art. 14,Prisión,1m - 2a,30
+622,Delitos contra la administración pública - Omisión o falsificación de declaraciones juradas patrimoniales,"CP, Art. 268 (3), pár. 3.","prisión, inhabilitación especial perpetua",15d - 2a,30
+,Delitos contra la administración pública - Enriquecimiento ilícito de funcionarios y empleados,268 (3),Prisión,15d - 2a,30
+125,Delitos contra la seguridad pública - Violación de leyes de policía sanitaria animal,206,Prisión,1m - 6m,20
+146,Delitos contra la administración pública - Desobediencia a la autoridad,"241, 2do. párr.",Prisión,15d - 6m,20
+148,Delitos contra la administración pública - Turbación de un acto legítimo de autoridad,"241, 1do. párr.",Prisión,15d - 6m,20
+149,Delitos contra la administración pública - Violación de deberes procesales,243,Prisión,15d - 1m,20
+267,Delitos contra la libertad - Violación de correspondencia por autor calificado,153,Prisión,15d - 6m,20
+86,Delitos contra la libertad - Violación de secretos,153,Prisión e inhabilitación especial,15d - 6m,15
+91,Delitos contra la libertad - Atentado a la libertad de prensa,161,Prisión,1m - 6m,15
+,Delitos previstos por Leyes Especiales y Decretos Ley - Ley N° 26.388-Acceso indebido a sistemas informáticos,153,Prisión,15d - 6m,15
+42,Delitos contra las personas (dolosos) - Agresión con toda arma,104,Prisión,15d - 6m,10
+90,Delitos contra la libertad - Atentado a la libertad de reunión,160,Prisión,15d - 3m,10
+46,Delitos contra las personas (dolosos) - Omisión de auxilio,108,Multa,Multa,1
+47,Delitos contra el honor - Calumnias,109,Multa,Multa,1
+49,Delitos contra el honor - Injurias,111,Multa,Multa,1
+66,Delitos contra la integridad sexual - Exhibiciones obscenas,129,Multa,Multa,1
+87,Delitos contra la libertad - Violación de secretos calificada (comunicación y publicación del contenido),155,Multa,Multa,1
+123,"Delitos contra la seguridad pública - Propagación de una enfermedad peligrosa y contagiosa, culposa.",203,Multa,Multa,1
+158,Delitos contra la administración pública - Uso ilegítimo de insignias,"247, 2do. párr.",Multa,Multa,1
+169,Delitos contra la administración pública - Malversación de caudales públicos calificada,"260, segunda parte",Multa,Multa,1
+171,Delitos contra la administración pública - Malversación de caudales públicos culposa,262,Multa,Multa,1
+176,Delitos contra la administración pública - Prevaricato,269,Multa,Multa,1
+251,Delitos contra el honor - Publicación o reproducción de injurias o calumnias,109,Multa,Multa,1
+275,Delitos contra la libertad - Concurrencia desleal. Desvío ilegal de clientela.,159,Multa,Multa,1
+313,Delitos contra la propiedad - Defraudaciones menores - Apropiación de cosa perdida o tesoro,art.175 inc. 1,Multa,Multa,1
+314,Delitos contra la propiedad - Defraudaciones menores - Apropiación de cosa ajena habida por error o caso fortuito,art. 175 inc. 2 ,Multa,Multa,1
+315,Delitos contra la propiedad - Defraudaciones menores - Apropiación de prenda,art. 175 inc. 3,Multa,Multa,1
+316,Delitos contra la propiedad - Defraudaciones menores - Desnaturalización de cheque,art. 175 inc. 4,Multa,Multa,1
+411,Delitos contra la administración pública - Falta de requisitos legales para la admisión al cargo público,253,Multa,Multa,1
+452,Delitos contra el honor - Publicación o reproducción de injurias o calumnias - Insertar o proporcionar datos falsos en un archivo de datos personales por funcionario público,117 bis inc4,Inhabilitación,1a - 3a,1
+541,Delitos contra la administración pública - Demora Injustificada de Pago,264,Inhabilitación ,1m - 6m,1
+542,Delitos previstos por Leyes Especiales y Decretos Ley - Venta ilegal de autopartes,Ley No 25.761,Multa,Multa,1
+623,Delitos previstos por Leyes Especiales y Decretos Ley - Ley N° 26.215 de financiamiento de los partidos políticos,-,Multa,Multa,1
+631,Delitos previstos por Leyes Especiales y Decretos Ley - Ley 1.472: Código Contravencional de la Ciudad Autónoma de Buenos Aires,-,Multa,Multa,1

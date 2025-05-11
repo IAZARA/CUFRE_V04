@@ -51,7 +51,14 @@ const DelitosPage: React.FC = () => {
       setLoading(true);
       setError(null);
       const data = await delitoService.getAll();
-      setDelitos(data);
+      // Mapear campos del backend a los del frontend
+      const mapped = data.map((delito: any) => ({
+        ...delito,
+        codigoPenal: delito.codigoPenal || '',
+        tipoPena: delito.tipoPena || '',
+        valoracion: delito.valoracion,
+      }));
+      setDelitos(mapped);
     } catch (err: any) {
       console.error('Error al cargar delitos:', err);
       setError(err.response?.data?.message || 'Error al cargar la lista de delitos');
@@ -155,10 +162,9 @@ const DelitosPage: React.FC = () => {
             <TableHead>
               <TableRow>
                 <TableCell>Nombre</TableCell>
-                <TableCell>Artículo</TableCell>
-                <TableCell>Ley/Código</TableCell>
-                <TableCell>Descripción</TableCell>
-                <TableCell align="center">Gravedad</TableCell>
+                <TableCell>Código Penal</TableCell>
+                <TableCell>Tipo de Pena</TableCell>
+                <TableCell>Valoración Asignada</TableCell>
                 <TableCell align="center">Acciones</TableCell>
               </TableRow>
             </TableHead>
@@ -175,27 +181,11 @@ const DelitosPage: React.FC = () => {
                   .map((delito) => (
                     <TableRow key={delito.id} hover>
                       <TableCell>{delito.nombre}</TableCell>
-                      <TableCell>{delito.articulo || '-'}</TableCell>
-                      <TableCell>{delito.ley || delito.codigo || '-'}</TableCell>
-                      <TableCell>
-                        {delito.descripcion && delito.descripcion.length > 100 
-                          ? `${delito.descripcion.substring(0, 100)}...` 
-                          : delito.descripcion || '-'}
-                      </TableCell>
-                      <TableCell align="center">
-                        {delito.esGrave ? (
-                          <Chip label="Grave" color="error" size="small" />
-                        ) : (
-                          <Chip label="Normal" color="primary" size="small" />
-                        )}
-                      </TableCell>
+                      <TableCell>{delito.codigoPenal || '-'}</TableCell>
+                      <TableCell>{delito.tipoPena || '-'}</TableCell>
+                      <TableCell>{delito.valoracion !== undefined && delito.valoracion !== null ? delito.valoracion : '-'}</TableCell>
                       <TableCell align="center">
                         <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                          <Tooltip title="Ver detalles">
-                            <IconButton onClick={() => handleEdit(delito.id!)}>
-                              <VisibilityIcon />
-                            </IconButton>
-                          </Tooltip>
                           <Tooltip title="Editar">
                             <IconButton onClick={() => handleEdit(delito.id!)}>
                               <EditIcon />

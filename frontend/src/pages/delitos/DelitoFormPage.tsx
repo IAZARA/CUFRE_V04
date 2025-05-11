@@ -118,7 +118,7 @@ const DelitoFormPage: React.FC = () => {
             Volver
           </Button>
           <Typography variant="h4">
-            {isEditMode ? `Editar Delito: ${delito.nombre}` : 'Crear Nuevo Delito'}
+            {isEditMode ? 'Editar Delito' : 'Crear Nuevo Delito'}
           </Typography>
         </Box>
         <Button
@@ -157,83 +157,38 @@ const DelitoFormPage: React.FC = () => {
               helperText="Nombre o tipo de delito (ej: Robo, Homicidio, etc.)"
             />
           </Box>
-          
           <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3 }}>
             <Box sx={{ width: { xs: '100%', sm: 'calc(33.33% - 2rem)' } }}>
               <TextField
                 fullWidth
-                label="Artículo"
-                name="articulo"
-                value={delito.articulo || ''}
+                label="Código Penal"
+                name="codigoPenal"
+                value={delito.codigoPenal || ''}
                 onChange={handleInputChange}
-                helperText="Número de artículo (ej: 164)"
+                helperText="Ejemplo: Art. 79 CP"
               />
             </Box>
-            
             <Box sx={{ width: { xs: '100%', sm: 'calc(33.33% - 2rem)' } }}>
               <TextField
                 fullWidth
-                label="Código"
-                name="codigo"
-                value={delito.codigo || ''}
+                label="Tipo de Pena"
+                name="tipoPena"
+                value={delito.tipoPena || ''}
                 onChange={handleInputChange}
-                helperText="Código al que corresponde (ej: Código Penal)"
+                helperText="Ejemplo: Prisión, Reclusión, etc."
               />
             </Box>
-            
             <Box sx={{ width: { xs: '100%', sm: 'calc(33.33% - 2rem)' } }}>
               <TextField
                 fullWidth
-                label="Ley"
-                name="ley"
-                value={delito.ley || ''}
+                label="Valoración Asignada"
+                name="valoracion"
+                type="number"
+                value={delito.valoracion !== undefined && delito.valoracion !== null ? delito.valoracion : ''}
                 onChange={handleInputChange}
-                helperText="Número de ley (ej: 11.723)"
+                helperText="Valor numérico (ej: 10)"
               />
             </Box>
-          </Box>
-          
-          <Box>
-            <TextField
-              fullWidth
-              multiline
-              rows={4}
-              label="Descripción"
-              name="descripcion"
-              value={delito.descripcion || ''}
-              onChange={handleInputChange}
-              helperText="Descripción detallada del delito"
-            />
-          </Box>
-          
-          <Box>
-            <TextField
-              fullWidth
-              multiline
-              rows={3}
-              label="Observaciones Adicionales"
-              name="observaciones"
-              value={delito.observaciones || ''}
-              onChange={handleInputChange}
-              helperText="Cualquier información adicional relevante"
-            />
-          </Box>
-          
-          <Box>
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={delito.esGrave || false}
-                  onChange={handleInputChange}
-                  name="esGrave"
-                  color="error"
-                />
-              }
-              label="Calificar como Delito Grave"
-            />
-            <Typography variant="body2" color="textSecondary" sx={{ mt: 1 }}>
-              Marque esta opción para delitos de alta gravedad que requieran atención especial
-            </Typography>
           </Box>
         </Box>
       </Paper>

@@ -17,11 +17,12 @@ import java.util.List;
 public class Delito {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "delito_seq")
+    @SequenceGenerator(name = "delito_seq", sequenceName = "SEQ_DELITO", allocationSize = 1)
     @Column(name = "ID")
     private Long id;
     
-    @Column(name = "NOMBRE", nullable = false, length = 200)
+    @Column(name = "NOMBRE", nullable = false, length = 400)
     private String nombre;
     
     @Column(name = "DESCRIPCION", length = 1000)
@@ -30,13 +31,13 @@ public class Delito {
     @Column(name = "CODIGO_PENAL", length = 100)
     private String codigoPenal;
     
-    @Column(name = "TIPO_PENA", length = 50)
+    @Column(name = "TIPO_PENA", length = 100)
     private String tipoPena;
     
     @Column(name = "PENA_MINIMA", length = 50)
     private String penaMinima;
     
-    @Column(name = "PENA_MAXIMA", length = 50)
+    @Column(name = "PENA_MAXIMA", length = 200)
     private String penaMaxima;
     
     @Column(name = "VALORACION")

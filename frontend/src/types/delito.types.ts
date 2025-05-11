@@ -12,4 +12,7 @@ export interface Delito {
   observaciones?: string;
   fechaCreacion?: string;
   fechaActualizacion?: string;
+  codigoPenal?: string;
+  tipoPena?: string;
+  valoracion?: number;
 } 
