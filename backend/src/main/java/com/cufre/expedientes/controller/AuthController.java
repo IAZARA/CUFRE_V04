@@ -55,6 +55,15 @@ public class AuthController {
     public ResponseEntity<Map<String, Object>> login(@RequestBody LoginDTO loginDTO) {
         log.info("Solicitud de login recibida para usuario: {}", loginDTO.getEmail());
         Map<String, Object> response = authService.login(loginDTO);
+
+        // Si la respuesta indica que se requiere activar 2FA, generar un token temporal
+        if (response.containsKey("action") && "activar_2fa".equals(response.get("action"))) {
+            // Agregar un token temporal para el flujo de activación de 2FA
+            String tempToken = authService.generateTemp2FAToken(loginDTO.getEmail());
+            response.put("temp_token", tempToken);
+            log.info("Generando token temporal para activación 2FA de: {}", loginDTO.getEmail());
+        }
+
         return ResponseEntity.ok(response);
     }
     
@@ -78,40 +87,74 @@ public class AuthController {
 
     @GetMapping("/2fa-setup")
     public ResponseEntity<?> setup2FA(Principal principal) {
-        Usuario usuario = usuarioService.findByEmailEntity(principal.getName());
-        GoogleAuthenticator gAuth = new GoogleAuthenticator();
-        GoogleAuthenticatorKey key = gAuth.createCredentials();
-        String secret = key.getKey();
-        String qrUrl = GoogleAuthenticatorQRGenerator.getOtpAuthURL("CUFRE", usuario.getEmail(), key);
-        usuario.setSecret2FA(secret);
-        usuarioRepository.save(usuario);
-        return ResponseEntity.ok(Map.of("qrUrl", qrUrl));
+        if (principal == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(Map.of("error", "No autenticado", "mensaje", "Debe iniciar sesión para configurar 2FA"));
+        }
+
+        try {
+            Usuario usuario = usuarioService.findByEmailEntity(principal.getName());
+            GoogleAuthenticator gAuth = new GoogleAuthenticator();
+            GoogleAuthenticatorKey key = gAuth.createCredentials();
+            String secret = key.getKey();
+            String qrUrl = GoogleAuthenticatorQRGenerator.getOtpAuthURL("CUFRE", usuario.getEmail(), key);
+            usuario.setSecret2FA(secret);
+            usuarioRepository.save(usuario);
+            return ResponseEntity.ok(Map.of("qrUrl", qrUrl));
+        } catch (Exception e) {
+            log.error("Error al configurar 2FA: ", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(Map.of("error", "Error interno", "mensaje", "Error al configurar 2FA: " + e.getMessage()));
+        }
     }
 
     @PostMapping("/activar-2fa")
     public ResponseEntity<?> activar2FA(@RequestBody Map<String, String> body, Principal principal) {
-        String code = body.get("code");
-        Usuario usuario = usuarioService.findByEmailEntity(principal.getName());
-        GoogleAuthenticator gAuth = new GoogleAuthenticator();
-        boolean isCodeValid = gAuth.authorize(usuario.getSecret2FA(), Integer.parseInt(code));
-        if (!isCodeValid) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", "Código incorrecto"));
+        if (principal == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(Map.of("error", "No autenticado", "mensaje", "Debe iniciar sesión para activar 2FA"));
         }
-        usuario.setRequiere2FA(false);
-        usuarioRepository.save(usuario);
-        return ResponseEntity.ok().build();
+
+        try {
+            String code = body.get("code");
+            Usuario usuario = usuarioService.findByEmailEntity(principal.getName());
+            GoogleAuthenticator gAuth = new GoogleAuthenticator();
+            boolean isCodeValid = gAuth.authorize(usuario.getSecret2FA(), Integer.parseInt(code));
+            if (!isCodeValid) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", "Código incorrecto"));
+            }
+            // NO cambiamos requiere2FA a false, ya que queremos que siga requiriendo 2FA
+            // en futuros inicios de sesión, solo marcamos que ya no necesita activarlo por primera vez
+            usuarioRepository.save(usuario);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            log.error("Error al activar 2FA: ", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(Map.of("error", "Error interno", "mensaje", "Error al activar 2FA: " + e.getMessage()));
+        }
     }
 
     @PostMapping("/validar-2fa")
     public ResponseEntity<?> validar2FA(@RequestBody Map<String, String> body, Principal principal) {
-        String code = body.get("code");
-        Usuario usuario = usuarioService.findByEmailEntity(principal.getName());
-        GoogleAuthenticator gAuth = new GoogleAuthenticator();
-        boolean isCodeValid = gAuth.authorize(usuario.getSecret2FA(), Integer.parseInt(code));
-        if (!isCodeValid) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", "Código incorrecto"));
+        if (principal == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(Map.of("error", "No autenticado", "mensaje", "Debe iniciar sesión para validar 2FA"));
         }
-        String jwt = authService.getTokenForUsuario(usuario);
-        return ResponseEntity.ok(Map.of("token", jwt));
+
+        try {
+            String code = body.get("code");
+            Usuario usuario = usuarioService.findByEmailEntity(principal.getName());
+            GoogleAuthenticator gAuth = new GoogleAuthenticator();
+            boolean isCodeValid = gAuth.authorize(usuario.getSecret2FA(), Integer.parseInt(code));
+            if (!isCodeValid) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", "Código incorrecto"));
+            }
+            String jwt = authService.getTokenForUsuario(usuario);
+            return ResponseEntity.ok(Map.of("token", jwt));
+        } catch (Exception e) {
+            log.error("Error al validar 2FA: ", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(Map.of("error", "Error interno", "mensaje", "Error al validar 2FA: " + e.getMessage()));
+        }
     }
 }

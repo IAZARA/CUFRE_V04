@@ -47,12 +47,20 @@ const Login: React.FC = () => {
       const response = await login({ email: username, password });
 
       if ('action' in response) {
+        // Simplemente verificar las acciones conocidas sin exhaustive checking
         if (response.action === 'cambiar_contrasena') {
           navigate('/cambiar-contrasena');
         } else if (response.action === 'activar_2fa') {
           navigate('/activar-2fa');
+        } else if (response.action === 'validar_2fa') {
+          navigate('/validar-2fa');
         } else {
-          setError(response.message || 'Acción requerida.');
+          // Usar type assertion para evitar errores de TypeScript
+          // Este caso en teoría nunca debería ocurrir con los tipos actuales
+          setError('Acción desconocida recibida');
+
+          // Para depuración, registramos la respuesta completa
+          console.error('Respuesta de acción desconocida:', response);
         }
       } else if ('token' in response) {
         // La redirección se maneja en el useEffect

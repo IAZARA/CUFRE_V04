@@ -32,14 +32,18 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
         try {
             String jwt = getJwtFromRequest(request);
+            log.debug("JWT extraído de la solicitud: {}", jwt != null ? "presente" : "ausente");
 
             if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
                 Authentication authentication = tokenProvider.getAuthentication(jwt);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
                 log.debug("Estableciendo autenticación de usuario: {}", authentication.getName());
+            } else {
+                log.debug("No se encontró un token JWT válido en la solicitud: {}", request.getRequestURI());
             }
         } catch (Exception ex) {
-            log.error("No se pudo establecer la autenticación del usuario", ex);
+            log.error("No se pudo establecer la autenticación del usuario para {}: {}",
+                request.getRequestURI(), ex.getMessage());
         }
 
         filterChain.doFilter(request, response);

@@ -11,7 +11,17 @@ const Activar2FA: React.FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    usuarioService.obtenerQr2FA().then(setQrUrl);
+    const fetchQrCode = async () => {
+      try {
+        const qrCode = await usuarioService.obtenerQr2FA();
+        setQrUrl(qrCode);
+      } catch (error) {
+        console.error('Error al obtener el código QR:', error);
+        setError('No se pudo obtener el código QR. Verifica que hayas iniciado sesión correctamente.');
+      }
+    };
+
+    fetchQrCode();
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -24,9 +34,14 @@ const Activar2FA: React.FC = () => {
     try {
       await usuarioService.activar2FA(codigo);
       setSuccess(true);
+
+      // Limpiar el token temporal ya que ya no se necesita
+      localStorage.removeItem('temp_token');
+
       setTimeout(() => navigate('/login'), 2000);
-    } catch {
-      setError('Código incorrecto');
+    } catch (error) {
+      console.error('Error al activar 2FA:', error);
+      setError('Código incorrecto o error de conexión');
     }
   };
 

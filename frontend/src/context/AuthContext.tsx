@@ -51,8 +51,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       const response = await usuarioService.login(credentials);
 
-      // Si el backend responde con acción especial, simplemente la retornamos
+      // Si el backend responde con acción especial
       if ('action' in response) {
+        // Si es activación de 2FA y tenemos token temporal, guardarlo
+        if (response.action === 'activar_2fa' && response.temp_token) {
+          localStorage.setItem('temp_token', response.temp_token);
+        }
         return response;
       }
 

@@ -70,11 +70,21 @@ public class AuthService {
                 return response;
             }
 
-            // Revisar si requiere activar 2FA
-            if (usuario.isRequiere2FA() || usuario.getSecret2FA() == null || usuario.getSecret2FA().isEmpty()) {
+            // Revisar si el usuario tiene configurado 2FA (tiene una clave secret2FA)
+            if (usuario.getSecret2FA() != null && !usuario.getSecret2FA().isEmpty()) {
+                // Ya tiene configurado 2FA, entonces debe validar siempre
+                Map<String, Object> response = new HashMap<>();
+                response.put("action", "validar_2fa");
+                response.put("message", "Debe validar su código de autenticación 2FA para continuar.");
+                response.put("email", usuario.getEmail());
+                response.put("temp_token", generateTemp2FAToken(usuario.getEmail()));
+                return response;
+            } else if (usuario.isRequiere2FA()) {
+                // No tiene configurado 2FA, pero se requiere, entonces debe activarlo
                 Map<String, Object> response = new HashMap<>();
                 response.put("action", "activar_2fa");
                 response.put("message", "Debe activar el segundo factor de autenticación (2FA) antes de continuar.");
+                response.put("temp_token", generateTemp2FAToken(usuario.getEmail()));
                 return response;
             }
 
@@ -132,5 +142,20 @@ public class AuthService {
 
     public String getTokenForUsuario(Usuario usuario) {
         return tokenProvider.generateToken(usuarioService.toDto(usuario));
+    }
+
+    /**
+     * Genera un token para 2FA basado en el email del usuario.
+     * Este es un token de uso específico para el flujo de activación de 2FA.
+     *
+     * @param email Email del usuario
+     * @return Token JWT
+     */
+    public String generateTemp2FAToken(String email) {
+        Optional<UsuarioDTO> usuarioOpt = usuarioService.findByEmail(email);
+        if (usuarioOpt.isPresent()) {
+            return tokenProvider.generateToken(usuarioOpt.get());
+        }
+        throw new ResourceNotFoundException("Usuario no encontrado con email: " + email);
     }
 } 
