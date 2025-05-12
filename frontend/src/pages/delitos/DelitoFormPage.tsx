@@ -30,7 +30,6 @@ const DelitoFormPage: React.FC = () => {
     articulo: '',
     codigo: '',
     ley: '',
-    esGrave: false,
     observaciones: ''
   });
   
@@ -197,19 +196,6 @@ const DelitoFormPage: React.FC = () => {
               InputProps={{
                 startAdornment: <InputAdornment position="start">#</InputAdornment>,
               }}
-            />
-          </Box>
-          <Box sx={{ width: { xs: '100%', sm: '50%', md: '33.33%' } }}>
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={!!delito.esGrave}
-                  onChange={handleInputChange}
-                  name="esGrave"
-                  color="primary"
-                />
-              }
-              label="¿Es grave?"
             />
           </Box>
           <Box sx={{ width: '100%' }}>

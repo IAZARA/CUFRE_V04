@@ -5,7 +5,7 @@ export interface Delito {
   articulo?: string;
   ley?: string;
   codigo?: string;
-  esGrave: boolean;
+  esGrave?: boolean;
   codigoInterno?: string;
   penaMinima?: string;
   penaMaxima?: string;
