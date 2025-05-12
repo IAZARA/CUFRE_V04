@@ -1,8 +1,6 @@
 export enum Rol {
   SUPERUSUARIO = 'SUPERUSUARIO',
   ADMINISTRADOR = 'ADMINISTRADOR',
-  OPERADOR = 'OPERADOR',
-  VISUALIZADOR = 'VISUALIZADOR',
   USUARIOCARGA = 'USUARIOCARGA',
   USUARIOCONSULTA = 'USUARIOCONSULTA'
 }
@@ -15,7 +13,7 @@ export interface Usuario {
   username: string;
   password?: string;
   rol: Rol;
-  activo: boolean;
+  dependencia?: string;
 }
 
 export interface LoginRequest {

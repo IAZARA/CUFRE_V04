@@ -36,8 +36,8 @@ const UsuarioFormPage: React.FC = () => {
     email: '',
     username: '',
     rol: Rol.ADMINISTRADOR,
-    activo: true,
-    password: ''
+    password: '',
+    dependencia: ''
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -45,8 +45,8 @@ const UsuarioFormPage: React.FC = () => {
   const rolLabels: Record<string, string> = {
     [Rol.SUPERUSUARIO]: 'Superusuario',
     [Rol.ADMINISTRADOR]: 'Administrador',
-    [Rol.OPERADOR]: 'Usuario Carga',
-    [Rol.VISUALIZADOR]: 'Usuario Consulta',
+    [Rol.USUARIOCARGA]: 'Usuario Carga',
+    [Rol.USUARIOCONSULTA]: 'Usuario Consulta',
   };
 
   // Cargar usuario si estamos en modo edición
@@ -116,35 +116,62 @@ const UsuarioFormPage: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
     if (!validateForm()) {
       return;
     }
-    
+
+    // Limpiar estados previos
+    setError(null);
+    setSuccess(null);
+    setLoading(true);
+
+    // Si username está vacío, usar el email
+    const usuarioParaCrear = {
+      ...usuario,
+      username: usuario.username && usuario.username.trim() !== '' ? usuario.username : usuario.email
+    };
+
+    // Establecer un timeout para evitar carga infinita
+    const timeoutId = setTimeout(() => {
+      setLoading(false);
+      setError('La operación ha tardado demasiado tiempo. Por favor, inténtelo de nuevo.');
+    }, 15000); // 15 segundos de timeout
+
     try {
-      setLoading(true);
-      setError(null);
-      
       if (isEditMode) {
-        await usuarioService.update(parseInt(id), usuario);
+        await usuarioService.update(parseInt(id), usuarioParaCrear);
+        clearTimeout(timeoutId); // Limpiar timeout si la operación fue exitosa
         setSuccess('Usuario actualizado correctamente');
       } else {
-        await usuarioService.create(usuario);
+        await usuarioService.create(usuarioParaCrear);
+        clearTimeout(timeoutId); // Limpiar timeout si la operación fue exitosa
         setSuccess('Usuario creado correctamente');
       }
-      
-      // Redireccionar después de un breve retraso
+
+      // Redireccionar después de un breve retraso solo si no hubo errores
       setTimeout(() => {
         navigate('/usuarios');
       }, 1500);
     } catch (err: any) {
-      setError(err.message || 'Ha ocurrido un error al guardar el usuario');
+      clearTimeout(timeoutId); // Limpiar timeout si hubo un error
+      console.error('Error en formulario de usuario:', err);
+      let errorMsg = 'Ha ocurrido un error al guardar el usuario';
+
+      // Extraer mensaje de error más detallado si está disponible
+      if (err.response?.data?.mensaje) {
+        errorMsg = err.response.data.mensaje;
+      } else if (err.message) {
+        errorMsg = err.message;
+      }
+
+      setError(errorMsg);
     } finally {
       setLoading(false);
     }
   };
 
-  if (loading && isEditMode) {
+  // Mostrar indicador de carga solo durante la carga inicial de datos, no durante el envío del formulario
+  if (loading && isEditMode && !success && !error) {
     return (
       <Box display="flex" justifyContent="center" alignItems="center" minHeight="50vh">
         <CircularProgress />
@@ -216,6 +243,15 @@ const UsuarioFormPage: React.FC = () => {
                 helperText={errors.username}
               />
             </div>
+            <div className="grid-item width-6 width-xs-12">
+              <TextField
+                fullWidth
+                label="Dependencia"
+                name="dependencia"
+                value={usuario.dependencia || ''}
+                onChange={handleChange}
+              />
+            </div>
             
             <div className="grid-item width-6 width-xs-12">
               <FormControl fullWidth>
@@ -224,7 +260,7 @@ const UsuarioFormPage: React.FC = () => {
                   labelId="rol-label"
                   id="rol"
                   name="rol"
-                  value={usuario.rol === Rol.OPERADOR || usuario.rol === Rol.VISUALIZADOR ? Rol.ADMINISTRADOR : usuario.rol}
+                  value={usuario.rol === Rol.USUARIOCARGA || usuario.rol === Rol.USUARIOCONSULTA ? Rol.ADMINISTRADOR : usuario.rol}
                   label="Rol"
                   onChange={(e) => {
                     setUsuario(prev => ({ ...prev, rol: e.target.value as Rol }));
@@ -270,8 +306,16 @@ const UsuarioFormPage: React.FC = () => {
                   type="submit"
                   variant="contained"
                   disabled={loading}
+                  sx={{ minWidth: '120px', position: 'relative' }}
                 >
-                  {loading ? <CircularProgress size={24} /> : isEditMode ? 'Actualizar' : 'Crear'}
+                  {loading ? (
+                    <>
+                      <CircularProgress size={24} sx={{ position: 'absolute' }} />
+                      <span style={{ visibility: 'hidden' }}>{isEditMode ? 'Actualizar' : 'Crear'}</span>
+                    </>
+                  ) : (
+                    isEditMode ? 'Actualizar' : 'Crear'
+                  )}
                 </Button>
               </Box>
             </div>

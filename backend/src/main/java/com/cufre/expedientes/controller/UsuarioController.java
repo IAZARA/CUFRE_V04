@@ -35,9 +35,16 @@ public class UsuarioController extends AbstractBaseController<Usuario, UsuarioDT
     @Override
     @PostMapping
     public ResponseEntity<UsuarioDTO> create(@Valid @RequestBody UsuarioDTO dto) {
-        // Usa el método create específico que establece una contraseña por defecto "Minseg2025-"
-        UsuarioDTO created = usuarioService.create(dto, "Minseg2025-");
-        return ResponseEntity.status(HttpStatus.CREATED).body(created);
+        try {
+            // Usa el método create específico que establece una contraseña por defecto "Minseg2025-"
+            UsuarioDTO created = usuarioService.create(dto, "Minseg2025-");
+            return ResponseEntity.status(HttpStatus.CREATED).body(created);
+        } catch (Exception e) {
+            // Log del error detallado para diagnóstico en el servidor
+            log.error("Error al crear usuario: {}", e.getMessage(), e);
+            // Re-lanzar la excepción para que sea manejada por el GlobalExceptionHandler
+            throw e;
+        }
     }
 
     @PatchMapping("/{id}/password")

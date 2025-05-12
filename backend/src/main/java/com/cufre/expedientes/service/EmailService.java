@@ -11,10 +11,16 @@ import jakarta.mail.internet.MimeMessage;
 @Service
 public class EmailService {
 
-    @Autowired
+    @Autowired(required = false)
     private JavaMailSender mailSender;
 
     public void enviarBienvenida(String nombre, String apellido, String email) throws MessagingException {
+        // Si el servicio de correo no está configurado, salir sin error
+        if (mailSender == null) {
+            System.out.println("Servicio de correo no está configurado. No se enviará email a: " + email);
+            return;
+        }
+
         String password = "Minseg2025-"; // Contraseña inicial fija
 
         String asunto = "Bienvenido al Sistema CUFRE";
@@ -34,13 +40,21 @@ public class EmailService {
                 + "<p style=\"color:#888; font-size:13px;\">© 2025 Sistema CUFRE - Dirección Nacional de Gestión de Bases de Datos de Seguridad - Ministerio de Seguridad Nacional</p>"
                 + "</div>";
 
-        MimeMessage mensaje = mailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(mensaje, true, "UTF-8");
-        helper.setFrom("soporte.cufre@gmail.com");
-        helper.setTo(email);
-        helper.setSubject(asunto);
-        helper.setText(html, true);
+        try {
+            MimeMessage mensaje = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(mensaje, true, "UTF-8");
+            helper.setFrom("soporte.cufre@gmail.com");
+            helper.setTo(email);
+            helper.setSubject(asunto);
+            helper.setText(html, true);
 
-        mailSender.send(mensaje);
+            mailSender.send(mensaje);
+
+            System.out.println("Correo enviado exitosamente a: " + email);
+        } catch (Exception e) {
+            System.err.println("Error al enviar correo a " + email + ": " + e.getMessage());
+            e.printStackTrace();
+            // No relanzar la excepción para que no interrumpa el flujo principal
+        }
     }
 } 

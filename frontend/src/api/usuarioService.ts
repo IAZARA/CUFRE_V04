@@ -23,8 +23,13 @@ const usuarioService = {
   },
   
   create: async (usuario: Usuario): Promise<Usuario> => {
-    const response = await axiosClient.post('/usuarios', usuario);
-    return response.data;
+    try {
+      const response = await axiosClient.post('/usuarios', usuario);
+      return response.data;
+    } catch (error: any) {
+      console.error('Error al crear usuario:', error.response?.data || error.message);
+      throw error;
+    }
   },
   
   update: async (id: number, usuario: Usuario): Promise<Usuario> => {

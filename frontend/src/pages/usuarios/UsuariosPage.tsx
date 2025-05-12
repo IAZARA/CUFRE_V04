@@ -59,16 +59,14 @@ const UsuariosPage: React.FC = () => {
     email: '',
     username: '',
     password: '',
-    rol: Rol.VISUALIZADOR,
-    activo: true
+    rol: Rol.USUARIOCONSULTA,
+    dependencia: ''
   });
   const [isEditMode, setIsEditMode] = useState(false);
 
   const rolLabels: Record<string, string> = {
     [Rol.SUPERUSUARIO]: 'Superusuario',
     [Rol.ADMINISTRADOR]: 'Administrador',
-    [Rol.OPERADOR]: 'Operador',
-    [Rol.VISUALIZADOR]: 'Visualizador',
     [Rol.USUARIOCARGA]: 'Usuario Carga',
     [Rol.USUARIOCONSULTA]: 'Usuario Consulta',
   };
@@ -128,8 +126,8 @@ const UsuariosPage: React.FC = () => {
         email: '',
         username: '',
         password: 'Minseg2025-',
-        rol: Rol.VISUALIZADOR,
-        activo: true
+        rol: Rol.USUARIOCONSULTA,
+        dependencia: ''
       });
       setIsEditMode(false);
     }
@@ -159,39 +157,32 @@ const UsuariosPage: React.FC = () => {
       setError('Por favor complete todos los campos obligatorios');
       return;
     }
-
+    // Si username está vacío, usar el email
+    const usuarioParaCrear = {
+      ...currentUsuario,
+      username: currentUsuario.username && currentUsuario.username.trim() !== '' ? currentUsuario.username : currentUsuario.email
+    };
     try {
       setLoading(true);
       setError(null);
-      
       if (isEditMode) {
-        await usuarioService.update(currentUsuario.id!, currentUsuario);
+        await usuarioService.update(usuarioParaCrear.id!, usuarioParaCrear);
         setSuccess('Usuario actualizado correctamente');
       } else {
-        await usuarioService.create(currentUsuario);
+        await usuarioService.create(usuarioParaCrear);
         setSuccess('Usuario creado correctamente');
       }
-      
       setOpenDialog(false);
       fetchUsuarios(); // Recargar la lista
     } catch (err: any) {
-      console.error('Error al guardar usuario:', err);
-      setError(err.response?.data?.message || 'Error al guardar el usuario');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleToggleActive = async (usuario: Usuario) => {
-    try {
-      setLoading(true);
-      const updatedUsuario = { ...usuario, activo: !usuario.activo };
-      await usuarioService.update(usuario.id!, updatedUsuario);
-      setSuccess(`Usuario ${updatedUsuario.activo ? 'activado' : 'desactivado'} correctamente`);
-      fetchUsuarios(); // Recargar la lista
-    } catch (err: any) {
-      console.error('Error al cambiar estado del usuario:', err);
-      setError(err.response?.data?.message || 'Error al cambiar el estado del usuario');
+      // Mostrar el mensaje de error del backend si existe, o un mensaje genérico
+      let mensaje = 'Error al guardar el usuario';
+      if (err?.response?.data?.mensaje) {
+        mensaje = err.response.data.mensaje;
+      } else if (err?.message) {
+        mensaje = err.message;
+      }
+      setError(mensaje);
     } finally {
       setLoading(false);
     }
@@ -248,9 +239,9 @@ const UsuariosPage: React.FC = () => {
         return 'error';
       case Rol.ADMINISTRADOR:
         return 'warning';
-      case Rol.OPERADOR:
+      case Rol.USUARIOCARGA:
         return 'primary';
-      case Rol.VISUALIZADOR:
+      case Rol.USUARIOCONSULTA:
         return 'info';
       default:
         return 'default';
@@ -317,7 +308,6 @@ const UsuariosPage: React.FC = () => {
                 <TableCell>Apellido</TableCell>
                 <TableCell>Email</TableCell>
                 <TableCell align="center">Rol</TableCell>
-                <TableCell align="center">Estado</TableCell>
                 <TableCell align="center">Acciones</TableCell>
               </TableRow>
             </TableHead>
@@ -344,24 +334,11 @@ const UsuariosPage: React.FC = () => {
                         />
                       </TableCell>
                       <TableCell align="center">
-                        <Chip 
-                          label={usuario.activo ? 'Activo' : 'Inactivo'}
-                          color={usuario.activo ? 'success' : 'default'}
-                          size="small"
-                        />
-                      </TableCell>
-                      <TableCell align="center">
                         <Box sx={{ display: 'flex', justifyContent: 'center' }}>
                           {canEdit(usuario) && (
                             <>
                               <IconButton onClick={() => handleOpenDialog(usuario)}>
                                 <EditIcon />
-                              </IconButton>
-                              <IconButton 
-                                color={usuario.activo ? 'default' : 'success'}
-                                onClick={() => handleToggleActive(usuario)}
-                              >
-                                {usuario.activo ? <BlockIcon /> : <CheckCircleIcon />}
                               </IconButton>
                               <IconButton 
                                 color="error"
@@ -480,6 +457,16 @@ const UsuariosPage: React.FC = () => {
                   value={currentUsuario.password}
                   onChange={handleInputChange}
                   helperText={isEditMode ? 'Dejar en blanco para mantener la actual' : 'Contraseña por defecto: Minseg2025-'}
+                  sx={{ mb: 2 }}
+                />
+              </Box>
+              <Box sx={{ width: '100%' }}>
+                <TextField
+                  fullWidth
+                  label="Dependencia"
+                  name="dependencia"
+                  value={currentUsuario.dependencia || ''}
+                  onChange={handleInputChange}
                   sx={{ mb: 2 }}
                 />
               </Box>

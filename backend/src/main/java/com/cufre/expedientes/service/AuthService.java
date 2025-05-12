@@ -132,7 +132,11 @@ public class AuthService {
         usuarioDTO.setEmail(registroDTO.getEmail());
         usuarioDTO.setRol(registroDTO.getRol());
         
-        UsuarioDTO usuarioCreado = usuarioService.create(usuarioDTO, registroDTO.getPassword());
+        String password = registroDTO.getPassword();
+        if (password == null || password.isEmpty()) {
+            password = "Minseg2025-";
+        }
+        UsuarioDTO usuarioCreado = usuarioService.create(usuarioDTO, password);
         
         // Generar token JWT
         String jwt = tokenProvider.generateToken(usuarioCreado);

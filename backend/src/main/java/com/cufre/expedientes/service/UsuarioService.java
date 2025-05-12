@@ -71,13 +71,17 @@ public class UsuarioService extends AbstractBaseService<Usuario, UsuarioDTO, Lon
         log.info("Usuario creado: {}", usuario.getNombre());
         // Registrar actividad de creación de usuario
         actividadSistemaService.registrarActividad(usuario.getEmail(), "CREAR_USUARIO", "Usuario creado: " + usuario.getNombre());
-        // Enviar email de bienvenida
+
+        // Intentar enviar email de bienvenida, pero no interrumpir el flujo si falla
         try {
             emailService.enviarBienvenida(usuario.getNombre(), usuario.getApellido(), usuario.getEmail());
             log.info("Email de bienvenida enviado a {}", usuario.getEmail());
-        } catch (MessagingException e) {
+        } catch (Exception e) {
+            // Capturar cualquier excepción, no solo MessagingException
             log.error("No se pudo enviar el email de bienvenida a {}: {}", usuario.getEmail(), e.getMessage());
+            // No re-lanzar la excepción, permitiendo que la creación del usuario continúe
         }
+
         return toDto(usuario);
     }
 
