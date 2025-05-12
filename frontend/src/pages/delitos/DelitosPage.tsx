@@ -31,6 +31,8 @@ import {
 } from '@mui/icons-material';
 import delitoService from '../../api/delitoService';
 import { Delito } from '../../types/delito.types';
+import { useAuth } from '../../context/AuthContext';
+import { Rol } from '../../types/usuario.types';
 
 const DelitosPage: React.FC = () => {
   const [delitos, setDelitos] = useState<Delito[]>([]);
@@ -43,6 +45,11 @@ const DelitosPage: React.FC = () => {
   const [rowsPerPage, setRowsPerPage] = useState<number>(10);
   
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const isCarga = user?.rol === Rol.USUARIOCARGA;
+  const isConsulta = user?.rol === Rol.USUARIOCONSULTA;
+  const isAdmin = user?.rol === Rol.ADMINISTRADOR;
+  const isSuper = user?.rol === Rol.SUPERUSUARIO;
 
   useEffect(() => {
     fetchDelitos();
@@ -135,6 +142,7 @@ const DelitosPage: React.FC = () => {
           </Typography>
         </Box>
         <Box sx={{ flexGrow: 1 }} />
+        {(isSuper || isAdmin) && (
         <Button
           variant="contained"
           color="secondary"
@@ -144,6 +152,7 @@ const DelitosPage: React.FC = () => {
         >
           Nuevo Delito
         </Button>
+        )}
       </Paper>
 
       {error && (
@@ -233,11 +242,14 @@ const DelitosPage: React.FC = () => {
                       </TableCell>
                       <TableCell align="center">
                         <Box sx={{ display: 'flex', justifyContent: 'center', gap: 1 }}>
+                          {!(isCarga || isConsulta) && (
                           <Tooltip title="Editar">
                             <IconButton onClick={() => handleEdit(delito.id!)} color="primary" sx={{ borderRadius: 2 }}>
                               <EditIcon />
                             </IconButton>
                           </Tooltip>
+                          )}
+                          {!(isCarga || isConsulta) && (
                           <Tooltip title="Eliminar">
                             <IconButton 
                               onClick={() => handleDelete(delito.id!)} 
@@ -247,6 +259,7 @@ const DelitosPage: React.FC = () => {
                               <DeleteIcon />
                             </IconButton>
                           </Tooltip>
+                          )}
                         </Box>
                       </TableCell>
                     </TableRow>

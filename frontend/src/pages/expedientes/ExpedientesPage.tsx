@@ -32,6 +32,9 @@ import { Expediente } from '../../types/expediente.types';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { es } from 'date-fns/locale';
+import MenuItem from '@mui/material/MenuItem';
+import { useAuth } from '../../context/AuthContext';
+import { Rol } from '../../types/usuario.types';
 
 const ExpedientesPage: React.FC = () => {
   const [expedientes, setExpedientes] = useState<Expediente[]>([]);
@@ -51,6 +54,10 @@ const ExpedientesPage: React.FC = () => {
   const [filtroNumero, setFiltroNumero] = useState('');
   const [filtroFuerza, setFiltroFuerza] = useState('');
   const [filtroEstado, setFiltroEstado] = useState('');
+
+  const { user } = useAuth();
+  const isCarga = user?.rol === Rol.USUARIOCARGA;
+  const isConsulta = user?.rol === Rol.USUARIOCONSULTA;
 
   useEffect(() => {
     fetchExpedientes();
@@ -185,6 +192,7 @@ const ExpedientesPage: React.FC = () => {
           <img src="/images/logo-cufre-2.png" alt="Logo CUFRE" style={{ height: 56, objectFit: 'contain' }} />
         </Box>
         <Typography variant="h4" sx={{ flex: 1, textAlign: 'center', fontWeight: 'bold', letterSpacing: 1 }}>Lista de Expedientes</Typography>
+        {!isConsulta && (
         <Button
           variant="contained"
           color="secondary"
@@ -194,6 +202,7 @@ const ExpedientesPage: React.FC = () => {
         >
           Nuevo Expediente
         </Button>
+        )}
       </Paper>
       {/* Barra de filtros */}
       <Paper sx={{ mb: 3, p: 2, display: 'flex', flexWrap: 'wrap', gap: 2, alignItems: 'center', boxShadow: 2, borderRadius: 2 }}>
@@ -231,11 +240,10 @@ const ExpedientesPage: React.FC = () => {
           select
           value={filtroFuerza}
           onChange={e => setFiltroFuerza(e.target.value)}
-          SelectProps={{ displayEmpty: true }}
           sx={{ minWidth: 160 }}
         >
-          <option value="">Todas</option>
-          {fuerzasUnicas.map(f => <option key={f} value={f}>{f}</option>)}
+          <MenuItem value="">Todas</MenuItem>
+          {fuerzasUnicas.map(f => <MenuItem key={f} value={f}>{f}</MenuItem>)}
         </TextField>
         <TextField
           label="Estado"
@@ -243,11 +251,10 @@ const ExpedientesPage: React.FC = () => {
           select
           value={filtroEstado}
           onChange={e => setFiltroEstado(e.target.value)}
-          SelectProps={{ displayEmpty: true }}
           sx={{ minWidth: 140 }}
         >
-          <option value="">Todos</option>
-          {estadosUnicos.map(e => <option key={e} value={e}>{e}</option>)}
+          <MenuItem value="">Todos</MenuItem>
+          {estadosUnicos.map(e => <MenuItem key={e} value={e}>{e}</MenuItem>)}
         </TextField>
         <Button variant="outlined" color="secondary" onClick={() => {
           setFechaDesde(null); setFechaHasta(null); setFiltroProfugo(''); setFiltroNumero(''); setFiltroFuerza(''); setFiltroEstado('');
@@ -354,6 +361,7 @@ const ExpedientesPage: React.FC = () => {
                                 <EditIcon />
                               </IconButton>
                             </Tooltip>
+                            {!(isCarga || isConsulta) && (
                             <Tooltip title="Eliminar">
                               <IconButton 
                                 onClick={() => handleDelete(expediente.id!)} 
@@ -362,6 +370,7 @@ const ExpedientesPage: React.FC = () => {
                                 <DeleteIcon />
                               </IconButton>
                             </Tooltip>
+                            )}
                           </Box>
                         </TableCell>
                       </TableRow>

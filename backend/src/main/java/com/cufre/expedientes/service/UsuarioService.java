@@ -64,6 +64,9 @@ public class UsuarioService extends AbstractBaseService<Usuario, UsuarioDTO, Lon
     public UsuarioDTO create(UsuarioDTO usuarioDTO, String password) {
         Usuario usuario = toEntity(usuarioDTO);
         usuario.setContrasena(passwordEncoder.encode(password));
+        // Asegurar que los valores por defecto sean correctos
+        usuario.setRequiereCambioContrasena(true); // Requerir cambio de contraseña al primer inicio
+        usuario.setRequiere2FA(true); // Requerir configuración de 2FA
         usuario = repository.save(usuario);
         log.info("Usuario creado: {}", usuario.getNombre());
         // Registrar actividad de creación de usuario

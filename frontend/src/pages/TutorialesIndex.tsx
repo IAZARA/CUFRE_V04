@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Typography, Paper, Card, CardActionArea, CardContent, Avatar } from '@mui/material';
+import { Box, Typography, Paper, List, ListItem, ListItemAvatar, Avatar, ListItemText, ListItemButton } from '@mui/material';
 import NoteAddRoundedIcon from '@mui/icons-material/NoteAddRounded';
 import FunctionsRoundedIcon from '@mui/icons-material/FunctionsRounded';
 import GavelRoundedIcon from '@mui/icons-material/GavelRounded';
@@ -38,66 +38,28 @@ const TutorialesIndex = () => {
 
   return (
     <Box sx={{ minHeight: '100vh', background: 'linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%)', py: 8 }}>
-      <Box maxWidth="1100px" mx="auto">
+      <Box maxWidth="700px" mx="auto">
         <Paper elevation={5} sx={{ borderRadius: 5, p: 5, mb: 4, background: 'rgba(255,255,255,0.7)', backdropFilter: 'blur(8px)' }}>
-          <Typography variant="h3" fontWeight={800} color="#222" mb={1} textAlign="center">
+          <Typography variant="h3" fontWeight={800} color="#222" mb={3} textAlign="center">
             TUTORIALES
           </Typography>
-          <Box
-            sx={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-              gap: 4,
-              justifyItems: 'center',
-              alignItems: 'center',
-              mt: 4,
-              width: '100%',
-              maxWidth: '1000px',
-              mx: 'auto',
-            }}
-          >
+          <List sx={{ width: '100%' }}>
             {tutoriales.map((tut) => (
-              <Card
-                key={tut.titulo}
-                elevation={0}
-                sx={{
-                  borderRadius: 4,
-                  width: '100%',
-                  minWidth: 220,
-                  maxWidth: 270,
-                  minHeight: 240,
-                  height: 240,
-                  background: 'rgba(255,255,255,0.85)',
-                  boxShadow: '0 4px 24px 0 rgba(30, 136, 229, 0.08)',
-                  transition: 'transform 0.18s, box-shadow 0.18s',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  '&:hover': {
-                    transform: 'translateY(-8px) scale(1.04)',
-                    boxShadow: '0 8px 32px 0 rgba(30, 136, 229, 0.18)',
-                    background: 'rgba(255,255,255,0.97)'
-                  }
-                }}
-              >
-                <CardActionArea onClick={() => navigate(tut.ruta)} sx={{ p: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100%', justifyContent: 'center' }}>
-                  <Avatar sx={{ bgcolor: 'transparent', width: 64, height: 64, mb: 2, boxShadow: '0 2px 8px #bbb' }}>
-                    {tut.icono}
-                  </Avatar>
-                  <CardContent sx={{ textAlign: 'center', p: 0 }}>
-                    <Typography variant="h6" fontWeight={700} color="#222" mb={1}>
-                      {tut.titulo}
-                    </Typography>
-                    <Typography variant="body2" color="#555">
-                      {tut.descripcion}
-                    </Typography>
-                  </CardContent>
-                </CardActionArea>
-              </Card>
+              <ListItem key={tut.titulo} disablePadding sx={{ mb: 2, borderRadius: 3, overflow: 'hidden', boxShadow: '0 2px 8px #e3e3e3' }}>
+                <ListItemButton onClick={() => navigate(tut.ruta)} sx={{ py: 3 }}>
+                  <ListItemAvatar>
+                    <Avatar sx={{ bgcolor: 'transparent', width: 56, height: 56, mr: 2, boxShadow: '0 2px 8px #bbb' }}>
+                      {tut.icono}
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText
+                    primary={<Typography variant="h6" fontWeight={700} color="#222">{tut.titulo}</Typography>}
+                    secondary={<Typography variant="body2" color="#555">{tut.descripcion}</Typography>}
+                  />
+                </ListItemButton>
+              </ListItem>
             ))}
-          </Box>
+          </List>
         </Paper>
       </Box>
     </Box>

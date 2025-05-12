@@ -86,14 +86,18 @@ const AppRoutes: React.FC = () => {
           
           {/* Rutas de Expedientes */}
           <Route path="/expedientes" element={<ExpedientesPage />} />
-          <Route path="/expedientes/crear" element={<ExpedienteFormPage />} />
-          <Route path="/expedientes/editar/:id" element={<ExpedienteFormPage />} />
+          <Route element={<ProtectedRoute requiredRoles={[Rol.SUPERUSUARIO, Rol.ADMINISTRADOR, Rol.USUARIOCARGA]} />}>
+            <Route path="/expedientes/crear" element={<ExpedienteFormPage />} />
+            <Route path="/expedientes/editar/:id" element={<ExpedienteFormPage />} />
+          </Route>
           <Route path="/expedientes/detalle/:id" element={<ExpedienteDetallePage />} />
           
           {/* Rutas de Delitos */}
           <Route path="/delitos" element={<DelitosPage />} />
-          <Route path="/delitos/crear" element={<DelitoFormPage />} />
-          <Route path="/delitos/editar/:id" element={<DelitoFormPage />} />
+          <Route element={<ProtectedRoute requiredRoles={[Rol.SUPERUSUARIO, Rol.ADMINISTRADOR]} />}>
+            <Route path="/delitos/crear" element={<DelitoFormPage />} />
+            <Route path="/delitos/editar/:id" element={<DelitoFormPage />} />
+          </Route>
           
           {/* Rutas de Estadísticas */}
           <Route path="/estadisticas" element={<EstadisticasPage />} />
@@ -102,24 +106,26 @@ const AppRoutes: React.FC = () => {
           <Route path="/estadisticas/evolucion-expedientes" element={<EvolucionExpedientesPage />} />
           <Route path="/estadisticas/ranking-delitos" element={<RankingDelitosPage />} />
           
-          {/* Rutas solo para administradores */}
-          <Route element={<ProtectedRoute requiredRoles={[Rol.ADMINISTRADOR, Rol.SUPERUSUARIO]} />}>
+          {/* Rutas solo para superusuario */}
+          <Route element={<ProtectedRoute requiredRoles={[Rol.SUPERUSUARIO]} />}>
             <Route path="/usuarios" element={<UsuariosPage />} />
             <Route path="/usuarios/crear" element={<UsuarioFormPage />} />
             <Route path="/usuarios/editar/:id" element={<UsuarioFormPage />} />
           </Route>
 
-          {/* Rutas de Tutoriales */}
+          {/* Rutas de Tutoriales y Soporte (accesibles para todos los autenticados) */}
           <Route path="/tutoriales" element={<TutorialesIndex />} />
           <Route path="/tutoriales/creacion-expediente" element={<TutorialCreacionExpediente />} />
           <Route path="/tutoriales/calculo-prioridad" element={<TutorialCalculoPrioridad />} />
           <Route path="/tutoriales/creacion-delito" element={<TutorialCreacionDelito />} />
           <Route path="/tutoriales/uso-sistema" element={<TutorialUsoSistema />} />
 
-          {/* Página de Actividad del Sistema */}
-          <Route path="/actividad-sistema" element={<ActividadSistemaPage />} />
+          {/* Página de Actividad del Sistema solo para SUPERUSUARIO y ADMINISTRADOR */}
+          <Route element={<ProtectedRoute requiredRoles={[Rol.SUPERUSUARIO, Rol.ADMINISTRADOR]} />}>
+            <Route path="/actividad-sistema" element={<ActividadSistemaPage />} />
+          </Route>
 
-          {/* Página de Soporte */}
+          {/* Página de Soporte (todos los autenticados) */}
           <Route path="/soporte" element={<SoportePage />} />
         </Route>
       </Route>

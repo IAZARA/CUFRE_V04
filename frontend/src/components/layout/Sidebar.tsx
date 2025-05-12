@@ -85,6 +85,29 @@ const Sidebar: React.FC<SidebarProps> = ({ open, handleDrawerClose }) => {
     navigate(path);
   };
 
+  // Helpers de visibilidad por rol
+  const isSuper = user?.rol === Rol.SUPERUSUARIO;
+  const isAdmin = user?.rol === Rol.ADMINISTRADOR;
+  const isCarga = user?.rol === Rol.USUARIOCARGA;
+  const isConsulta = user?.rol === Rol.USUARIOCONSULTA;
+
+  // Función para saber si el usuario puede ver un menú
+  const canSee = (menu: string) => {
+    if (isSuper) return true;
+    if (isAdmin) {
+      if (menu === 'usuarios') return false;
+      return true;
+    }
+    if (isCarga) {
+      if (menu === 'usuarios' || menu === 'actividad' || menu === 'crear-delito') return false;
+      return true;
+    }
+    if (isConsulta) {
+      return ['consulta', 'estadisticas', 'masbuscados', 'soporte'].includes(menu);
+    }
+    return false;
+  };
+
   return (
     <Drawer
       className="no-print"
@@ -119,6 +142,8 @@ const Sidebar: React.FC<SidebarProps> = ({ open, handleDrawerClose }) => {
         </Box>
       )}
       <List>
+        {/* Dashboard */}
+        {canSee('dashboard') && (
         <ListItem disablePadding>
           <ListItemButton 
             selected={location.pathname === '/dashboard'}
@@ -142,8 +167,10 @@ const Sidebar: React.FC<SidebarProps> = ({ open, handleDrawerClose }) => {
             <ListItemText primary="Dashboard" primaryTypographyProps={{ fontWeight: 500, color: '#fff' }} />
           </ListItemButton>
         </ListItem>
+        )}
 
         {/* Consulta */}
+        {canSee('consulta') && (
         <ListItem disablePadding>
           <ListItemButton
             selected={location.pathname === '/consulta'}
@@ -167,8 +194,10 @@ const Sidebar: React.FC<SidebarProps> = ({ open, handleDrawerClose }) => {
             <ListItemText primary="Consulta" primaryTypographyProps={{ fontWeight: 500, color: '#fff' }} />
           </ListItemButton>
         </ListItem>
+        )}
 
         {/* Expedientes (expandible) */}
+        {canSee('expedientes') && (
         <ListItem disablePadding>
           <ListItemButton onClick={handleExpedientesClick} sx={{ borderRadius: 2, mb: 1, px: 2, py: 1.5 }}>
             <ListItemIcon sx={{ color: '#fff', minWidth: 0, mr: 2 }}>
@@ -178,6 +207,8 @@ const Sidebar: React.FC<SidebarProps> = ({ open, handleDrawerClose }) => {
             {expedientesOpen ? <ExpandLess /> : <ExpandMore />}
           </ListItemButton>
         </ListItem>
+        )}
+        {canSee('expedientes') && (
         <Collapse in={expedientesOpen} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
             <ListItemButton 
@@ -194,6 +225,7 @@ const Sidebar: React.FC<SidebarProps> = ({ open, handleDrawerClose }) => {
               sx={{ pl: 5, borderRadius: 2, mb: 1 }}
               selected={location.pathname === '/expedientes/crear'}
               onClick={() => handleNavigation('/expedientes/crear')}
+              disabled={isConsulta}
             >
               <ListItemIcon sx={{ color: '#fff', minWidth: 0, mr: 2 }}>
                 <NoteAddRoundedIcon fontSize="small" />
@@ -202,8 +234,10 @@ const Sidebar: React.FC<SidebarProps> = ({ open, handleDrawerClose }) => {
             </ListItemButton>
           </List>
         </Collapse>
+        )}
 
         {/* Más Buscados (expandible) */}
+        {canSee('masbuscados') && (
         <ListItem disablePadding>
           <ListItemButton onClick={handleMasBuscadosClick} sx={{ borderRadius: 2, mb: 1, px: 2, py: 1.5 }}>
             <ListItemIcon sx={{ color: '#fff', minWidth: 0, mr: 2 }}>
@@ -213,6 +247,8 @@ const Sidebar: React.FC<SidebarProps> = ({ open, handleDrawerClose }) => {
             {masBuscadosOpen ? <ExpandLess /> : <ExpandMore />}
           </ListItemButton>
         </ListItem>
+        )}
+        {canSee('masbuscados') && (
         <Collapse in={masBuscadosOpen} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
             <ListItemButton 
@@ -246,8 +282,10 @@ const Sidebar: React.FC<SidebarProps> = ({ open, handleDrawerClose }) => {
             </ListItemButton>
           </List>
         </Collapse>
+        )}
 
         {/* Delitos (expandible) */}
+        {canSee('delitos') && (
         <ListItem disablePadding>
           <ListItemButton onClick={handleDelitosClick} sx={{ borderRadius: 2, mb: 1, px: 2, py: 1.5 }}>
             <ListItemIcon sx={{ color: '#fff', minWidth: 0, mr: 2 }}>
@@ -257,6 +295,8 @@ const Sidebar: React.FC<SidebarProps> = ({ open, handleDrawerClose }) => {
             {delitosOpen ? <ExpandLess /> : <ExpandMore />}
           </ListItemButton>
         </ListItem>
+        )}
+        {canSee('delitos') && (
         <Collapse in={delitosOpen} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
             <ListItemButton 
@@ -269,6 +309,7 @@ const Sidebar: React.FC<SidebarProps> = ({ open, handleDrawerClose }) => {
               </ListItemIcon>
               <ListItemText primary="Lista Delitos" primaryTypographyProps={{ fontWeight: 500, color: '#fff' }} />
             </ListItemButton>
+            {canSee('crear-delito') && (
             <ListItemButton 
               sx={{ pl: 5, borderRadius: 2, mb: 1 }}
               selected={location.pathname === '/delitos/crear'}
@@ -279,10 +320,13 @@ const Sidebar: React.FC<SidebarProps> = ({ open, handleDrawerClose }) => {
               </ListItemIcon>
               <ListItemText primary="Crear Delito" primaryTypographyProps={{ fontWeight: 500, color: '#fff' }} />
             </ListItemButton>
+            )}
           </List>
         </Collapse>
+        )}
 
         {/* Estadísticas (expandible) */}
+        {canSee('estadisticas') && (
         <ListItem disablePadding>
           <ListItemButton onClick={handleEstadisticasClick} sx={{ borderRadius: 2, mb: 1, px: 2, py: 1.5 }}>
             <ListItemIcon sx={{ color: '#fff', minWidth: 0, mr: 2 }}>
@@ -292,6 +336,8 @@ const Sidebar: React.FC<SidebarProps> = ({ open, handleDrawerClose }) => {
             {estadisticasOpen ? <ExpandLess /> : <ExpandMore />}
           </ListItemButton>
         </ListItem>
+        )}
+        {canSee('estadisticas') && (
         <Collapse in={estadisticasOpen} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
             <ListItemButton
@@ -346,24 +392,26 @@ const Sidebar: React.FC<SidebarProps> = ({ open, handleDrawerClose }) => {
             </ListItemButton>
           </List>
         </Collapse>
+        )}
 
-        {/* Usuarios (solo para administradores) */}
-        {user && (user.rol === Rol.ADMINISTRADOR || user.rol === Rol.SUPERUSUARIO) && (
-          <ListItem disablePadding>
-            <ListItemButton 
-              selected={location.pathname.startsWith('/usuarios')}
-              onClick={() => handleNavigation('/usuarios')}
-              sx={{ borderRadius: 2, mb: 1, px: 2, py: 1.5 }}
-            >
-              <ListItemIcon sx={{ color: '#fff', minWidth: 0, mr: 2 }}>
-                <GroupRoundedIcon fontSize="medium" />
-              </ListItemIcon>
-              <ListItemText primary="Usuarios" primaryTypographyProps={{ fontWeight: 500, color: '#fff' }} />
-            </ListItemButton>
-          </ListItem>
+        {/* Usuarios */}
+        {canSee('usuarios') && (
+        <ListItem disablePadding>
+          <ListItemButton 
+            selected={location.pathname.startsWith('/usuarios')}
+            onClick={() => handleNavigation('/usuarios')}
+            sx={{ borderRadius: 2, mb: 1, px: 2, py: 1.5 }}
+          >
+            <ListItemIcon sx={{ color: '#fff', minWidth: 0, mr: 2 }}>
+              <GroupRoundedIcon fontSize="medium" />
+            </ListItemIcon>
+            <ListItemText primary="Usuarios" primaryTypographyProps={{ fontWeight: 500, color: '#fff' }} />
+          </ListItemButton>
+        </ListItem>
         )}
 
         {/* Tutoriales */}
+        {canSee('tutoriales') && (
         <ListItem disablePadding>
           <ListItemButton 
             selected={location.pathname.startsWith('/tutoriales')}
@@ -387,8 +435,10 @@ const Sidebar: React.FC<SidebarProps> = ({ open, handleDrawerClose }) => {
             <ListItemText primary="Tutoriales" primaryTypographyProps={{ fontWeight: 500, color: '#fff' }} />
           </ListItemButton>
         </ListItem>
+        )}
 
         {/* Soporte */}
+        {canSee('soporte') && (
         <ListItem disablePadding>
           <ListItemButton
             selected={location.pathname === '/soporte'}
@@ -412,8 +462,10 @@ const Sidebar: React.FC<SidebarProps> = ({ open, handleDrawerClose }) => {
             <ListItemText primary="Soporte" primaryTypographyProps={{ fontWeight: 500, color: '#fff' }} />
           </ListItemButton>
         </ListItem>
+        )}
 
-        {/* Actividad del Sistema (al final) */}
+        {/* Actividad del Sistema */}
+        {canSee('actividad') && (
         <ListItem disablePadding>
           <ListItemButton
             selected={location.pathname === '/actividad-sistema'}
@@ -437,6 +489,7 @@ const Sidebar: React.FC<SidebarProps> = ({ open, handleDrawerClose }) => {
             <ListItemText primary="Actividad del Sistema" primaryTypographyProps={{ fontWeight: 500, color: '#fff' }} />
           </ListItemButton>
         </ListItem>
+        )}
       </List>
     </Drawer>
   );
