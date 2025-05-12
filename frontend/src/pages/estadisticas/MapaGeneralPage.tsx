@@ -23,7 +23,7 @@ const iconFuga = new L.Icon({
   shadowSize: [41, 41]
 });
 const iconDetencion = new L.Icon({
-  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png',
+  iconUrl: process.env.PUBLIC_URL + '/images/marker-icon-green.png',
   shadowUrl: iconShadow,
   iconSize: [25, 41],
   iconAnchor: [12, 41],

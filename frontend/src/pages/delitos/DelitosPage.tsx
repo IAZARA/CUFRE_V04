@@ -25,7 +25,9 @@ import {
   Add as AddIcon,
   Edit as EditIcon,
   Delete as DeleteIcon,
-  Visibility as VisibilityIcon
+  Visibility as VisibilityIcon,
+  Gavel as GavelIcon,
+  Star as StarIcon
 } from '@mui/icons-material';
 import delitoService from '../../api/delitoService';
 import { Delito } from '../../types/delito.types';
@@ -121,17 +123,28 @@ const DelitosPage: React.FC = () => {
 
   return (
     <Box>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
-        <Typography variant="h4">Lista de Delitos</Typography>
+      {/* Encabezado moderno */}
+      <Paper elevation={2} sx={{ p: 2, mb: 3, display: 'flex', alignItems: 'center', borderRadius: 2, background: 'linear-gradient(90deg, #1976d2 0%, #2196f3 100%)', boxShadow: 4 }}>
+        <GavelIcon sx={{ color: 'white', fontSize: 40, mr: 2 }} />
+        <Box>
+          <Typography variant="h4" sx={{ color: 'white', fontWeight: 700, letterSpacing: 1 }}>
+            Lista de Delitos
+          </Typography>
+          <Typography variant="subtitle1" sx={{ color: 'rgba(255,255,255,0.85)' }}>
+            Gestión y consulta de delitos registrados en el sistema
+          </Typography>
+        </Box>
+        <Box sx={{ flexGrow: 1 }} />
         <Button
           variant="contained"
-          color="primary"
+          color="secondary"
           startIcon={<AddIcon />}
           onClick={handleCreate}
+          sx={{ minWidth: 150, fontWeight: 600, boxShadow: 3, borderRadius: 2, ml: 2, transition: '0.2s', '&:hover': { boxShadow: 6, transform: 'scale(1.04)' } }}
         >
           Nuevo Delito
         </Button>
-      </Box>
+      </Paper>
 
       {error && (
         <Alert severity="error" sx={{ mb: 3 }}>
@@ -139,7 +152,8 @@ const DelitosPage: React.FC = () => {
         </Alert>
       )}
 
-      <Paper sx={{ mb: 3 }}>
+      {/* Buscador moderno */}
+      <Paper sx={{ mb: 3, boxShadow: 2, borderRadius: 2 }}>
         <Box sx={{ p: 2 }}>
           <TextField
             fullWidth
@@ -147,20 +161,35 @@ const DelitosPage: React.FC = () => {
             label="Buscar delitos"
             value={searchTerm}
             onChange={handleSearchChange}
+            sx={{ background: 'white', borderRadius: 2, boxShadow: 1 }}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <SearchIcon />
+                  <SearchIcon sx={{ color: '#1976d2' }} />
                 </InputAdornment>
               ),
             }}
           />
         </Box>
 
-        <TableContainer>
-          <Table stickyHeader>
+        {/* Tabla moderna */}
+        <TableContainer sx={{ borderRadius: 2, boxShadow: 0 }}>
+          <Table stickyHeader sx={{ borderRadius: 2, overflow: 'hidden' }}>
             <TableHead>
-              <TableRow>
+              <TableRow
+                sx={{
+                  background: '#0d223a',
+                  '& th': {
+                    color: '#fff',
+                    fontWeight: 800,
+                    fontSize: 17,
+                    letterSpacing: 0.5,
+                    textShadow: '0 1px 4px rgba(0,0,0,0.18)',
+                    borderBottom: '3px solid #1976d2',
+                    background: 'inherit',
+                  },
+                }}
+              >
                 <TableCell>Nombre</TableCell>
                 <TableCell>Código Penal</TableCell>
                 <TableCell>Tipo de Pena</TableCell>
@@ -178,16 +207,34 @@ const DelitosPage: React.FC = () => {
               ) : (
                 filteredDelitos
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((delito) => (
-                    <TableRow key={delito.id} hover>
-                      <TableCell>{delito.nombre}</TableCell>
+                  .map((delito, idx) => (
+                    <TableRow
+                      key={delito.id}
+                      hover
+                      sx={{
+                        backgroundColor: idx % 2 === 0 ? '#f5f7fa' : '#e3eafc',
+                        transition: 'background 0.2s',
+                        '&:hover': { backgroundColor: '#bbdefb' },
+                      }}
+                    >
+                      <TableCell sx={{ fontWeight: 500 }}>{delito.nombre}</TableCell>
                       <TableCell>{delito.codigoPenal || '-'}</TableCell>
                       <TableCell>{delito.tipoPena || '-'}</TableCell>
-                      <TableCell>{delito.valoracion !== undefined && delito.valoracion !== null ? delito.valoracion : '-'}</TableCell>
+                      <TableCell>
+                        {delito.valoracion !== undefined && delito.valoracion !== null ? (
+                          delito.valoracion >= 700 ? (
+                            <Chip label={delito.valoracion} color="error" size="small" icon={<StarIcon sx={{ color: 'gold' }} />} />
+                          ) : (
+                            <Chip label={delito.valoracion} color="primary" size="small" />
+                          )
+                        ) : (
+                          '-'
+                        )}
+                      </TableCell>
                       <TableCell align="center">
-                        <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                        <Box sx={{ display: 'flex', justifyContent: 'center', gap: 1 }}>
                           <Tooltip title="Editar">
-                            <IconButton onClick={() => handleEdit(delito.id!)}>
+                            <IconButton onClick={() => handleEdit(delito.id!)} color="primary" sx={{ borderRadius: 2 }}>
                               <EditIcon />
                             </IconButton>
                           </Tooltip>
@@ -195,6 +242,7 @@ const DelitosPage: React.FC = () => {
                             <IconButton 
                               onClick={() => handleDelete(delito.id!)} 
                               color="error"
+                              sx={{ borderRadius: 2 }}
                             >
                               <DeleteIcon />
                             </IconButton>
@@ -207,9 +255,9 @@ const DelitosPage: React.FC = () => {
             </TableBody>
           </Table>
         </TableContainer>
-        
+
         <TablePagination
-          rowsPerPageOptions={[5, 10, 25, 50]}
+          rowsPerPageOptions={[10, 25, 50]}
           component="div"
           count={filteredDelitos.length}
           rowsPerPage={rowsPerPage}
@@ -217,7 +265,7 @@ const DelitosPage: React.FC = () => {
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
           labelRowsPerPage="Filas por página"
-          labelDisplayedRows={({ from, to, count }) => `${from}-${to} de ${count}`}
+          sx={{ borderTop: '1px solid #e0e0e0', background: '#f5f7fa', borderRadius: 2 }}
         />
       </Paper>
     </Box>

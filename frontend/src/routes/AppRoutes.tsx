@@ -15,11 +15,13 @@ import NotFound from '../pages/NotFound';
 import CambiarContrasena from '../pages/CambiarContrasena';
 import Activar2FA from '../pages/Activar2FA';
 import Validar2FA from '../pages/Validar2FA';
+import ConsultaPage from '../pages/ConsultaPage';
 
 // Páginas de Expedientes
 import ExpedientesPage from '../pages/expedientes/ExpedientesPage';
 import ExpedienteFormPage from '../pages/expedientes/ExpedienteFormPage';
 import ExpedienteDetallePage from '../pages/expedientes/ExpedienteDetallePage';
+import IterarMasBuscadosPage from '../pages/expedientes/IterarMasBuscadosPage';
 
 // Páginas de Delitos
 import DelitosPage from '../pages/delitos/DelitosPage';
@@ -35,6 +37,13 @@ import UsuarioFormPage from '../pages/usuarios/UsuarioFormPage';
 
 // Nueva página MasBuscadosPage
 import MasBuscadosPage from '../pages/MasBuscadosPage';
+
+// Páginas de Tutoriales
+import TutorialesIndex from '../pages/TutorialesIndex';
+import TutorialCreacionExpediente from '../pages/TutorialCreacionExpediente';
+import TutorialCalculoPrioridad from '../pages/TutorialCalculoPrioridad';
+import TutorialCreacionDelito from '../pages/TutorialCreacionDelito';
+import TutorialUsoSistema from '../pages/TutorialUsoSistema';
 
 // Wrapper para MainLayout que oculta el footer si el modal de Más Buscados está abierto
 type MasBuscadosContext = { modalOpen?: boolean };
@@ -59,8 +68,12 @@ const AppRoutes: React.FC = () => {
       {/* Rutas protegidas - requieren autenticación */}
       <Route element={<ProtectedRoute />}>
         <Route element={<MainLayoutWithFooterControl />}>
-          <Route path="/mas-buscados" element={<MasBuscadosPage />} />
+          <Route path="/expedientes/cufre" element={<MasBuscadosPage />} />
+          <Route path="/expedientes/iterar-mas-buscados" element={<IterarMasBuscadosPage />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          
+          {/* Página de Consulta */}
+          <Route path="/consulta" element={<ConsultaPage />} />
           
           {/* Rutas de Expedientes */}
           <Route path="/expedientes" element={<ExpedientesPage />} />
@@ -83,6 +96,13 @@ const AppRoutes: React.FC = () => {
             <Route path="/usuarios/crear" element={<UsuarioFormPage />} />
             <Route path="/usuarios/editar/:id" element={<UsuarioFormPage />} />
           </Route>
+
+          {/* Rutas de Tutoriales */}
+          <Route path="/tutoriales" element={<TutorialesIndex />} />
+          <Route path="/tutoriales/creacion-expediente" element={<TutorialCreacionExpediente />} />
+          <Route path="/tutoriales/calculo-prioridad" element={<TutorialCalculoPrioridad />} />
+          <Route path="/tutoriales/creacion-delito" element={<TutorialCreacionDelito />} />
+          <Route path="/tutoriales/uso-sistema" element={<TutorialUsoSistema />} />
         </Route>
       </Route>
       

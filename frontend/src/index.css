@@ -30,4 +30,9 @@ code {
   .no-print {
     display: none !important;
   }
+}
+
+body.app-fullscreen-mode .MuiAppBar-root,
+body.app-fullscreen-mode footer {
+  display: none !important;
 } 

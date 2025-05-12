@@ -407,4 +407,47 @@ public class ExpedienteService extends AbstractBaseService<Expediente, Expedient
         List<Expediente> expedientes = repository.findAllByEstadoSituacionOrderByPrioridadAsc("CAPTURA VIGENTE", PageRequest.of(0, limit));
         return expedientes.stream().map(this::toDto).collect(Collectors.toList());
     }
+
+    /**
+     * Búsqueda avanzada de expedientes y personas
+     */
+    @Transactional(readOnly = true)
+    public List<ExpedienteDTO> busquedaAvanzada(String nombre, String apellido, String numeroExpediente, String tipoBusqueda, String numeroIdentificacion) {
+        List<Expediente> expedientesPorNumero = new ArrayList<>();
+        List<Expediente> expedientesPorPersona = new ArrayList<>();
+        boolean buscarPorExpediente = tipoBusqueda == null || tipoBusqueda.equalsIgnoreCase("expediente") || tipoBusqueda.equalsIgnoreCase("ambos");
+        boolean buscarPorPersona = tipoBusqueda == null || tipoBusqueda.equalsIgnoreCase("persona") || tipoBusqueda.equalsIgnoreCase("ambos");
+
+        // Buscar por número de expediente
+        if (buscarPorExpediente && numeroExpediente != null && !numeroExpediente.isEmpty()) {
+            expedientesPorNumero = repository.findByNumeroContainingIgnoreCase(numeroExpediente);
+            // Si no encuentra nada, intenta buscar quitando ceros a la izquierda
+            if (expedientesPorNumero.isEmpty()) {
+                String sinCeros = numeroExpediente.replaceFirst("^0+(?!$)", "");
+                if (!sinCeros.equals(numeroExpediente)) {
+                    expedientesPorNumero = repository.findByNumeroContainingIgnoreCase(sinCeros);
+                }
+            }
+        }
+
+        // Buscar por persona asociada
+        if (buscarPorPersona && ( (nombre != null && !nombre.isEmpty()) || (apellido != null && !apellido.isEmpty()) || (numeroIdentificacion != null && !numeroIdentificacion.isEmpty()) )) {
+            expedientesPorPersona = personaExpedienteRepository.findExpedientesByPersonaDatos(nombre, apellido, numeroIdentificacion);
+        }
+
+        // Unir resultados sin duplicados
+        List<Expediente> resultado = new ArrayList<>();
+        if (!expedientesPorNumero.isEmpty()) resultado.addAll(expedientesPorNumero);
+        for (Expediente e : expedientesPorPersona) {
+            if (resultado.stream().noneMatch(x -> x.getId().equals(e.getId()))) {
+                resultado.add(e);
+            }
+        }
+        // Si no hay filtros, retorna vacío
+        if (resultado.isEmpty() && ( (numeroExpediente == null || numeroExpediente.isEmpty()) && (nombre == null || nombre.isEmpty()) && (apellido == null || apellido.isEmpty()) && (numeroIdentificacion == null || numeroIdentificacion.isEmpty()) )) {
+            return new ArrayList<>();
+        }
+        // Mapear a DTO
+        return resultado.stream().map(this::toDto).collect(Collectors.toList());
+    }
 } 

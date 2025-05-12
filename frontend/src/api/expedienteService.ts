@@ -420,6 +420,23 @@ const expedienteService = {
       throw error;
     }
   },
+
+  // Búsqueda avanzada de expedientes/personas
+  buscarAvanzado: async (params: {
+    nombre?: string;
+    apellido?: string;
+    numeroExpediente?: string;
+    tipoBusqueda?: string;
+    numeroIdentificacion?: string;
+  }): Promise<any[]> => {
+    try {
+      const response = await axios.get('/expedientes/busqueda-avanzada', { params });
+      return response.data;
+    } catch (error) {
+      console.error('Error en búsqueda avanzada:', error);
+      throw error;
+    }
+  },
 };
 
 export default expedienteService; 

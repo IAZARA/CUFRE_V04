@@ -41,4 +41,13 @@ public interface PersonaExpedienteRepository extends JpaRepository<PersonaExpedi
     
     @Query("SELECT COUNT(DISTINCT pe.persona.id) FROM PersonaExpediente pe")
     Long countDistinctPersonasVinculadas();
+
+    /**
+     * Busca expedientes asociados a personas por nombre, apellido o número de identificación
+     */
+    @Query("SELECT DISTINCT pe.expediente FROM PersonaExpediente pe WHERE " +
+            "(:nombre IS NULL OR LOWER(pe.persona.nombre) LIKE LOWER(CONCAT('%', :nombre, '%'))) AND " +
+            "(:apellido IS NULL OR LOWER(pe.persona.apellido) LIKE LOWER(CONCAT('%', :apellido, '%'))) AND " +
+            "(:numeroIdentificacion IS NULL OR LOWER(pe.persona.numeroDocumento) LIKE LOWER(CONCAT('%', :numeroIdentificacion, '%')))")
+    List<com.cufre.expedientes.model.Expediente> findExpedientesByPersonaDatos(@Param("nombre") String nombre, @Param("apellido") String apellido, @Param("numeroIdentificacion") String numeroIdentificacion);
 } 

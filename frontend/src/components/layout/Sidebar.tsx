@@ -31,6 +31,8 @@ import PersonSearchRoundedIcon from '@mui/icons-material/PersonSearchRounded';
 import GroupRoundedIcon from '@mui/icons-material/GroupRounded';
 import ExitToAppRoundedIcon from '@mui/icons-material/ExitToAppRounded';
 import PlaceRoundedIcon from '@mui/icons-material/PlaceRounded';
+import SearchIcon from '@mui/icons-material/Search';
+import SchoolIcon from '@mui/icons-material/School';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { Rol } from '../../types/usuario.types';
@@ -58,6 +60,7 @@ const Sidebar: React.FC<SidebarProps> = ({ open, handleDrawerClose }) => {
   const [expedientesOpen, setExpedientesOpen] = useState(false);
   const [delitosOpen, setDelitosOpen] = useState(false);
   const [estadisticasOpen, setEstadisticasOpen] = useState(false);
+  const [masBuscadosOpen, setMasBuscadosOpen] = useState(false);
 
   const handleExpedientesClick = () => {
     setExpedientesOpen(!expedientesOpen);
@@ -69,6 +72,10 @@ const Sidebar: React.FC<SidebarProps> = ({ open, handleDrawerClose }) => {
 
   const handleEstadisticasClick = () => {
     setEstadisticasOpen(!estadisticasOpen);
+  };
+
+  const handleMasBuscadosClick = () => {
+    setMasBuscadosOpen(!masBuscadosOpen);
   };
 
   const handleNavigation = (path: string) => {
@@ -132,6 +139,31 @@ const Sidebar: React.FC<SidebarProps> = ({ open, handleDrawerClose }) => {
           </ListItemButton>
         </ListItem>
 
+        {/* Consulta */}
+        <ListItem disablePadding>
+          <ListItemButton
+            selected={location.pathname === '/consulta'}
+            onClick={() => handleNavigation('/consulta')}
+            sx={{
+              borderRadius: 2,
+              mb: 1,
+              px: 2,
+              py: 1.5,
+              color: '#fff',
+              backgroundColor: location.pathname === '/consulta' ? 'rgba(255,255,255,0.08)' : 'transparent',
+              '&:hover': {
+                backgroundColor: 'rgba(255,255,255,0.15)',
+                color: '#fff'
+              }
+            }}
+          >
+            <ListItemIcon sx={{ color: '#fff', minWidth: 0, mr: 2 }}>
+              <SearchIcon fontSize="medium" />
+            </ListItemIcon>
+            <ListItemText primary="Consulta" primaryTypographyProps={{ fontWeight: 500, color: '#fff' }} />
+          </ListItemButton>
+        </ListItem>
+
         {/* Expedientes (expandible) */}
         <ListItem disablePadding>
           <ListItemButton onClick={handleExpedientesClick} sx={{ borderRadius: 2, mb: 1, px: 2, py: 1.5 }}>
@@ -163,6 +195,50 @@ const Sidebar: React.FC<SidebarProps> = ({ open, handleDrawerClose }) => {
                 <NoteAddRoundedIcon fontSize="small" />
               </ListItemIcon>
               <ListItemText primary="Crear Expediente" primaryTypographyProps={{ fontWeight: 500, color: '#fff' }} />
+            </ListItemButton>
+          </List>
+        </Collapse>
+
+        {/* Más Buscados (expandible) */}
+        <ListItem disablePadding>
+          <ListItemButton onClick={handleMasBuscadosClick} sx={{ borderRadius: 2, mb: 1, px: 2, py: 1.5 }}>
+            <ListItemIcon sx={{ color: '#fff', minWidth: 0, mr: 2 }}>
+              <PersonSearchRoundedIcon fontSize="medium" />
+            </ListItemIcon>
+            <ListItemText primary="Más Buscados" primaryTypographyProps={{ fontWeight: 500, color: '#fff' }} />
+            {masBuscadosOpen ? <ExpandLess /> : <ExpandMore />}
+          </ListItemButton>
+        </ListItem>
+        <Collapse in={masBuscadosOpen} timeout="auto" unmountOnExit>
+          <List component="div" disablePadding>
+            <ListItemButton 
+              sx={{ pl: 5, borderRadius: 2, mb: 1 }}
+              selected={location.pathname === '/expedientes/cufre'}
+              onClick={() => handleNavigation('/expedientes/cufre')}
+            >
+              <ListItemIcon sx={{ color: '#fff', minWidth: 0, mr: 2 }}>
+                <PersonSearchRoundedIcon fontSize="small" />
+              </ListItemIcon>
+              <ListItemText primary="CUFRE" primaryTypographyProps={{ fontWeight: 500, color: '#fff' }} />
+            </ListItemButton>
+            <ListItemButton
+              sx={{ pl: 5, borderRadius: 2, mb: 1 }}
+              onClick={() => window.open('https://www.interpol.int/es/Como-trabajamos/Notificaciones/Notificaciones-rojas/Ver-las-notificaciones-rojas', '_blank')}
+            >
+              <ListItemIcon sx={{ color: '#fff', minWidth: 0, mr: 2 }}>
+                <GroupRoundedIcon fontSize="small" />
+              </ListItemIcon>
+              <ListItemText primary="INTERPOOL" primaryTypographyProps={{ fontWeight: 500, color: '#fff' }} />
+            </ListItemButton>
+            <ListItemButton
+              sx={{ pl: 5, borderRadius: 2, mb: 1 }}
+              selected={location.pathname === '/expedientes/iterar-mas-buscados'}
+              onClick={() => handleNavigation('/expedientes/iterar-mas-buscados')}
+            >
+              <ListItemIcon sx={{ color: '#fff', minWidth: 0, mr: 2 }}>
+                <PersonSearchRoundedIcon fontSize="small" />
+              </ListItemIcon>
+              <ListItemText primary="Iterar Más Buscados" primaryTypographyProps={{ fontWeight: 500, color: '#fff' }} />
             </ListItemButton>
           </List>
         </Collapse>
@@ -237,20 +313,6 @@ const Sidebar: React.FC<SidebarProps> = ({ open, handleDrawerClose }) => {
           </List>
         </Collapse>
 
-        {/* Más Buscados */}
-        <ListItem disablePadding>
-          <ListItemButton 
-            selected={location.pathname === '/mas-buscados'}
-            onClick={() => handleNavigation('/mas-buscados')}
-            sx={{ borderRadius: 2, mb: 1, px: 2, py: 1.5 }}
-          >
-            <ListItemIcon sx={{ color: '#fff', minWidth: 0, mr: 2 }}>
-              <PersonSearchRoundedIcon fontSize="medium" />
-            </ListItemIcon>
-            <ListItemText primary="Más Buscados" primaryTypographyProps={{ fontWeight: 500, color: '#fff' }} />
-          </ListItemButton>
-        </ListItem>
-
         {/* Usuarios (solo para administradores) */}
         {user && (user.rol === Rol.ADMINISTRADOR || user.rol === Rol.SUPERUSUARIO) && (
           <ListItem disablePadding>
@@ -266,6 +328,31 @@ const Sidebar: React.FC<SidebarProps> = ({ open, handleDrawerClose }) => {
             </ListItemButton>
           </ListItem>
         )}
+
+        {/* Tutoriales */}
+        <ListItem disablePadding>
+          <ListItemButton 
+            selected={location.pathname.startsWith('/tutoriales')}
+            onClick={() => handleNavigation('/tutoriales')}
+            sx={{
+              borderRadius: 2,
+              mb: 1,
+              px: 2,
+              py: 1.5,
+              color: '#fff',
+              backgroundColor: location.pathname.startsWith('/tutoriales') ? 'rgba(255,255,255,0.08)' : 'transparent',
+              '&:hover': {
+                backgroundColor: 'rgba(255,255,255,0.15)',
+                color: '#fff'
+              }
+            }}
+          >
+            <ListItemIcon sx={{ color: '#fff', minWidth: 0, mr: 2 }}>
+              <SchoolIcon fontSize="medium" />
+            </ListItemIcon>
+            <ListItemText primary="Tutoriales" primaryTypographyProps={{ fontWeight: 500, color: '#fff' }} />
+          </ListItemButton>
+        </ListItem>
       </List>
     </Drawer>
   );

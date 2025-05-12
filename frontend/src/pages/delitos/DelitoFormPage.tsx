@@ -10,7 +10,8 @@ import {
   FormControlLabel,
   Switch,
   Alert,
-  CircularProgress
+  CircularProgress,
+  InputAdornment
 } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import SaveIcon from '@mui/icons-material/Save';
@@ -107,46 +108,53 @@ const DelitoFormPage: React.FC = () => {
 
   return (
     <Box>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
-        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <Button
-            color="inherit"
-            startIcon={<ArrowBackIcon />}
-            onClick={() => navigate('/delitos')}
-            sx={{ mr: 2 }}
-          >
-            Volver
-          </Button>
-          <Typography variant="h4">
+      {/* Encabezado mejorado */}
+      <Paper elevation={2} sx={{ p: 2, mb: 3, display: 'flex', alignItems: 'center', borderRadius: 2, background: 'linear-gradient(90deg, #1976d2 0%, #2196f3 100%)' }}>
+        <Button
+          color="inherit"
+          startIcon={<ArrowBackIcon />}
+          onClick={() => navigate('/delitos')}
+          sx={{ color: 'white', mr: 2, background: 'rgba(255,255,255,0.08)', '&:hover': { background: 'rgba(255,255,255,0.18)' } }}
+        >
+          Volver
+        </Button>
+        <Box>
+          <Typography variant="h4" sx={{ color: 'white', fontWeight: 700 }}>
             {isEditMode ? 'Editar Delito' : 'Crear Nuevo Delito'}
           </Typography>
+          <Typography variant="subtitle1" sx={{ color: 'rgba(255,255,255,0.8)' }}>
+            {isEditMode ? 'Modifica los datos del delito seleccionado.' : 'Completa el formulario para registrar un nuevo delito.'}
+          </Typography>
         </Box>
+        <Box sx={{ flexGrow: 1 }} />
         <Button
           variant="contained"
-          color="primary"
+          color="secondary"
           startIcon={<SaveIcon />}
           onClick={handleSave}
           disabled={loading}
+          sx={{ minWidth: 120, fontWeight: 600, boxShadow: 2 }}
         >
-          Guardar
+          {loading ? <CircularProgress size={24} color="inherit" /> : 'Guardar'}
         </Button>
-      </Box>
+      </Paper>
 
       {error && (
-        <Alert severity="error" sx={{ mb: 3 }}>
+        <Alert severity="error" sx={{ mb: 3, animation: 'fadein 0.5s' }}>
           {error}
         </Alert>
       )}
 
       {success && (
-        <Alert severity="success" sx={{ mb: 3 }}>
+        <Alert severity="success" sx={{ mb: 3, animation: 'fadein 0.5s' }}>
           {success}
         </Alert>
       )}
 
-      <Paper sx={{ p: 3 }}>
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-          <Box>
+      {/* Formulario mejorado */}
+      <Paper sx={{ p: 3, borderRadius: 2 }}>
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3 }}>
+          <Box sx={{ width: '100%' }}>
             <TextField
               fullWidth
               required
@@ -157,38 +165,76 @@ const DelitoFormPage: React.FC = () => {
               helperText="Nombre o tipo de delito (ej: Robo, Homicidio, etc.)"
             />
           </Box>
-          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3 }}>
-            <Box sx={{ width: { xs: '100%', sm: 'calc(33.33% - 2rem)' } }}>
-              <TextField
-                fullWidth
-                label="Código Penal"
-                name="codigoPenal"
-                value={delito.codigoPenal || ''}
-                onChange={handleInputChange}
-                helperText="Ejemplo: Art. 79 CP"
-              />
-            </Box>
-            <Box sx={{ width: { xs: '100%', sm: 'calc(33.33% - 2rem)' } }}>
-              <TextField
-                fullWidth
-                label="Tipo de Pena"
-                name="tipoPena"
-                value={delito.tipoPena || ''}
-                onChange={handleInputChange}
-                helperText="Ejemplo: Prisión, Reclusión, etc."
-              />
-            </Box>
-            <Box sx={{ width: { xs: '100%', sm: 'calc(33.33% - 2rem)' } }}>
-              <TextField
-                fullWidth
-                label="Valoración Asignada"
-                name="valoracion"
-                type="number"
-                value={delito.valoracion !== undefined && delito.valoracion !== null ? delito.valoracion : ''}
-                onChange={handleInputChange}
-                helperText="Valor numérico (ej: 10)"
-              />
-            </Box>
+          <Box sx={{ width: { xs: '100%', sm: '50%', md: '33.33%' } }}>
+            <TextField
+              fullWidth
+              label="Código Penal"
+              name="codigoPenal"
+              value={delito.codigoPenal || ''}
+              onChange={handleInputChange}
+              helperText="Ejemplo: Art. 79 CP"
+            />
+          </Box>
+          <Box sx={{ width: { xs: '100%', sm: '50%', md: '33.33%' } }}>
+            <TextField
+              fullWidth
+              label="Tipo de Pena"
+              name="tipoPena"
+              value={delito.tipoPena || ''}
+              onChange={handleInputChange}
+              helperText="Ejemplo: Prisión, Reclusión, etc."
+            />
+          </Box>
+          <Box sx={{ width: { xs: '100%', sm: '50%', md: '33.33%' } }}>
+            <TextField
+              fullWidth
+              label="Valoración Asignada"
+              name="valoracion"
+              type="number"
+              value={delito.valoracion !== undefined && delito.valoracion !== null ? delito.valoracion : ''}
+              onChange={handleInputChange}
+              helperText="Valor numérico (ej: 10)"
+              InputProps={{
+                startAdornment: <InputAdornment position="start">#</InputAdornment>,
+              }}
+            />
+          </Box>
+          <Box sx={{ width: { xs: '100%', sm: '50%', md: '33.33%' } }}>
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={!!delito.esGrave}
+                  onChange={handleInputChange}
+                  name="esGrave"
+                  color="primary"
+                />
+              }
+              label="¿Es grave?"
+            />
+          </Box>
+          <Box sx={{ width: '100%' }}>
+            <TextField
+              fullWidth
+              multiline
+              minRows={2}
+              label="Descripción"
+              name="descripcion"
+              value={delito.descripcion || ''}
+              onChange={handleInputChange}
+              helperText="Descripción breve del delito"
+            />
+          </Box>
+          <Box sx={{ width: '100%' }}>
+            <TextField
+              fullWidth
+              multiline
+              minRows={2}
+              label="Observaciones"
+              name="observaciones"
+              value={delito.observaciones || ''}
+              onChange={handleInputChange}
+              helperText="Observaciones adicionales (opcional)"
+            />
           </Box>
         </Box>
       </Paper>

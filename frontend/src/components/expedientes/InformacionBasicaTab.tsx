@@ -15,6 +15,9 @@ import { Expediente } from '../../types/expediente.types';
 interface InformacionBasicaTabProps {
   expediente: Expediente;
   onChange: (field: keyof Expediente, value: any) => void;
+  onCreateExpediente?: () => void;
+  expedienteId?: number;
+  loading?: boolean;
 }
 
 const estados = [
@@ -52,7 +55,7 @@ const fuerzasAsignadas = [
   'BLOQUE DE BÚSQUEDA CUFRE'
 ];
 
-const InformacionBasicaTab: React.FC<InformacionBasicaTabProps> = ({ expediente, onChange }) => {
+const InformacionBasicaTab: React.FC<InformacionBasicaTabProps> = ({ expediente, onChange, onCreateExpediente, expedienteId, loading }) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, checked, type } = e.target;
     let fieldValue = type === 'checkbox' ? checked : value;
@@ -81,18 +84,30 @@ const InformacionBasicaTab: React.FC<InformacionBasicaTabProps> = ({ expediente,
         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
           <Box sx={{ width: { xs: '100%', md: 'calc(50% - 2rem)' } }}>
             <Tooltip title="Este número es único para cada expediente" arrow>
-              <TextField
-                fullWidth
-                required
-                label="Número de Expediente"
-                name="numero"
-                value={expediente.numero}
-                onChange={handleChange}
-                margin="normal"
-                helperText="Ingrese el número de identificación único del expediente"
-                size="small"
-                variant="outlined"
-              />
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                <TextField
+                  fullWidth
+                  required
+                  label="Número de Expediente"
+                  name="numero"
+                  value={expediente.numero}
+                  onChange={handleChange}
+                  margin="normal"
+                  helperText="Ingrese el número de identificación único del expediente"
+                  size="small"
+                  variant="outlined"
+                />
+                {!expedienteId && onCreateExpediente && (
+                  <button
+                    type="button"
+                    style={{ height: 40 }}
+                    onClick={onCreateExpediente}
+                    disabled={loading || !expediente.numero}
+                  >
+                    Crear expediente
+                  </button>
+                )}
+              </Box>
             </Tooltip>
           </Box>
           <Box sx={{ width: { xs: '100%', md: 'calc(50% - 2rem)' } }}>

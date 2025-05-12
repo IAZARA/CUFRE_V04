@@ -353,6 +353,22 @@ const ExpedienteFormPage: React.FC = () => {
     }
   };
 
+  const handleCreateExpediente = async () => {
+    setLoading(true);
+    setError(null);
+    setSuccess(null);
+    try {
+      const newExpediente = await expedienteService.createExpediente(expediente);
+      setExpediente(newExpediente);
+      setSuccess('Expediente creado correctamente. Ahora puedes subir fotos y documentos.');
+      // Opcional: podrías actualizar la URL con navigate(`/expedientes/${newExpediente.id}/edit`)
+    } catch (err) {
+      setError('Error al crear el expediente. Por favor intente nuevamente.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <Box sx={{ width: '100%', mb: 4 }}>
       <Box sx={{ mb: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -417,7 +433,13 @@ const ExpedienteFormPage: React.FC = () => {
         </Box>
 
         <TabPanel value={tabValue} index={0}>
-          <InformacionBasicaTab expediente={expediente} onChange={handleFieldChange} />
+          <InformacionBasicaTab
+            expediente={expediente}
+            onChange={handleFieldChange}
+            onCreateExpediente={handleCreateExpediente}
+            expedienteId={expediente.id}
+            loading={loading}
+          />
         </TabPanel>
         
         <TabPanel value={tabValue} index={1}>

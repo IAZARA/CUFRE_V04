@@ -183,4 +183,25 @@ public class ExpedienteController extends AbstractBaseController<Expediente, Exp
     public ResponseEntity<List<ExpedienteDTO>> getMasBuscados(@RequestParam(defaultValue = "10") int limit) {
         return ResponseEntity.ok(expedienteService.findMasBuscados(limit));
     }
+
+    /**
+     * Búsqueda avanzada de expedientes y personas
+     * @param nombre Nombre de la persona (opcional)
+     * @param apellido Apellido de la persona (opcional)
+     * @param numeroExpediente Número de expediente (opcional)
+     * @param tipoBusqueda "expediente", "persona" o "ambos" (opcional)
+     * @param numeroIdentificacion Número de identificación de la persona (opcional)
+     */
+    @GetMapping("/busqueda-avanzada")
+    public ResponseEntity<List<ExpedienteDTO>> busquedaAvanzada(
+            @RequestParam(required = false) String nombre,
+            @RequestParam(required = false) String apellido,
+            @RequestParam(required = false) String numeroExpediente,
+            @RequestParam(required = false) String tipoBusqueda, // "expediente", "persona", "ambos"
+            @RequestParam(required = false) String numeroIdentificacion
+    ) {
+        // TODO: Implementar lógica de búsqueda avanzada en el servicio
+        List<ExpedienteDTO> resultados = expedienteService.busquedaAvanzada(nombre, apellido, numeroExpediente, tipoBusqueda, numeroIdentificacion);
+        return ResponseEntity.ok(resultados);
+    }
 } 
