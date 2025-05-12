@@ -52,7 +52,64 @@ const estadisticaService = {
       return response.data;
     } catch (error: any) {
       console.error('Error al obtener expedientes por estado:', error);
-      throw new Error(error.response?.data?.message || 'Error al obtener estadísticas');
+      // Intentar con el endpoint antiguo
+      try {
+        const responseAlt = await axios.get(`${API_URL}/estadisticas/estado`);
+        // Convertir formato antiguo {estado: cantidad} al nuevo formato [{name, value}]
+        return Object.entries(responseAlt.data).map(([estado, cantidad]) => ({
+          name: estado,
+          value: Number(cantidad)
+        }));
+      } catch (altError) {
+        console.error('Error en endpoint alternativo:', altError);
+        // Datos simulados en caso de error (solo estados que existen en el sistema)
+        return [
+          { name: 'Captura Vigente', value: 0 },
+          { name: 'Detenido', value: 0 },
+          { name: 'Sin Efecto', value: 0 }
+        ];
+      }
+    }
+  },
+
+  getExpedientesPorFuerza: async () => {
+    try {
+      const response = await axios.get(`${API_URL}/estadisticas/expedientes-por-fuerza`);
+      return response.data;
+    } catch (error: any) {
+      console.error('Error al obtener expedientes por fuerza:', error);
+      // Datos simulados en caso de error
+      return [
+        { name: 'PFA', value: 0 },
+        { name: 'GNA', value: 0 },
+        { name: 'PNA', value: 0 },
+        { name: 'PSA', value: 0 },
+        { name: 'SPF', value: 0 },
+        { name: 'INTERPOOL', value: 0 },
+        { name: 'CUFRE', value: 0 }
+      ];
+    }
+  },
+
+  getExpedientesPorEstadoYFuerza: async (fuerza: string) => {
+    try {
+      const response = await axios.get(`${API_URL}/estadisticas/expedientes-por-estado-y-fuerza/${fuerza}`);
+      return response.data;
+    } catch (error: any) {
+      console.error(`Error al obtener expedientes por estado para la fuerza ${fuerza}:`, error);
+      // No se lanza error para que el frontend maneje el fallback
+      return [];
+    }
+  },
+
+  getExpedientesPorFuerzaYEstado: async (estado: string) => {
+    try {
+      const response = await axios.get(`${API_URL}/estadisticas/expedientes-por-fuerza-y-estado/${estado}`);
+      return response.data;
+    } catch (error: any) {
+      console.error(`Error al obtener expedientes por fuerza para el estado ${estado}:`, error);
+      // No se lanza error para que el frontend maneje el fallback
+      return [];
     }
   },
 
@@ -86,11 +143,11 @@ const estadisticaService = {
       console.error('Error al obtener expedientes por provincia:', error);
       // Datos simulados en caso de error
       return [
-        { provincia: 'Buenos Aires', cantidad: 350 },
-        { provincia: 'CABA', cantidad: 280 },
-        { provincia: 'Córdoba', cantidad: 175 },
-        { provincia: 'Santa Fe', cantidad: 145 },
-        { provincia: 'Mendoza', cantidad: 98 }
+        { name: 'Buenos Aires', value: 350 },
+        { name: 'CABA', value: 280 },
+        { name: 'Córdoba', value: 175 },
+        { name: 'Santa Fe', value: 145 },
+        { name: 'Mendoza', value: 98 }
       ];
     }
   },
@@ -103,11 +160,11 @@ const estadisticaService = {
       console.error('Error al obtener expedientes por delito:', error);
       // Datos simulados en caso de error
       return [
-        { delito: 'Robo', cantidad: 245 },
-        { delito: 'Hurto', cantidad: 189 },
-        { delito: 'Estafa', cantidad: 142 },
-        { delito: 'Lesiones', cantidad: 98 },
-        { delito: 'Amenazas', cantidad: 76 }
+        { name: 'Robo', value: 245 },
+        { name: 'Hurto', value: 189 },
+        { name: 'Estafa', value: 142 },
+        { name: 'Lesiones', value: 98 },
+        { name: 'Amenazas', value: 76 }
       ];
     }
   },
@@ -120,10 +177,10 @@ const estadisticaService = {
       console.error('Error al obtener expedientes por tipo de captura:', error);
       // Datos simulados en caso de error
       return [
-        { tipoCaptura: 'Manual', cantidad: 450 },
-        { tipoCaptura: 'Importación', cantidad: 350 },
-        { tipoCaptura: 'API', cantidad: 250 },
-        { tipoCaptura: 'Escáner', cantidad: 150 }
+        { name: 'Manual', value: 450 },
+        { name: 'Importación', value: 350 },
+        { name: 'API', value: 250 },
+        { name: 'Escáner', value: 150 }
       ];
     }
   },
@@ -136,11 +193,11 @@ const estadisticaService = {
       console.error('Error al obtener expedientes por tiempo:', error);
       // Datos simulados en caso de error
       return [
-        { periodo: '2023-Q1', cantidad: 125 },
-        { periodo: '2023-Q2', cantidad: 157 },
-        { periodo: '2023-Q3', cantidad: 189 },
-        { periodo: '2023-Q4', cantidad: 205 },
-        { periodo: '2024-Q1', cantidad: 218 }
+        { name: '2023-Q1', value: 125 },
+        { name: '2023-Q2', value: 157 },
+        { name: '2023-Q3', value: 189 },
+        { name: '2023-Q4', value: 205 },
+        { name: '2024-Q1', value: 218 }
       ];
     }
   },

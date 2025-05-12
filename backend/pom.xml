@@ -78,7 +78,7 @@
         <dependency>
             <groupId>com.oracle.database.jdbc</groupId>
             <artifactId>ojdbc8</artifactId>
-            <scope>runtime</scope>
+            <version>21.7.0.0</version>
         </dependency>
         
         <!-- H2 Database para desarrollo y pruebas -->

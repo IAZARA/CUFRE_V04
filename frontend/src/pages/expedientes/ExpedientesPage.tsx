@@ -29,6 +29,9 @@ import {
 } from '@mui/icons-material';
 import expedienteService from '../../api/expedienteService';
 import { Expediente } from '../../types/expediente.types';
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { es } from 'date-fns/locale';
 
 const ExpedientesPage: React.FC = () => {
   const [expedientes, setExpedientes] = useState<Expediente[]>([]);
@@ -41,6 +44,13 @@ const ExpedientesPage: React.FC = () => {
   const [rowsPerPage, setRowsPerPage] = useState<number>(10);
   
   const navigate = useNavigate();
+
+  const [fechaDesde, setFechaDesde] = useState<Date | null>(null);
+  const [fechaHasta, setFechaHasta] = useState<Date | null>(null);
+  const [filtroProfugo, setFiltroProfugo] = useState('');
+  const [filtroNumero, setFiltroNumero] = useState('');
+  const [filtroFuerza, setFiltroFuerza] = useState('');
+  const [filtroEstado, setFiltroEstado] = useState('');
 
   useEffect(() => {
     fetchExpedientes();
@@ -134,6 +144,31 @@ const ExpedientesPage: React.FC = () => {
     CUFRE: { src: '/images/logo-cufre-2.png', alt: 'CUFRE' },
   };
 
+  // Opciones únicas para fuerza y estado
+  const fuerzasUnicas = Array.from(new Set(expedientes.map(e => (e.fuerzaAsignada || '').toUpperCase()).filter(Boolean)));
+  const estadosUnicos = Array.from(new Set(expedientes.map(e => (e.estadoSituacion || '').toUpperCase()).filter(Boolean)));
+
+  // Filtro avanzado
+  const expedientesFiltrados = expedientes.filter(expediente => {
+    // Filtro por número de expediente
+    if (filtroNumero && !expediente.numero.toLowerCase().includes(filtroNumero.toLowerCase())) return false;
+    // Filtro por nombre de prófugo
+    if (filtroProfugo && !(Array.isArray(expediente.profugos) && expediente.profugos.join(' ').toLowerCase().includes(filtroProfugo.toLowerCase()))) return false;
+    // Filtro por fuerza
+    if (filtroFuerza && (expediente.fuerzaAsignada || '').toUpperCase() !== filtroFuerza) return false;
+    // Filtro por estado
+    if (filtroEstado && (expediente.estadoSituacion || '').toUpperCase() !== filtroEstado) return false;
+    // Filtro por fecha de inicio
+    const fechaStr = expediente.fechaIngreso || expediente.fechaInicio;
+    if ((fechaDesde || fechaHasta) && !fechaStr) return false;
+    if (fechaStr) {
+      const fecha = new Date(fechaStr);
+      if (fechaDesde && fecha < fechaDesde) return false;
+      if (fechaHasta && fecha > fechaHasta) return false;
+    }
+    return true;
+  });
+
   if (loading) {
     return (
       <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50vh' }}>
@@ -144,17 +179,80 @@ const ExpedientesPage: React.FC = () => {
 
   return (
     <Box>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
-        <Typography variant="h4">Lista de Expedientes</Typography>
+      {/* Encabezado profesional */}
+      <Paper sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', p: 2, mb: 2, bgcolor: '#002856', color: '#fff', borderRadius: 3, boxShadow: 4 }}>
+        <Box sx={{ flex: '0 0 80px', display: 'flex', alignItems: 'center' }}>
+          <img src="/images/logo-cufre-2.png" alt="Logo CUFRE" style={{ height: 56, objectFit: 'contain' }} />
+        </Box>
+        <Typography variant="h4" sx={{ flex: 1, textAlign: 'center', fontWeight: 'bold', letterSpacing: 1 }}>Lista de Expedientes</Typography>
         <Button
           variant="contained"
-          color="primary"
+          color="secondary"
           startIcon={<AddIcon />}
           onClick={handleCreate}
+          sx={{ fontWeight: 'bold', boxShadow: 2 }}
         >
           Nuevo Expediente
         </Button>
-      </Box>
+      </Paper>
+      {/* Barra de filtros */}
+      <Paper sx={{ mb: 3, p: 2, display: 'flex', flexWrap: 'wrap', gap: 2, alignItems: 'center', boxShadow: 2, borderRadius: 2 }}>
+        <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={es}>
+          <DatePicker
+            label="Fecha de inicio desde"
+            value={fechaDesde}
+            onChange={setFechaDesde}
+            slotProps={{ textField: { size: 'small', sx: { minWidth: 170 } } }}
+          />
+          <DatePicker
+            label="hasta"
+            value={fechaHasta}
+            onChange={setFechaHasta}
+            slotProps={{ textField: { size: 'small', sx: { minWidth: 170 } } }}
+          />
+        </LocalizationProvider>
+        <TextField
+          label="Nombre de prófugo"
+          size="small"
+          value={filtroProfugo}
+          onChange={e => setFiltroProfugo(e.target.value)}
+          sx={{ minWidth: 180 }}
+        />
+        <TextField
+          label="Número de expediente"
+          size="small"
+          value={filtroNumero}
+          onChange={e => setFiltroNumero(e.target.value)}
+          sx={{ minWidth: 180 }}
+        />
+        <TextField
+          label="Fuerza asignada"
+          size="small"
+          select
+          value={filtroFuerza}
+          onChange={e => setFiltroFuerza(e.target.value)}
+          SelectProps={{ displayEmpty: true }}
+          sx={{ minWidth: 160 }}
+        >
+          <option value="">Todas</option>
+          {fuerzasUnicas.map(f => <option key={f} value={f}>{f}</option>)}
+        </TextField>
+        <TextField
+          label="Estado"
+          size="small"
+          select
+          value={filtroEstado}
+          onChange={e => setFiltroEstado(e.target.value)}
+          SelectProps={{ displayEmpty: true }}
+          sx={{ minWidth: 140 }}
+        >
+          <option value="">Todos</option>
+          {estadosUnicos.map(e => <option key={e} value={e}>{e}</option>)}
+        </TextField>
+        <Button variant="outlined" color="secondary" onClick={() => {
+          setFechaDesde(null); setFechaHasta(null); setFiltroProfugo(''); setFiltroNumero(''); setFiltroFuerza(''); setFiltroEstado('');
+        }}>Limpiar filtros</Button>
+      </Paper>
 
       {error && (
         <Alert severity="error" sx={{ mb: 3 }}>
@@ -163,22 +261,6 @@ const ExpedientesPage: React.FC = () => {
       )}
 
       <Paper sx={{ mb: 3, boxShadow: 3, borderRadius: 2 }}>
-        <Box sx={{ p: 2 }}>
-          <TextField
-            fullWidth
-            variant="outlined"
-            label="Buscar expedientes"
-            value={searchTerm}
-            onChange={handleSearchChange}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <SearchIcon />
-                </InputAdornment>
-              ),
-            }}
-          />
-        </Box>
         <TableContainer>
           <Table stickyHeader>
             <TableHead>
@@ -193,14 +275,14 @@ const ExpedientesPage: React.FC = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {filteredExpedientes.length === 0 ? (
+              {expedientesFiltrados.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={7} align="center">
                     No se encontraron expedientes
                   </TableCell>
                 </TableRow>
               ) : (
-                filteredExpedientes
+                expedientesFiltrados
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((expediente, idx) => {
                     const estadoInfo = getEstadoInfo(expediente.estadoSituacion);
@@ -292,7 +374,7 @@ const ExpedientesPage: React.FC = () => {
         <TablePagination
           rowsPerPageOptions={[5, 10, 25, 50]}
           component="div"
-          count={filteredExpedientes.length}
+          count={expedientesFiltrados.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}

@@ -44,6 +44,12 @@ const Login: React.FC = () => {
     }
 
     try {
+      // Guardar credenciales para el proceso 2FA si fuera necesario
+      if (rememberMe) {
+        localStorage.setItem('last_email', username);
+        localStorage.setItem('last_password', password);
+      }
+
       const response = await login({ email: username, password });
 
       if ('action' in response) {
@@ -53,6 +59,10 @@ const Login: React.FC = () => {
         } else if (response.action === 'activar_2fa') {
           navigate('/activar-2fa');
         } else if (response.action === 'validar_2fa') {
+          // Para el flujo 2FA es importante guardar credenciales temporalmente
+          // incluso si el usuario no marcó "recordarme"
+          localStorage.setItem('last_email', username);
+          localStorage.setItem('last_password', password);
           navigate('/validar-2fa');
         } else {
           // Usar type assertion para evitar errores de TypeScript
@@ -64,6 +74,11 @@ const Login: React.FC = () => {
         }
       } else if ('token' in response) {
         // La redirección se maneja en el useEffect
+        // Limpiar credenciales temporales si no quiere recordarlas
+        if (!rememberMe) {
+          localStorage.removeItem('last_email');
+          localStorage.removeItem('last_password');
+        }
       } else {
         setError('Respuesta inesperada del servidor');
       }
@@ -82,7 +97,6 @@ const Login: React.FC = () => {
           alignItems: 'center',
         }}
       >
-        <img src="/logo-cufre-2.png" alt="CUFRE Logo" style={{ height: 64, marginBottom: 16 }} />
         <Paper elevation={3} sx={{ p: 4, width: '100%', maxWidth: 400 }}>
           <Box
             sx={{
@@ -92,14 +106,12 @@ const Login: React.FC = () => {
               mb: 3
             }}
           >
-            <Avatar sx={{ m: 1, bgcolor: 'primary.main' }}>
-              <LockOutlinedIcon />
-            </Avatar>
+            <img src="/logo-cufre-2.png" alt="CUFRE Logo" style={{ height: 64, marginBottom: 8, marginTop: 8 }} />
             <Typography component="h1" variant="h5">
               Iniciar Sesión
             </Typography>
             <Typography variant="body2" color="textSecondary" align="center" sx={{ mt: 1 }}>
-              Sistema de Gestión de Expedientes
+              Comando Unificado Federal de Recaptura de Evadidos
             </Typography>
           </Box>
 
@@ -157,11 +169,6 @@ const Login: React.FC = () => {
             >
               {loading ? <CircularProgress size={24} /> : 'Ingresar'}
             </Button>
-            <Box sx={{ mt: 1, textAlign: 'center' }}>
-              <Link href="#" variant="body2">
-                ¿Olvidó su contraseña?
-              </Link>
-            </Box>
           </Box>
         </Paper>
         <Typography variant="body2" color="text.secondary" align="center" sx={{ mt: 2 }}>

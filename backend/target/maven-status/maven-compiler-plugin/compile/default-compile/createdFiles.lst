@@ -44,6 +44,7 @@ com/cufre/expedientes/dto/AuthResponseDTO.class
 com/cufre/expedientes/mapper/ExpedienteDelitoMapper.class
 com/cufre/expedientes/model/Domicilio.class
 com/cufre/expedientes/mapper/UsuarioMapper.class
+com/cufre/expedientes/service/ActividadSistemaService.class
 com/cufre/expedientes/service/ArchivoService.class
 com/cufre/expedientes/mapper/PersonaExpedienteMapper.class
 com/cufre/expedientes/mapper/UsuarioMapperImpl.class
@@ -121,11 +122,14 @@ com/cufre/expedientes/model/Usuario.class
 com/cufre/expedientes/config/CorsConfig.class
 com/cufre/expedientes/dto/MedioComunicacionDTO.class
 com/cufre/expedientes/dto/UsuarioDTO.class
+com/cufre/expedientes/controller/ActividadSistemaController.class
 com/cufre/expedientes/security/JwtAuthenticationFilter.class
 com/cufre/expedientes/mapper/FotografiaMapper.class
+com/cufre/expedientes/repository/ActividadSistemaRepository.class
 com/cufre/expedientes/service/ExpedienteDelitoService.class
 com/cufre/expedientes/dto/ChangePasswordDTO.class
 com/cufre/expedientes/controller/PersonaExpedienteController.class
 com/cufre/expedientes/controller/DelitoController.class
+com/cufre/expedientes/model/ActividadSistema.class
 com/cufre/expedientes/security/JwtAuthorizationFilter.class
 com/cufre/expedientes/dto/ExpedienteDTO$ExpedienteDTOBuilder.class

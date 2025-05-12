@@ -60,13 +60,61 @@ public class EstadisticaService {
     public Map<String, Long> countByTipoCaptura() {
         List<Object[]> results = expedienteRepository.countByTipoCaptura();
         Map<String, Long> estadisticas = new HashMap<>();
-        
+
         for (Object[] result : results) {
             String tipoCaptura = (String) result[0];
             Long count = (Long) result[1];
             estadisticas.put(tipoCaptura != null ? tipoCaptura : "Sin datos", count);
         }
-        
+
+        return estadisticas;
+    }
+
+    /**
+     * Obtiene la cantidad de expedientes por fuerza asignada
+     */
+    public Map<String, Long> countByFuerzaAsignada() {
+        List<Object[]> results = expedienteRepository.countByFuerzaAsignada();
+        Map<String, Long> estadisticas = new HashMap<>();
+
+        for (Object[] result : results) {
+            String fuerza = (String) result[0];
+            Long count = (Long) result[1];
+            estadisticas.put(fuerza != null ? fuerza : "Sin datos", count);
+        }
+
+        return estadisticas;
+    }
+
+    /**
+     * Obtiene la cantidad de expedientes por estado para una fuerza específica
+     */
+    public Map<String, Long> countByEstadoSituacionAndFuerza(String fuerza) {
+        List<Object[]> results = expedienteRepository.countByEstadoSituacionAndFuerza(fuerza);
+        Map<String, Long> estadisticas = new HashMap<>();
+
+        for (Object[] result : results) {
+            String estado = (String) result[0];
+            Long count = (Long) result[1];
+            estadisticas.put(estado != null ? estado : "Sin datos", count);
+        }
+
+        return estadisticas;
+    }
+
+    /**
+     * Obtiene la cantidad de expedientes por fuerza para un estado específico
+     */
+    public Map<String, Long> countByFuerzaAsignadaAndEstado(String estado) {
+        List<Object[]> results = expedienteRepository.countByFuerzaAsignadaAndEstado(estado);
+        Map<String, Long> estadisticas = new HashMap<>();
+
+        for (Object[] result : results) {
+            String fuerza = (String) result[0];
+            Long count = (Long) result[1];
+            estadisticas.put(fuerza != null ? fuerza : "Sin datos", count);
+        }
+
         return estadisticas;
     }
     

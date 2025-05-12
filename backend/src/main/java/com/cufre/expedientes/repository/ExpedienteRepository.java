@@ -42,9 +42,18 @@ public interface ExpedienteRepository extends JpaRepository<Expediente, Long> {
 
     @Query("SELECT e.estadoSituacion, COUNT(e) FROM Expediente e GROUP BY e.estadoSituacion ORDER BY COUNT(e) DESC")
     List<Object[]> countByEstadoSituacion();
-    
+
     @Query("SELECT e.tipoCaptura, COUNT(e) FROM Expediente e GROUP BY e.tipoCaptura ORDER BY COUNT(e) DESC")
     List<Object[]> countByTipoCaptura();
+
+    @Query("SELECT e.fuerzaAsignada, COUNT(e) FROM Expediente e GROUP BY e.fuerzaAsignada ORDER BY COUNT(e) DESC")
+    List<Object[]> countByFuerzaAsignada();
+
+    @Query("SELECT e.estadoSituacion, COUNT(e) FROM Expediente e WHERE e.fuerzaAsignada = :fuerza GROUP BY e.estadoSituacion ORDER BY COUNT(e) DESC")
+    List<Object[]> countByEstadoSituacionAndFuerza(@Param("fuerza") String fuerza);
+
+    @Query("SELECT e.fuerzaAsignada, COUNT(e) FROM Expediente e WHERE e.estadoSituacion = :estado GROUP BY e.fuerzaAsignada ORDER BY COUNT(e) DESC")
+    List<Object[]> countByFuerzaAsignadaAndEstado(@Param("estado") String estado);
     
     @Query("SELECT FUNCTION('YEAR', e.fechaIngreso) as anio, COUNT(e) FROM Expediente e GROUP BY anio ORDER BY anio")
     List<Object[]> countByAnio();

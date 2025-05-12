@@ -143,12 +143,48 @@ public class AuthController {
 
         try {
             String code = body.get("code");
+            log.info("Validando código 2FA para usuario: {}", principal.getName());
+
+            if (code == null || code.trim().isEmpty()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", "El código no puede estar vacío"));
+            }
+
+            // Eliminar espacios en blanco y verificar longitud
+            code = code.trim();
+            if (code.length() != 6) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", "El código debe tener 6 dígitos"));
+            }
+
+            // Verificar que el código solo contiene dígitos
+            if (!code.matches("\\d+")) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", "El código debe contener solo dígitos"));
+            }
+
             Usuario usuario = usuarioService.findByEmailEntity(principal.getName());
+
+            if (usuario.getSecret2FA() == null || usuario.getSecret2FA().trim().isEmpty()) {
+                log.error("El usuario {} no tiene secret2FA configurado", principal.getName());
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("error", "Error de configuración", "mensaje", "El 2FA no está correctamente configurado"));
+            }
+
             GoogleAuthenticator gAuth = new GoogleAuthenticator();
-            boolean isCodeValid = gAuth.authorize(usuario.getSecret2FA(), Integer.parseInt(code));
+            int codeInt;
+            try {
+                codeInt = Integer.parseInt(code);
+            } catch (NumberFormatException e) {
+                log.error("Error al convertir código a entero: {}", code);
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("error", "Formato de código incorrecto", "mensaje", "El código debe contener solo dígitos"));
+            }
+
+            boolean isCodeValid = gAuth.authorize(usuario.getSecret2FA(), codeInt);
+            log.info("Resultado de validación para {}: {}", principal.getName(), isCodeValid);
+
             if (!isCodeValid) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", "Código incorrecto"));
             }
+
             String jwt = authService.getTokenForUsuario(usuario);
             return ResponseEntity.ok(Map.of("token", jwt));
         } catch (Exception e) {

@@ -15,6 +15,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Hibernate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,6 +39,7 @@ public class ExpedienteService extends AbstractBaseService<Expediente, Expedient
     private final DomicilioService domicilioService;
     private final PersonaExpedienteRepository personaExpedienteRepository;
     private final PersonaExpedienteMapper personaExpedienteMapper;
+    private final ActividadSistemaService actividadSistemaService;
 
     public ExpedienteService(
             ExpedienteRepository repository, 
@@ -46,7 +49,8 @@ public class ExpedienteService extends AbstractBaseService<Expediente, Expedient
             PersonaMapper personaMapper,
             DomicilioService domicilioService,
             PersonaExpedienteRepository personaExpedienteRepository,
-            PersonaExpedienteMapper personaExpedienteMapper) {
+            PersonaExpedienteMapper personaExpedienteMapper,
+            ActividadSistemaService actividadSistemaService) {
         super(repository, mapper);
         this.delitoService = delitoService;
         this.expedienteDelitoService = expedienteDelitoService;
@@ -54,6 +58,7 @@ public class ExpedienteService extends AbstractBaseService<Expediente, Expedient
         this.domicilioService = domicilioService;
         this.personaExpedienteRepository = personaExpedienteRepository;
         this.personaExpedienteMapper = personaExpedienteMapper;
+        this.actividadSistemaService = actividadSistemaService;
     }
 
     @Override
@@ -180,7 +185,11 @@ public class ExpedienteService extends AbstractBaseService<Expediente, Expedient
         // Calcular prioridad antes de guardar
         entity.setPrioridad(PriorityCalculator.calcularPrioridad(entity));
         entity = repository.save(entity);
-        return toDto(entity);
+        ExpedienteDTO result = toDto(entity);
+        // Registrar actividad de creación de expediente
+        String usuario = obtenerUsuarioActual();
+        actividadSistemaService.registrarActividad(usuario, "CREAR_EXPEDIENTE", "Expediente creado: " + result.getNumero());
+        return result;
     }
 
     /**
@@ -201,14 +210,13 @@ public class ExpedienteService extends AbstractBaseService<Expediente, Expedient
         } catch (Exception e) {
             log.warn("Error al inicializar colecciones del expediente: {}", e.getMessage());
         }
-        // Actualizar campos simples
         Expediente updatedEntity = updateEntity(dto, existingEntity);
-        // Calcular prioridad antes de guardar
-        updatedEntity.setPrioridad(PriorityCalculator.calcularPrioridad(updatedEntity));
-        // No sobrescribimos las colecciones porque las relaciones se gestionan 
-        // con endpoints específicos, manteniendo así las relaciones existentes
         updatedEntity = repository.save(updatedEntity);
-        return toDto(updatedEntity);
+        ExpedienteDTO result = toDto(updatedEntity);
+        // Registrar actividad de edición de expediente
+        String usuario = obtenerUsuarioActual();
+        actividadSistemaService.registrarActividad(usuario, "EDITAR_EXPEDIENTE", "Expediente editado: " + result.getNumero());
+        return result;
     }
 
     /**
@@ -449,5 +457,22 @@ public class ExpedienteService extends AbstractBaseService<Expediente, Expedient
         }
         // Mapear a DTO
         return resultado.stream().map(this::toDto).collect(Collectors.toList());
+    }
+
+    /**
+     * Obtiene el email del usuario autenticado actual
+     */
+    private String obtenerUsuarioActual() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated()) {
+            return authentication.getName();
+        }
+        return "desconocido";
+    }
+
+    @Override
+    @Transactional
+    public ExpedienteDTO save(ExpedienteDTO dto) {
+        return this.create(dto);
     }
 } 

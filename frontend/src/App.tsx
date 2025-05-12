@@ -56,6 +56,12 @@ function App() {
         <ModalProvider>
           <ThemeProvider theme={theme}>
             <CssBaseline />
+            {/* Ocultar elementos no imprimibles en PDF/impresión */}
+            <style>{`
+              @media print {
+                .no-print { display: none !important; }
+              }
+            `}</style>
             <AppRoutes />
           </ThemeProvider>
         </ModalProvider>

@@ -1,3 +1,4 @@
+/Users/macbook/Documents/CUFRE_V04/backend/src/main/java/com/cufre/expedientes/model/ActividadSistema.java
 /Users/macbook/Documents/CUFRE_V04/backend/src/main/java/com/cufre/expedientes/controller/UsuarioController.java
 /Users/macbook/Documents/CUFRE_V04/backend/src/main/java/com/cufre/expedientes/service/UsuarioService.java
 /Users/macbook/Documents/CUFRE_V04/backend/src/main/java/com/cufre/expedientes/controller/DomicilioController.java
@@ -32,6 +33,7 @@
 /Users/macbook/Documents/CUFRE_V04/backend/src/main/java/com/cufre/expedientes/dto/DocumentoDTO.java
 /Users/macbook/Documents/CUFRE_V04/backend/src/main/java/com/cufre/expedientes/controller/FotografiaController.java
 /Users/macbook/Documents/CUFRE_V04/backend/src/main/java/com/cufre/expedientes/mapper/DocumentoMapper.java
+/Users/macbook/Documents/CUFRE_V04/backend/src/main/java/com/cufre/expedientes/controller/ActividadSistemaController.java
 /Users/macbook/Documents/CUFRE_V04/backend/src/main/java/com/cufre/expedientes/dto/ChangePasswordDTO.java
 /Users/macbook/Documents/CUFRE_V04/backend/src/main/java/com/cufre/expedientes/mapper/FotografiaMapper.java
 /Users/macbook/Documents/CUFRE_V04/backend/src/main/java/com/cufre/expedientes/model/MedioComunicacion.java
@@ -73,6 +75,7 @@
 /Users/macbook/Documents/CUFRE_V04/backend/src/main/java/com/cufre/expedientes/service/MedioComunicacionService.java
 /Users/macbook/Documents/CUFRE_V04/backend/src/main/java/com/cufre/expedientes/controller/ExpedienteDelitoController.java
 /Users/macbook/Documents/CUFRE_V04/backend/src/main/java/com/cufre/expedientes/config/DatabaseHealthIndicator.java
+/Users/macbook/Documents/CUFRE_V04/backend/src/main/java/com/cufre/expedientes/repository/ActividadSistemaRepository.java
 /Users/macbook/Documents/CUFRE_V04/backend/src/main/java/com/cufre/expedientes/dto/CambioPasswordDTO.java
 /Users/macbook/Documents/CUFRE_V04/backend/src/main/java/com/cufre/expedientes/mapper/ExpedienteMapper.java
 /Users/macbook/Documents/CUFRE_V04/backend/src/main/java/com/cufre/expedientes/service/BaseService.java
@@ -87,6 +90,7 @@
 /Users/macbook/Documents/CUFRE_V04/backend/src/main/java/com/cufre/expedientes/service/ExpedienteService.java
 /Users/macbook/Documents/CUFRE_V04/backend/src/main/java/com/cufre/expedientes/dto/ExpedienteDTO.java
 /Users/macbook/Documents/CUFRE_V04/backend/src/main/java/com/cufre/expedientes/config/CorsConfig.java
+/Users/macbook/Documents/CUFRE_V04/backend/src/main/java/com/cufre/expedientes/service/ActividadSistemaService.java
 /Users/macbook/Documents/CUFRE_V04/backend/src/main/java/com/cufre/expedientes/model/Usuario.java
 /Users/macbook/Documents/CUFRE_V04/backend/src/main/java/com/cufre/expedientes/dto/MedioComunicacionDTO.java
 /Users/macbook/Documents/CUFRE_V04/backend/src/main/java/com/cufre/expedientes/service/DelitoService.java

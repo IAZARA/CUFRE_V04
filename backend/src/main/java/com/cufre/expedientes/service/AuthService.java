@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import com.cufre.expedientes.model.Usuario;
+import com.cufre.expedientes.service.ActividadSistemaService;
 
 /**
  * Servicio para gestionar la autenticación y registro de usuarios.
@@ -34,6 +35,7 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider tokenProvider;
     private final UsuarioService usuarioService;
+    private final ActividadSistemaService actividadSistemaService;
     
     /**
      * Autentica a un usuario con sus credenciales
@@ -74,10 +76,16 @@ public class AuthService {
             if (usuario.getSecret2FA() != null && !usuario.getSecret2FA().isEmpty()) {
                 // Ya tiene configurado 2FA, entonces debe validar siempre
                 Map<String, Object> response = new HashMap<>();
+
+                // Generamos un token temporal específico para validación 2FA
+                String tempToken = generateTemp2FAToken(usuario.getEmail());
+                log.info("Generando token temporal para validación 2FA de: {}", usuario.getEmail());
+
                 response.put("action", "validar_2fa");
                 response.put("message", "Debe validar su código de autenticación 2FA para continuar.");
                 response.put("email", usuario.getEmail());
-                response.put("temp_token", generateTemp2FAToken(usuario.getEmail()));
+                response.put("temp_token", tempToken);
+
                 return response;
             } else if (usuario.isRequiere2FA()) {
                 // No tiene configurado 2FA, pero se requiere, entonces debe activarlo
@@ -100,6 +108,8 @@ public class AuthService {
             response.put("token", jwt);
             
             log.info("Usuario autenticado exitosamente: {}", usuario.getEmail());
+            // Registrar actividad de login exitoso
+            actividadSistemaService.registrarActividad(usuario.getEmail(), "LOGIN", "Inicio de sesión exitoso");
             return response;
             
         } catch (AuthenticationException e) {
@@ -146,16 +156,21 @@ public class AuthService {
 
     /**
      * Genera un token para 2FA basado en el email del usuario.
-     * Este es un token de uso específico para el flujo de activación de 2FA.
+     * Este es un token de uso específico para el flujo de activación y validación de 2FA.
      *
      * @param email Email del usuario
-     * @return Token JWT
+     * @return Token JWT temporal para flujo 2FA
      */
     public String generateTemp2FAToken(String email) {
+        log.debug("Generando token temporal 2FA para: {}", email);
         Optional<UsuarioDTO> usuarioOpt = usuarioService.findByEmail(email);
         if (usuarioOpt.isPresent()) {
-            return tokenProvider.generateToken(usuarioOpt.get());
+            UsuarioDTO usuario = usuarioOpt.get();
+            String token = tokenProvider.generateToken(usuario);
+            log.debug("Token 2FA generado exitosamente para: {}", email);
+            return token;
         }
+        log.error("No se pudo generar token 2FA. Usuario no encontrado: {}", email);
         throw new ResourceNotFoundException("Usuario no encontrado con email: " + email);
     }
 } 

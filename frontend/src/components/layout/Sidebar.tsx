@@ -33,6 +33,9 @@ import ExitToAppRoundedIcon from '@mui/icons-material/ExitToAppRounded';
 import PlaceRoundedIcon from '@mui/icons-material/PlaceRounded';
 import SearchIcon from '@mui/icons-material/Search';
 import SchoolIcon from '@mui/icons-material/School';
+import TimelineIcon from '@mui/icons-material/Timeline';
+import GavelIcon from '@mui/icons-material/Gavel';
+import HelpOutlineRoundedIcon from '@mui/icons-material/HelpOutlineRounded';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { Rol } from '../../types/usuario.types';
@@ -84,6 +87,7 @@ const Sidebar: React.FC<SidebarProps> = ({ open, handleDrawerClose }) => {
 
   return (
     <Drawer
+      className="no-print"
       sx={{
         width: drawerWidth,
         flexShrink: 0,
@@ -310,6 +314,36 @@ const Sidebar: React.FC<SidebarProps> = ({ open, handleDrawerClose }) => {
               </ListItemIcon>
               <ListItemText primary="Mapa" primaryTypographyProps={{ fontSize: 15 }} />
             </ListItemButton>
+            <ListItemButton
+              sx={{ pl: 5, borderRadius: 2, mb: 1 }}
+              selected={location.pathname === '/estadisticas/detenidos-por-fuerza'}
+              onClick={() => handleNavigation('/estadisticas/detenidos-por-fuerza')}
+            >
+              <ListItemIcon sx={{ color: '#fff', minWidth: 0, mr: 2 }}>
+                <BarChartRoundedIcon fontSize="small" />
+              </ListItemIcon>
+              <ListItemText primary="Detenidos por Fuerza" primaryTypographyProps={{ fontWeight: 500, color: '#fff' }} />
+            </ListItemButton>
+            <ListItemButton
+              sx={{ pl: 5, borderRadius: 2, mb: 1 }}
+              selected={location.pathname === '/estadisticas/evolucion-expedientes'}
+              onClick={() => handleNavigation('/estadisticas/evolucion-expedientes')}
+            >
+              <ListItemIcon sx={{ color: '#fff', minWidth: 0, mr: 2 }}>
+                <TimelineIcon fontSize="small" />
+              </ListItemIcon>
+              <ListItemText primary="Evolución de Expedientes" primaryTypographyProps={{ fontWeight: 500, color: '#fff' }} />
+            </ListItemButton>
+            <ListItemButton
+              sx={{ pl: 5, borderRadius: 2, mb: 1 }}
+              selected={location.pathname === '/estadisticas/ranking-delitos'}
+              onClick={() => handleNavigation('/estadisticas/ranking-delitos')}
+            >
+              <ListItemIcon sx={{ color: '#fff', minWidth: 0, mr: 2 }}>
+                <GavelIcon fontSize="small" />
+              </ListItemIcon>
+              <ListItemText primary="Ranking de Delitos" primaryTypographyProps={{ fontWeight: 500, color: '#fff' }} />
+            </ListItemButton>
           </List>
         </Collapse>
 
@@ -351,6 +385,56 @@ const Sidebar: React.FC<SidebarProps> = ({ open, handleDrawerClose }) => {
               <SchoolIcon fontSize="medium" />
             </ListItemIcon>
             <ListItemText primary="Tutoriales" primaryTypographyProps={{ fontWeight: 500, color: '#fff' }} />
+          </ListItemButton>
+        </ListItem>
+
+        {/* Soporte */}
+        <ListItem disablePadding>
+          <ListItemButton
+            selected={location.pathname === '/soporte'}
+            onClick={() => handleNavigation('/soporte')}
+            sx={{
+              borderRadius: 2,
+              mb: 1,
+              px: 2,
+              py: 1.5,
+              color: '#fff',
+              backgroundColor: location.pathname === '/soporte' ? 'rgba(255,255,255,0.08)' : 'transparent',
+              '&:hover': {
+                backgroundColor: 'rgba(255,255,255,0.15)',
+                color: '#fff'
+              }
+            }}
+          >
+            <ListItemIcon sx={{ color: '#fff', minWidth: 0, mr: 2 }}>
+              <HelpOutlineRoundedIcon fontSize="medium" />
+            </ListItemIcon>
+            <ListItemText primary="Soporte" primaryTypographyProps={{ fontWeight: 500, color: '#fff' }} />
+          </ListItemButton>
+        </ListItem>
+
+        {/* Actividad del Sistema (al final) */}
+        <ListItem disablePadding>
+          <ListItemButton
+            selected={location.pathname === '/actividad-sistema'}
+            onClick={() => handleNavigation('/actividad-sistema')}
+            sx={{
+              borderRadius: 2,
+              mb: 1,
+              px: 2,
+              py: 1.5,
+              color: '#fff',
+              backgroundColor: location.pathname === '/actividad-sistema' ? 'rgba(255,255,255,0.08)' : 'transparent',
+              '&:hover': {
+                backgroundColor: 'rgba(255,255,255,0.15)',
+                color: '#fff'
+              }
+            }}
+          >
+            <ListItemIcon sx={{ color: '#fff', minWidth: 0, mr: 2 }}>
+              <BarChartRoundedIcon fontSize="medium" />
+            </ListItemIcon>
+            <ListItemText primary="Actividad del Sistema" primaryTypographyProps={{ fontWeight: 500, color: '#fff' }} />
           </ListItemButton>
         </ListItem>
       </List>

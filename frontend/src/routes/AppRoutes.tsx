@@ -30,6 +30,9 @@ import DelitoFormPage from '../pages/delitos/DelitoFormPage';
 // Páginas de Estadísticas
 import EstadisticasPage from '../pages/estadisticas/EstadisticasPage';
 import MapaGeneralPage from '../pages/estadisticas/MapaGeneralPage';
+import DetenidosPorFuerzaPage from '../pages/estadisticas/DetenidosPorFuerzaPage';
+import EvolucionExpedientesPage from '../pages/estadisticas/EvolucionExpedientesPage';
+import RankingDelitosPage from '../pages/estadisticas/RankingDelitosPage';
 
 // Páginas de Usuarios
 import UsuariosPage from '../pages/usuarios/UsuariosPage';
@@ -44,6 +47,12 @@ import TutorialCreacionExpediente from '../pages/TutorialCreacionExpediente';
 import TutorialCalculoPrioridad from '../pages/TutorialCalculoPrioridad';
 import TutorialCreacionDelito from '../pages/TutorialCreacionDelito';
 import TutorialUsoSistema from '../pages/TutorialUsoSistema';
+
+// Nueva página ActividadSistemaPage
+import ActividadSistemaPage from '../pages/ActividadSistemaPage';
+
+// Página de Soporte
+import SoportePage from '../pages/SoportePage';
 
 // Wrapper para MainLayout que oculta el footer si el modal de Más Buscados está abierto
 type MasBuscadosContext = { modalOpen?: boolean };
@@ -89,6 +98,9 @@ const AppRoutes: React.FC = () => {
           {/* Rutas de Estadísticas */}
           <Route path="/estadisticas" element={<EstadisticasPage />} />
           <Route path="/estadisticas/mapa" element={<MapaGeneralPage />} />
+          <Route path="/estadisticas/detenidos-por-fuerza" element={<DetenidosPorFuerzaPage />} />
+          <Route path="/estadisticas/evolucion-expedientes" element={<EvolucionExpedientesPage />} />
+          <Route path="/estadisticas/ranking-delitos" element={<RankingDelitosPage />} />
           
           {/* Rutas solo para administradores */}
           <Route element={<ProtectedRoute requiredRoles={[Rol.ADMINISTRADOR, Rol.SUPERUSUARIO]} />}>
@@ -103,6 +115,12 @@ const AppRoutes: React.FC = () => {
           <Route path="/tutoriales/calculo-prioridad" element={<TutorialCalculoPrioridad />} />
           <Route path="/tutoriales/creacion-delito" element={<TutorialCreacionDelito />} />
           <Route path="/tutoriales/uso-sistema" element={<TutorialUsoSistema />} />
+
+          {/* Página de Actividad del Sistema */}
+          <Route path="/actividad-sistema" element={<ActividadSistemaPage />} />
+
+          {/* Página de Soporte */}
+          <Route path="/soporte" element={<SoportePage />} />
         </Route>
       </Route>
       

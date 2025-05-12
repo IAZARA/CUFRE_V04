@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 import jakarta.mail.MessagingException;
+import com.cufre.expedientes.service.ActividadSistemaService;
 
 /**
  * Servicio para la gestión de usuarios
@@ -24,11 +25,13 @@ public class UsuarioService extends AbstractBaseService<Usuario, UsuarioDTO, Lon
 
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
+    private final ActividadSistemaService actividadSistemaService;
 
-    public UsuarioService(UsuarioRepository repository, UsuarioMapper mapper, PasswordEncoder passwordEncoder, EmailService emailService) {
+    public UsuarioService(UsuarioRepository repository, UsuarioMapper mapper, PasswordEncoder passwordEncoder, EmailService emailService, ActividadSistemaService actividadSistemaService) {
         super(repository, mapper);
         this.passwordEncoder = passwordEncoder;
         this.emailService = emailService;
+        this.actividadSistemaService = actividadSistemaService;
     }
 
     @Override
@@ -63,6 +66,8 @@ public class UsuarioService extends AbstractBaseService<Usuario, UsuarioDTO, Lon
         usuario.setContrasena(passwordEncoder.encode(password));
         usuario = repository.save(usuario);
         log.info("Usuario creado: {}", usuario.getNombre());
+        // Registrar actividad de creación de usuario
+        actividadSistemaService.registrarActividad(usuario.getEmail(), "CREAR_USUARIO", "Usuario creado: " + usuario.getNombre());
         // Enviar email de bienvenida
         try {
             emailService.enviarBienvenida(usuario.getNombre(), usuario.getApellido(), usuario.getEmail());

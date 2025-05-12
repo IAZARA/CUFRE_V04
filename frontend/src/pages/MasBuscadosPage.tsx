@@ -4,6 +4,8 @@ import { Expediente } from '../types/expediente.types';
 import ModalWanted from '../components/expedientes/ModalWanted';
 import { useOutletContext } from 'react-router-dom';
 import { useModalContext } from '../context/ModalContext';
+import '../styles/MasBuscadosPage.css';
+const logoFallback = '/images/logo-cufre-2.png';
 
 // Tipos de expediente (ajusta según tu backend)
 // type Expediente = { ... } // Ya importado
@@ -45,6 +47,13 @@ const getColorByIndex = (index: number) => {
   return '#fafafa'; // default
 };
 
+const getPriorityClass = (priority: number, prefix: string = 'bg') => {
+  if (priority === 1) return `${prefix}-danger`;
+  if (priority <= 3) return `${prefix}-orange`;
+  if (priority <= 10) return `${prefix}-warning`;
+  return `${prefix}-navy`;
+};
+
 const MasBuscadosPage: React.FC = () => {
   const [expedientes, setExpedientes] = useState<Expediente[]>([]);
   const [loading, setLoading] = useState(false);
@@ -81,60 +90,78 @@ const MasBuscadosPage: React.FC = () => {
     setMasBuscadosModalOpen(true);
   };
 
-  // Renderizado de expedientes
-  const renderExpediente = (exp: Expediente, index: number) => {
-    const fotoPrincipal = exp.fotografias?.find(f => f.id === exp.fotoPrincipalId);
-    const color = getColorByIndex(index);
-    return (
-      <div
-        key={exp.id}
-        className="expediente-card"
-        style={{
-          border: '1px solid #ddd',
-          borderRadius: 18,
-          padding: 18,
-          margin: 16,
-          width: 220,
-          minHeight: 260,
-          background: color,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          position: 'relative',
-          boxShadow: color !== '#fafafa' ? `0 0 12px 2px ${color}55` : undefined,
-          cursor: 'pointer'
-        }}
-        onClick={() => handleCardClick(exp)}
-      >
-        <div style={{
-          position: 'absolute', top: 12, left: 12, fontWeight: 'bold', fontSize: 22, color: '#fff', letterSpacing: 1,
-          textShadow: '0 2px 8px #0008', background: '#0007', borderRadius: 8, padding: '2px 12px', minWidth: 32, textAlign: 'left', zIndex: 2
-        }}>{index + 1}</div>
-        <img
-          src={getFotoUrl(fotoPrincipal) || '/img/default.jpg'}
-          alt="Foto"
-          style={{ width: 120, height: 120, objectFit: 'cover', borderRadius: 12, margin: '32px 0 12px 0', boxShadow: '0 2px 8px #0002' }}
-        />
-        <h3 style={{
-          margin: 0,
-          fontSize: 18,
-          fontWeight: 700,
-          textTransform: 'uppercase',
-          color: '#111',
-          textAlign: 'center',
-          letterSpacing: 0.5,
-          whiteSpace: 'normal',
-          wordBreak: 'break-word',
-          maxHeight: 48,
-          overflow: 'hidden',
-          display: 'block',
-          lineHeight: 1.2
-        }}>
-          {(exp.personaExpedientes?.[0]?.persona?.nombre + ' ' + exp.personaExpedientes?.[0]?.persona?.apellido).toUpperCase()}
-        </h3>
-      </div>
-    );
-  };
+  // --- NUEVA VISTA DE TARJETAS ---
+  const TarjetasView = ({ expedientes }: { expedientes: Expediente[] }) => (
+    <div className="row g-4">
+      {expedientes.map((exp, index) => {
+        const fotoPrincipal = exp.fotografias?.find(f => f.id === exp.fotoPrincipalId);
+        const nombreCompleto = ((exp.personaExpedientes?.[0]?.persona?.nombre || '') + ' ' + (exp.personaExpedientes?.[0]?.persona?.apellido || '')).trim().toUpperCase() || 'PRÓFUGO NO ESPECIFICADO';
+        const priority = index + 1;
+        const headerClass = getPriorityClass(priority, 'bg');
+        return (
+          <div className="col-12 col-sm-6 col-md-4 col-lg-3" key={exp.id}>
+            <div
+              className={`tarjeta-mas-buscado h-100 shadow-sm`}
+              onClick={() => handleCardClick(exp)}
+              style={{ cursor: 'pointer' }}
+            >
+              <div className={`card-header ${headerClass} text-white d-flex justify-content-between align-items-center`}>
+                <span>#{priority}</span>
+              </div>
+              <img
+                src={getFotoUrl(fotoPrincipal) || logoFallback}
+                alt={`Foto de ${nombreCompleto}`}
+                className="tarjeta-imagen-mas-buscado"
+                onError={(e) => { (e.target as HTMLImageElement).src = logoFallback; }}
+              />
+              <div className="card-body d-flex flex-column">
+                <h3 className="mb-1 wanted-name">{nombreCompleto}</h3>
+                <div className="text-muted small mb-3">Número Legajo: {exp.numero || 'N/A'}</div>
+              </div>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+
+  // --- NUEVA VISTA DE LISTA ---
+  const ListView = ({ expedientes }: { expedientes: Expediente[] }) => (
+    <div>
+      {expedientes.map((exp, idx) => {
+        const fotoPrincipal = exp.fotografias?.find(f => f.id === exp.fotoPrincipalId);
+        const nombreCompleto = ((exp.personaExpedientes?.[0]?.persona?.nombre || '') + ' ' + (exp.personaExpedientes?.[0]?.persona?.apellido || '')).trim().toUpperCase() || 'PRÓFUGO NO ESPECIFICADO';
+        const priority = idx + 1;
+        const itemClass = getPriorityClass(priority, 'bg');
+        return (
+          <div
+            key={exp.id}
+            className={`d-flex justify-content-between align-items-center ${itemClass} mb-2 border rounded p-3 text-white`}
+            style={{ cursor: 'pointer' }}
+            onClick={() => handleCardClick(exp)}
+          >
+            <div className="d-flex align-items-center">
+              <img
+                src={getFotoUrl(fotoPrincipal) || logoFallback}
+                alt={`Foto de ${nombreCompleto}`}
+                className="imagen-perfil-lista me-3 shadow-sm"
+                style={{ width: 60, height: 60, objectFit: 'cover', borderRadius: '50%' }}
+                onError={(e) => { (e.target as HTMLImageElement).src = logoFallback; }}
+              />
+              <div>
+                <h5 className="mb-1">
+                  <span className="badge bg-light text-dark me-2">#{priority}</span>
+                  <span className="text-white text-decoration-none">{nombreCompleto}</span>
+                </h5>
+                <small className="text-white-50">Número Legajo: {exp.numero || 'N/A'}</small>
+              </div>
+            </div>
+            <button className="btn btn-outline-secondary btn-sm">Ver</button>
+          </div>
+        );
+      })}
+    </div>
+  );
 
   return (
     <div style={{ maxWidth: 1100, margin: '0 auto', padding: 24 }}>
@@ -157,46 +184,10 @@ const MasBuscadosPage: React.FC = () => {
       {!loading && !error && expedientes.length === 0 && <div style={{ margin: 20 }}>No hay expedientes para mostrar.</div>}
 
       {!loading && !error && expedientes.length > 0 && (
-        <div style={viewType === 'grid' ? { display: 'flex', flexWrap: 'wrap', gap: 16 } : {}}>
+        <div>
           {viewType === 'grid'
-            ? expedientes.map((exp, idx) => renderExpediente(exp, idx))
-            : (
-              <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-                <thead>
-                  <tr style={{ background: '#f5f5f5' }}>
-                    <th style={{ textAlign: 'right' }}>Foto</th>
-                    <th style={{ textAlign: 'center' }}>Nombre</th>
-                    <th style={{ textAlign: 'center' }}>Prioridad</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {expedientes.map((exp, idx) => {
-                    const color = getColorByIndex(idx);
-                    // Obtener imputado principal
-                    const imputado = exp.personaExpedientes?.find(p => (p.tipoRelacion || '').toLowerCase() === 'imputado');
-                    const nombreImputado = imputado && imputado.persona ?
-                      `${imputado.persona.nombre || ''} ${imputado.persona.apellido || ''}`.trim().toUpperCase() :
-                      '-';
-                    return (
-                      <tr key={exp.id} style={{ borderBottom: '1px solid #eee', background: color }}>
-                        <td style={{ textAlign: 'right', verticalAlign: 'middle' }}>
-                          <img
-                            src={getFotoUrl(exp.fotografias?.find(f => f.id === exp.fotoPrincipalId)) || '/img/default.jpg'}
-                            alt="Foto"
-                            style={{ width: 70, height: 70, objectFit: 'cover', borderRadius: 12, display: 'inline-block' }}
-                          />
-                        </td>
-                        <td style={{ textTransform: 'uppercase', fontWeight: 600, fontSize: 20, textAlign: 'center', verticalAlign: 'middle' }}>{nombreImputado}</td>
-                        <td style={{ textAlign: 'center', verticalAlign: 'middle' }}>
-                          <span style={{ background: '#1976d2', color: '#fff', borderRadius: 12, padding: '2px 14px', fontWeight: 'bold', fontSize: 18, display: 'inline-block' }}>{exp.prioridad}</span>
-                          <div style={{ color: '#444', fontSize: 14, marginTop: 2 }}>({idx + 1})</div>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            )}
+            ? <TarjetasView expedientes={expedientes} />
+            : <ListView expedientes={expedientes} />}
         </div>
       )}
 

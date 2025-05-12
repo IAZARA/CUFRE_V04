@@ -1,0 +1,310 @@
+/* Estilos para MasBuscadosPage.js */
+
+/* Colores personalizados */
+.bg-orange {
+  background-color: #fd7e14 !important; /* Naranja */
+}
+
+/* Color azul marino para expedientes después del Top 10 */
+.bg-navy {
+  background-color: #1e3a8a !important; /* Azul marino */
+  color: white !important;
+}
+
+.table-custom-danger {
+  --bs-table-bg: rgba(220, 53, 69, 0.15); /* Rojo más suave para fondo */
+  --bs-table-striped-bg: rgba(220, 53, 69, 0.20);
+  --bs-table-active-bg: rgba(220, 53, 69, 0.25);
+  --bs-table-hover-bg: rgba(220, 53, 69, 0.20);
+  color: #000; /* Texto negro para legibilidad */
+}
+
+.table-custom-orange {
+  --bs-table-bg: rgba(253, 126, 20, 0.15); /* Naranja más suave para fondo */
+  --bs-table-striped-bg: rgba(253, 126, 20, 0.20);
+  --bs-table-active-bg: rgba(253, 126, 20, 0.25);
+  --bs-table-hover-bg: rgba(253, 126, 20, 0.20);
+  color: #000; /* Texto negro para legibilidad */
+}
+
+.table-custom-warning {
+  --bs-table-bg: rgba(255, 193, 7, 0.15); /* Amarillo más suave para fondo */
+  --bs-table-striped-bg: rgba(255, 193, 7, 0.20);
+  --bs-table-active-bg: rgba(255, 193, 7, 0.25);
+  --bs-table-hover-bg: rgba(255, 193, 7, 0.20);
+  color: #000; /* Texto negro para legibilidad */
+}
+
+/* Estilos específicos para cada vista (se añadirán más aquí) */
+
+/* Vista Tarjetas */
+.tarjeta-mas-buscado {
+  transition: transform 0.2s ease-in-out;
+  border: none;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+}
+
+.tarjeta-mas-buscado:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
+}
+
+.tarjeta-mas-buscado .card-header {
+    color: #000 !important; /* Asegurar texto negro en cabecera */
+}
+
+.tarjeta-imagen-mas-buscado {
+    height: 280px;
+    object-fit: cover;
+    object-position: center;
+}
+
+.imagen-perfil-tarjeta {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid #dee2e6; /* Borde gris claro */
+}
+
+/* Vista Lista */
+.tabla-mas-buscados th {
+  background-color: #1a237e; /* Azul oscuro */
+  color: white;
+}
+
+.tabla-mas-buscados .badge {
+    color: var(--bs-secondary-color);
+    border: 1px solid var(--bs-secondary-color);
+    opacity: 0.7; /* Opacidad general */
+}
+
+.tabla-mas-buscados .btn-details {
+    background-color: white;
+    color: #1a237e;
+    border: 1px solid #1a237e;
+}
+.tabla-mas-buscados .btn-details:hover {
+    background-color: #1a237e;
+    color: white;
+}
+
+/* Ajuste de opacidad específico por fila */
+.table-custom-danger .badge { opacity: 1; }
+.table-custom-orange .badge { opacity: 0.8; }
+.table-custom-warning .badge { opacity: 0.7; }
+
+.imagen-perfil-lista {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+/* Vista Fotos */
+.foto-card {
+    border: 1px solid black;
+    min-height: 320px; /* Altura mínima */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    transition: transform 0.2s ease-in-out, border-color 0.2s ease-in-out;
+    position: relative; /* Para posicionar la etiqueta */
+    margin-bottom: 1rem;
+}
+
+.foto-card:hover {
+    transform: translateY(-5px);
+    border-color: red;
+}
+
+.foto-card-img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 1rem;
+}
+
+.foto-card-name {
+    font-weight: bold;
+    text-transform: uppercase;
+    color: red;
+    text-align: center;
+}
+
+.priority-tag {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    background-color: red;
+    color: white;
+    padding: 2px 6px;
+    font-size: 0.8em;
+    font-weight: bold;
+    border-radius: 3px;
+}
+
+/* Estilos para el modal de Wanted */
+.wanted-poster {
+    position: relative;
+    background-color: white;
+    overflow: hidden;
+}
+
+.wanted-header {
+    background-color: #0b3d91; /* Azul institucional */
+    color: white;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+}
+
+.wanted-logo {
+    height: 80px;
+    margin-right: 20px;
+}
+
+.wanted-title {
+    flex: 1;
+    text-align: center;
+}
+
+.wanted-title h1 {
+    font-size: 3rem;
+    font-weight: 900;
+    margin: 0;
+    letter-spacing: 2px;
+}
+
+.wanted-title h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0;
+    letter-spacing: 1px;
+}
+
+.wanted-content {
+    padding: 30px;
+    text-align: center;
+}
+
+.wanted-name {
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+    letter-spacing: 1.5px;
+    color: #0b3d91;
+}
+
+.wanted-charges {
+    font-size: 1.2rem;
+    margin-bottom: 25px;
+    color: #555;
+    font-style: italic;
+}
+
+.wanted-photo-container {
+    max-width: 80%;
+    margin: 0 auto 30px;
+}
+
+.wanted-photo {
+    width: 100%;
+    max-height: 400px;
+    object-fit: contain;
+    border: 8px solid #ddd;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+}
+
+.wanted-footer {
+    margin-top: 20px;
+}
+
+.wanted-button {
+    padding: 12px 30px;
+    font-size: 1.2rem;
+    letter-spacing: 1px;
+    background-color: #0b3d91;
+    border-color: #0b3d91;
+}
+
+.wanted-button:hover, .wanted-button:focus {
+    background-color: #072a67;
+    border-color: #072a67;
+}
+
+/* Estilo para el botón más discreto en el modal */
+.wanted-button-small {
+    padding: 8px 15px;
+    font-size: 0.85rem;
+    border-color: #6c757d;
+    color: #495057;
+    margin-top: 10px;
+    box-shadow: none;
+    opacity: 0.8;
+    transition: all 0.2s ease;
+}
+
+.wanted-button-small:hover {
+    opacity: 1;
+    border-color: #0b3d91;
+    background-color: transparent;
+    color: #0b3d91;
+}
+
+/* Estilos responsive */
+@media (max-width: 768px) {
+    .wanted-header {
+        flex-direction: column;
+        padding: 15px;
+    }
+    
+    .wanted-logo {
+        margin-right: 0;
+        margin-bottom: 15px;
+    }
+    
+    .wanted-title h1 {
+        font-size: 2.2rem;
+    }
+    
+    .wanted-title h2 {
+        font-size: 1.2rem;
+    }
+    
+    .wanted-name {
+        font-size: 1.8rem;
+    }
+    
+    .wanted-photo-container {
+        max-width: 100%;
+    }
+}
+
+/* Recompensa */
+.wanted-reward {
+  text-align: center;
+  margin: 15px 0;
+  padding: 10px;
+  background-color: #f8f1d5;
+  border: 2px solid #8b0000;
+  border-radius: 5px;
+}
+
+.wanted-reward h3 {
+  color: #8b0000;
+  font-weight: bold;
+  margin-bottom: 5px;
+  font-size: 1.5rem;
+}
+
+.reward-amount {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #000;
+  margin: 0;
+}
