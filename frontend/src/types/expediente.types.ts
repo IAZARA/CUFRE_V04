@@ -149,6 +149,17 @@ export interface Expediente {
 
   // Nombres completos de los prófugos asociados a este expediente
   profugos?: string[];
+
+  // Datos de Fuga
+  fugaLugar?: string;
+  fugaLatitud?: number;
+  fugaLongitud?: number;
+
+  // Datos de Detención (punto geográfico)
+  detencionDescripcion?: string;
+  detencionLugar?: string;
+  detencionLatitud?: number;
+  detencionLongitud?: number;
 }
 
 export interface ExpedienteDelito {

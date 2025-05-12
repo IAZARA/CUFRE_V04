@@ -27,6 +27,7 @@ import estadisticaService from '../api/estadisticaService';
 import expedienteService from '../api/expedienteService';
 import delitoService from '../api/delitoService';
 import { useAuth } from '../context/AuthContext';
+import CountUp from 'react-countup';
 
 interface DashboardStat {
   title: string;
@@ -75,7 +76,7 @@ const Dashboard: React.FC = () => {
   const mockStats: DashboardStat[] = [
     {
       title: 'Expedientes',
-      value: 1256,
+      value: stats?.totalExpedientes ?? 1256,
       description: 'Total de expedientes en el sistema',
       color: '#1976d2',
       icon: <FolderIcon />,
@@ -83,23 +84,23 @@ const Dashboard: React.FC = () => {
     },
     {
       title: 'Delitos',
-      value: 87,
+      value: stats?.totalDelitos ?? 87,
       description: 'Tipos de delitos registrados',
       color: '#dc004e',
       icon: <GavelIcon />,
       path: '/delitos'
     },
     {
-      title: 'Estadísticas',
-      value: 42,
-      description: 'Informes disponibles',
+      title: 'Usuarios',
+      value: stats?.totalUsuarios ?? 120,
+      description: 'Usuarios con acceso al sistema',
       color: '#ff9800',
-      icon: <BarChartIcon />,
-      path: '/estadisticas'
+      icon: <PersonIcon />,
+      path: '/usuarios'
     },
     {
       title: 'Personas',
-      value: 3254,
+      value: stats?.totalPersonas ?? 3254,
       description: 'Personas vinculadas a expedientes',
       color: '#4caf50',
       icon: <PersonIcon />,
@@ -129,128 +130,82 @@ const Dashboard: React.FC = () => {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-        <Typography variant="h4" sx={{ m: 0 }}>
-          {getSaludo()}, {user?.nombre}.
-        </Typography>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', fontSize: 22, fontWeight: 500, color: 'primary.main' }}>
-            <CalendarTodayIcon sx={{ mr: 1, fontSize: 28 }} />
-            {fechaHora.toLocaleDateString()}
+      {/* NUEVO: Saludo y fecha/hora en tarjetas */}
+      <Box sx={{ width: '100%', maxWidth: 900, mx: 'auto', display: 'flex', flexDirection: 'column', alignItems: 'center', mb: 4 }}>
+        {/* Tarjeta de saludo */}
+        <Paper elevation={3} sx={{ p: 3, width: '100%', textAlign: 'center', mb: 2, bgcolor: '#f5faff' }}>
+          <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 1 }}>
+            {getSaludo()}, <span style={{ color: '#1976d2' }}>{user?.nombre}</span>.
+          </Typography>
+          <Typography variant="subtitle1" color="textSecondary">
+            Aquí tienes un resumen del sistema.
+          </Typography>
+        </Paper>
+        {/* Tarjeta de fecha y hora */}
+        <Paper elevation={1} sx={{ p: 2, width: '100%', display: 'flex', justifyContent: 'space-around', alignItems: 'center', gap: 2 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <CalendarTodayIcon color="primary" />
+            <Typography variant="body1" sx={{ fontWeight: 500 }}>
+              {fechaHora.toLocaleDateString('es-AR', { weekday: 'long' }).charAt(0).toUpperCase() +
+                fechaHora.toLocaleDateString('es-AR', { weekday: 'long' }).slice(1)}
+            </Typography>
           </Box>
-          <Box sx={{ display: 'flex', alignItems: 'center', fontSize: 22, fontWeight: 500, color: 'primary.main' }}>
-            <AccessTimeIcon sx={{ mr: 1, fontSize: 28 }} />
-            {fechaHora.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false })}
+          <Divider orientation="vertical" flexItem />
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <CalendarTodayIcon color="primary" />
+            <Typography variant="body1" sx={{ fontWeight: 500 }}>
+              {fechaHora.toLocaleDateString()}
+            </Typography>
           </Box>
-        </Box>
+          <Divider orientation="vertical" flexItem />
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <AccessTimeIcon color="primary" />
+            <Typography variant="body1" sx={{ fontWeight: 500 }}>
+              {fechaHora.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false })}
+            </Typography>
+          </Box>
+        </Paper>
       </Box>
-      <Typography variant="subtitle1" color="textSecondary" paragraph>
-        Aquí tienes un resumen del sistema.
-      </Typography>
+      {/* FIN NUEVO */}
 
-      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3, mb: 4 }}>
+      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3, mb: 4, justifyContent: 'center' }}>
         {mockStats.map((stat, index) => (
           <Box key={index} sx={{ width: { xs: '100%', sm: '47%', md: '22%' } }}>
-            <ButtonBase 
-              sx={{ width: '100%', textAlign: 'left' }}
-              onClick={() => handleNavigate(stat.path)}
+            <Paper
+              sx={{
+                p: 2,
+                display: 'flex',
+                flexDirection: 'column',
+                width: '100%',
+                borderLeft: `4px solid ${stat.color}`,
+                userSelect: 'none',
+                boxShadow: 2,
+                transition: 'box-shadow 0.3s',
+              }}
             >
-              <Paper
-                sx={{
-                  p: 2,
+              <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                <Box sx={{ 
+                  borderRadius: '50%', 
+                  bgcolor: `${stat.color}20`, 
+                  p: 1, 
                   display: 'flex',
-                  flexDirection: 'column',
-                  width: '100%',
-                  borderLeft: `4px solid ${stat.color}`,
-                  '&:hover': {
-                    boxShadow: 6,
-                    transform: 'translateY(-2px)',
-                    transition: 'all 0.3s'
-                  }
-                }}
-              >
-                <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-                  <Box sx={{ 
-                    borderRadius: '50%', 
-                    bgcolor: `${stat.color}20`, 
-                    p: 1, 
-                    display: 'flex',
-                    color: stat.color 
-                  }}>
-                    {stat.icon}
-                  </Box>
-                  <Typography variant="h6" sx={{ ml: 2, fontWeight: 'bold' }}>
-                    {stat.title}
-                  </Typography>
+                  color: stat.color 
+                }}>
+                  {stat.icon}
                 </Box>
-                <Typography variant="h4" sx={{ fontWeight: 'bold' }}>
-                  {stat.value}
+                <Typography variant="h6" sx={{ ml: 2, fontWeight: 'bold' }}>
+                  {stat.title}
                 </Typography>
-                <Typography variant="body2" color="textSecondary">
-                  {stat.description}
-                </Typography>
-              </Paper>
-            </ButtonBase>
-          </Box>
-        ))}
-      </Box>
-
-      <Typography variant="h5" gutterBottom sx={{ mt: 4 }}>
-        Expedientes Recientes
-      </Typography>
-      <Divider sx={{ mb: 2 }} />
-
-      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
-        {expedientesRecientes.length > 0 ? (
-          expedientesRecientes.map((expediente, index) => (
-            <Box key={index} sx={{ width: { xs: '100%', sm: '47%', md: '31%' } }}>
-              <Card>
-                <CardActionArea onClick={() => handleNavigate(`/expedientes/editar/${expediente.id}`)}>
-                  <CardContent>
-                    <Typography variant="h6" component="div" noWrap>
-                      {expediente.caratula}
-                    </Typography>
-                    <Typography variant="body2" color="textSecondary">
-                      Expediente Nº: {expediente.numero}
-                    </Typography>
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 1 }}>
-                      <Typography variant="body2" color="textSecondary">
-                        {expediente.estado}
-                      </Typography>
-                      <Typography variant="body2" color="textSecondary">
-                        {expediente.fechaIngreso}
-                      </Typography>
-                    </Box>
-                  </CardContent>
-                </CardActionArea>
-              </Card>
-            </Box>
-          ))
-        ) : (
-          <Box sx={{ width: '100%' }}>
-            <Paper sx={{ p: 3, textAlign: 'center' }}>
-              <Typography variant="body1">
-                No hay expedientes recientes para mostrar.
+              </Box>
+              <Typography variant="h4" sx={{ fontWeight: 'bold' }}>
+                <CountUp end={stat.value} duration={1.2} />
+              </Typography>
+              <Typography variant="body2" color="textSecondary">
+                {stat.description}
               </Typography>
             </Paper>
           </Box>
-        )}
-      </Box>
-
-      <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
-        <ButtonBase onClick={() => handleNavigate('/expedientes')}>
-          <Paper sx={{ 
-            p: 2, 
-            display: 'flex', 
-            alignItems: 'center',
-            '&:hover': { bgcolor: 'action.hover' } 
-          }}>
-            <Typography variant="button" sx={{ mr: 1 }}>
-              Ver todos los expedientes
-            </Typography>
-            <ArrowForwardIcon fontSize="small" />
-          </Paper>
-        </ButtonBase>
+        ))}
       </Box>
     </Box>
   );

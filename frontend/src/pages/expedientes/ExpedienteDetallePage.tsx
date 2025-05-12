@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
   Box,
@@ -13,6 +13,10 @@ import {
 import expedienteService from '../../api/expedienteService';
 import { Expediente, PersonaExpediente, Fotografia } from '../../types/expediente.types';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
+import { Map as LeafletMap, LatLngBoundsLiteral } from 'leaflet';
 
 // Mapeo de logos de fuerza
 const fuerzaIconos: Record<string, { src: string; alt: string }> = {
@@ -32,12 +36,30 @@ const Section: React.FC<{ title: string; children: React.ReactNode }> = ({ title
   </Box>
 );
 
+// Componente auxiliar para ajustar el mapa a los puntos
+const FitBoundsToPoints: React.FC<{ fugaLat: number, fugaLon: number, detLat: number, detLon: number }> = ({ fugaLat, fugaLon, detLat, detLon }) => {
+  const map = useMap();
+  useEffect(() => {
+    if (
+      typeof fugaLat === 'number' && typeof fugaLon === 'number' &&
+      typeof detLat === 'number' && typeof detLon === 'number'
+    ) {
+      map.fitBounds([
+        [fugaLat, fugaLon],
+        [detLat, detLon]
+      ], { padding: [50, 50] });
+    }
+  }, [fugaLat, fugaLon, detLat, detLon, map]);
+  return null;
+};
+
 const ExpedienteDetallePage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [expediente, setExpediente] = useState<Expediente | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const mapRef = useRef<LeafletMap | null>(null);
 
   useEffect(() => {
     if (id) {
@@ -212,6 +234,75 @@ const ExpedienteDetallePage: React.FC = () => {
           <Typography color="text.secondary">No hay otras personas relacionadas.</Typography>
         )}
       </Section>
+
+      {/* Mapa de puntos de fuga y detención (al final) */}
+      {(expediente.fugaLatitud && expediente.fugaLongitud) || (expediente.detencionLatitud && expediente.detencionLongitud) ? (
+        <Box sx={{ mt: 4, mb: 4 }}>
+          <Typography variant="subtitle1" sx={{ mb: 1, fontWeight: 600 }}>Mapa de Ubicación</Typography>
+          <MapContainer
+            center={
+              expediente.fugaLatitud && expediente.fugaLongitud
+                ? [expediente.fugaLatitud, expediente.fugaLongitud]
+                : expediente.detencionLatitud && expediente.detencionLongitud
+                ? [expediente.detencionLatitud, expediente.detencionLongitud]
+                : [-34.6, -58.4] // centro por defecto (Buenos Aires)
+            }
+            zoom={12}
+            style={{ height: '400px', width: '100%' }}
+            scrollWheelZoom={true}
+          >
+            {typeof expediente.fugaLatitud === 'number' && typeof expediente.fugaLongitud === 'number' &&
+             typeof expediente.detencionLatitud === 'number' && typeof expediente.detencionLongitud === 'number' && (
+              <FitBoundsToPoints
+                fugaLat={expediente.fugaLatitud}
+                fugaLon={expediente.fugaLongitud}
+                detLat={expediente.detencionLatitud}
+                detLon={expediente.detencionLongitud}
+              />
+            )}
+            <TileLayer
+              url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+              attribution='&copy; <a href="https://carto.com/attributions">CARTO</a>'
+            />
+            {expediente.fugaLatitud && expediente.fugaLongitud && (
+              <Marker
+                position={[expediente.fugaLatitud, expediente.fugaLongitud]}
+                icon={new L.Icon({
+                  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
+                  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+                  iconSize: [25, 41],
+                  iconAnchor: [12, 41],
+                  popupAnchor: [1, -34],
+                  shadowSize: [41, 41]
+                })}
+              >
+                <Popup>
+                  <strong>PUNTO DE FUGA</strong><br />
+                  {expediente.fugaLugar || 'Sin lugar especificado'}
+                </Popup>
+              </Marker>
+            )}
+            {expediente.detencionLatitud && expediente.detencionLongitud && (
+              <Marker
+                position={[expediente.detencionLatitud, expediente.detencionLongitud]}
+                icon={new L.Icon({
+                  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png',
+                  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+                  iconSize: [25, 41],
+                  iconAnchor: [12, 41],
+                  popupAnchor: [1, -34],
+                  shadowSize: [41, 41]
+                })}
+              >
+                <Popup>
+                  <strong>PUNTO DE DETENCIÓN</strong><br />
+                  {expediente.detencionLugar || 'Sin lugar especificado'}
+                </Popup>
+              </Marker>
+            )}
+          </MapContainer>
+        </Box>
+      ) : null}
 
       {/* Pie de página institucional */}
       <Box sx={{ mt: 6, textAlign: 'center' }}>

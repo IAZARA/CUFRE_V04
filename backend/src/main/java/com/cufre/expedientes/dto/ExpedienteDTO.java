@@ -113,4 +113,14 @@ public class ExpedienteDTO {
     
     // Nombres completos de los prófugos asociados a este expediente
     private List<String> profugos = new ArrayList<>();
+
+    private String fugaDescripcion;
+    private String fugaLugar;
+    private Double fugaLatitud;
+    private Double fugaLongitud;
+
+    private String detencionDescripcion;
+    private String detencionLugar;
+    private Double detencionLatitud;
+    private Double detencionLongitud;
 }

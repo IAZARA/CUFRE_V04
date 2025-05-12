@@ -5,7 +5,9 @@ import {
   Box,
   Typography,
   FormControlLabel,
-  Checkbox
+  Checkbox,
+  Divider,
+  Tooltip
 } from '@mui/material';
 import { Expediente } from '../../types/expediente.types';
 
@@ -43,11 +45,11 @@ const InfoOrganizacionTab: React.FC<InfoOrganizacionTabProps> = ({ expediente, o
 
   return (
     <Box component="form" noValidate autoComplete="off">
-      <Typography variant="h6" gutterBottom>
-        Organización Criminal
+      <Typography variant="h6" sx={{ mb: 2, fontWeight: 600 }}>
+        Información de la Organización
       </Typography>
-      
-      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+      <Divider sx={{ mb: 3 }} />
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
           <Box sx={{ width: { xs: '100%', md: 'auto' } }}>
             <FormControlLabel
@@ -84,6 +86,8 @@ const InfoOrganizacionTab: React.FC<InfoOrganizacionTabProps> = ({ expediente, o
             value={expediente.nombreBanda || ''}
             onChange={handleChange}
             margin="normal"
+            size="small"
+            variant="outlined"
           />
         </Box>
         
@@ -97,6 +101,8 @@ const InfoOrganizacionTab: React.FC<InfoOrganizacionTabProps> = ({ expediente, o
               value={expediente.nivelOrganizacion || 'S/D'}
               onChange={handleChange}
               margin="normal"
+              size="small"
+              variant="outlined"
             >
               {nivelesOrganizacion.map((option) => (
                 <MenuItem key={option} value={option}>
@@ -115,6 +121,8 @@ const InfoOrganizacionTab: React.FC<InfoOrganizacionTabProps> = ({ expediente, o
               value={expediente.ambitoBanda || 'S/D'}
               onChange={handleChange}
               margin="normal"
+              size="small"
+              variant="outlined"
             >
               {ambitosBanda.map((option) => (
                 <MenuItem key={option} value={option}>
@@ -133,6 +141,8 @@ const InfoOrganizacionTab: React.FC<InfoOrganizacionTabProps> = ({ expediente, o
               value={expediente.capacidadOperativa || 'S/D'}
               onChange={handleChange}
               margin="normal"
+              size="small"
+              variant="outlined"
             >
               {capacidadesOperativas.map((option) => (
                 <MenuItem key={option} value={option}>

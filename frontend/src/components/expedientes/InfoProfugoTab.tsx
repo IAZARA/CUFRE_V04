@@ -5,7 +5,9 @@ import {
   Box,
   Typography,
   FormControlLabel,
-  Checkbox
+  Checkbox,
+  Divider,
+  Tooltip
 } from '@mui/material';
 import { Expediente } from '../../types/expediente.types';
 
@@ -102,11 +104,11 @@ const InfoProfugoTab: React.FC<InfoProfugoTabProps> = ({ expediente, onChange })
 
   return (
     <Box component="form" noValidate autoComplete="off">
-      <Typography variant="h6" gutterBottom>
-        Datos del Prófugo
+      <Typography variant="h6" sx={{ mb: 2, fontWeight: 600 }}>
+        Información del Prófugo
       </Typography>
-      
-      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+      <Divider sx={{ mb: 3 }} />
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3 }}>
           <Box sx={{ width: { xs: '100%', md: 'calc(33.33% - 2rem)' } }}>
             <TextField
@@ -117,6 +119,8 @@ const InfoProfugoTab: React.FC<InfoProfugoTabProps> = ({ expediente, onChange })
               value={expediente.profugoTez || ''}
               onChange={handleChange}
               margin="normal"
+              size="small"
+              variant="outlined"
             >
               {tiposTez.map((option) => (
                 <MenuItem key={option} value={option}>
@@ -135,6 +139,8 @@ const InfoProfugoTab: React.FC<InfoProfugoTabProps> = ({ expediente, onChange })
               value={expediente.profugoContexturaFisica || ''}
               onChange={handleChange}
               margin="normal"
+              size="small"
+              variant="outlined"
             >
               {tiposContextura.map((option) => (
                 <MenuItem key={option} value={option}>
@@ -153,6 +159,8 @@ const InfoProfugoTab: React.FC<InfoProfugoTabProps> = ({ expediente, onChange })
               value={expediente.profugoCabello || ''}
               onChange={handleChange}
               margin="normal"
+              size="small"
+              variant="outlined"
             >
               {coloresCabello.map((option) => (
                 <MenuItem key={option} value={option}>
@@ -173,6 +181,8 @@ const InfoProfugoTab: React.FC<InfoProfugoTabProps> = ({ expediente, onChange })
               value={expediente.profugoOjos || ''}
               onChange={handleChange}
               margin="normal"
+              size="small"
+              variant="outlined"
             >
               {coloresOjos.map((option) => (
                 <MenuItem key={option} value={option}>
@@ -192,6 +202,8 @@ const InfoProfugoTab: React.FC<InfoProfugoTabProps> = ({ expediente, onChange })
               value={expediente.profugoEstatura || ''}
               onChange={handleNumericChange}
               margin="normal"
+              size="small"
+              variant="outlined"
             />
           </Box>
           
@@ -205,6 +217,8 @@ const InfoProfugoTab: React.FC<InfoProfugoTabProps> = ({ expediente, onChange })
               value={expediente.profugoPeso || ''}
               onChange={handleNumericChange}
               margin="normal"
+              size="small"
+              variant="outlined"
             />
           </Box>
         </Box>
@@ -217,6 +231,8 @@ const InfoProfugoTab: React.FC<InfoProfugoTabProps> = ({ expediente, onChange })
             value={expediente.profugoMarcasVisibles || ''}
             onChange={handleChange}
             margin="normal"
+            size="small"
+            variant="outlined"
             helperText="Cicatrices, tatuajes, lunares, etc."
           />
         </Box>
@@ -231,6 +247,8 @@ const InfoProfugoTab: React.FC<InfoProfugoTabProps> = ({ expediente, onChange })
               value={expediente.profugoNivelEstudios || 'S/D'}
               onChange={handleChange}
               margin="normal"
+              size="small"
+              variant="outlined"
             >
               {nivelesEstudio.map((option) => (
                 <MenuItem key={option} value={option}>
@@ -249,6 +267,8 @@ const InfoProfugoTab: React.FC<InfoProfugoTabProps> = ({ expediente, onChange })
               value={expediente.profugoProfesionOcupacion || 'S/D'}
               onChange={handleChange}
               margin="normal"
+              size="small"
+              variant="outlined"
             >
               {ocupaciones.map((option) => (
                 <MenuItem key={option} value={option}>
@@ -269,6 +289,8 @@ const InfoProfugoTab: React.FC<InfoProfugoTabProps> = ({ expediente, onChange })
               value={expediente.profugoGrupoSanguineo || ''}
               onChange={handleChange}
               margin="normal"
+              size="small"
+              variant="outlined"
             >
               {gruposSanguineos.map((option) => (
                 <MenuItem key={option} value={option}>
@@ -286,6 +308,8 @@ const InfoProfugoTab: React.FC<InfoProfugoTabProps> = ({ expediente, onChange })
               value={expediente.profugoTelefono || ''}
               onChange={handleChange}
               margin="normal"
+              size="small"
+              variant="outlined"
             />
           </Box>
         </Box>
@@ -313,6 +337,8 @@ const InfoProfugoTab: React.FC<InfoProfugoTabProps> = ({ expediente, onChange })
             margin="normal"
             multiline
             rows={2}
+            size="small"
+            variant="outlined"
           />
         </Box>
         
@@ -325,6 +351,8 @@ const InfoProfugoTab: React.FC<InfoProfugoTabProps> = ({ expediente, onChange })
               value={expediente.profugoSituacionProcesal || ''}
               onChange={handleChange}
               margin="normal"
+              size="small"
+              variant="outlined"
             />
           </Box>
           
@@ -336,6 +364,8 @@ const InfoProfugoTab: React.FC<InfoProfugoTabProps> = ({ expediente, onChange })
               value={expediente.profugoNumeroProntuario || ''}
               onChange={handleChange}
               margin="normal"
+              size="small"
+              variant="outlined"
             />
           </Box>
         </Box>
@@ -348,6 +378,8 @@ const InfoProfugoTab: React.FC<InfoProfugoTabProps> = ({ expediente, onChange })
             value={expediente.profugoUltimaVezVisto || ''}
             onChange={handleChange}
             margin="normal"
+            size="small"
+            variant="outlined"
             helperText="Lugar y fecha donde fue visto por última vez"
           />
         </Box>
@@ -375,6 +407,8 @@ const InfoProfugoTab: React.FC<InfoProfugoTabProps> = ({ expediente, onChange })
             value={expediente.profugoNumeroDetencionesPrevias || 0}
             onChange={handleNumericChange}
             margin="normal"
+            size="small"
+            variant="outlined"
           />
         </Box>
       </Box>

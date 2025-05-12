@@ -3,7 +3,9 @@ import {
   TextField,
   MenuItem,
   Box,
-  Typography
+  Typography,
+  Divider,
+  Tooltip
 } from '@mui/material';
 import { Expediente } from '../../types/expediente.types';
 
@@ -35,11 +37,11 @@ const InfoDetencionTab: React.FC<InfoDetencionTabProps> = ({ expediente, onChang
 
   return (
     <Box component="form" noValidate autoComplete="off">
-      <Typography variant="h6" gutterBottom>
-        Datos de la Detención
+      <Typography variant="h6" sx={{ mb: 2, fontWeight: 600 }}>
+        Información de la Detención
       </Typography>
-      
-      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+      <Divider sx={{ mb: 3 }} />
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3 }}>
           <Box sx={{ width: { xs: '100%', md: 'calc(50% - 1.5rem)' } }}>
             <TextField
@@ -53,6 +55,8 @@ const InfoDetencionTab: React.FC<InfoDetencionTabProps> = ({ expediente, onChang
               InputLabelProps={{
                 shrink: true,
               }}
+              size="small"
+              variant="outlined"
             />
           </Box>
           
@@ -64,6 +68,8 @@ const InfoDetencionTab: React.FC<InfoDetencionTabProps> = ({ expediente, onChang
               value={expediente.lugarDetencion || ''}
               onChange={handleChange}
               margin="normal"
+              size="small"
+              variant="outlined"
             />
           </Box>
         </Box>
@@ -77,6 +83,8 @@ const InfoDetencionTab: React.FC<InfoDetencionTabProps> = ({ expediente, onChang
             value={expediente.fuerzaDetencion || 'S/D'}
             onChange={handleChange}
             margin="normal"
+            size="small"
+            variant="outlined"
           >
             {fuerzasDetencion.map((option) => (
               <MenuItem key={option} value={option}>
@@ -97,6 +105,8 @@ const InfoDetencionTab: React.FC<InfoDetencionTabProps> = ({ expediente, onChang
             onChange={handleChange}
             margin="normal"
             helperText="Describa detalles relevantes del operativo y procedimiento de detención"
+            size="small"
+            variant="outlined"
           />
         </Box>
       </Box>

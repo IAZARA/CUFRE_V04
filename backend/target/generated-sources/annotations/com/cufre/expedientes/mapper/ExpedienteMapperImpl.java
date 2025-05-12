@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-05-11T17:00:08-0300",
+    date = "2025-05-11T20:58:33-0300",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 23.0.2 (Homebrew)"
 )
 @Component
@@ -114,6 +114,14 @@ public class ExpedienteMapperImpl implements ExpedienteMapper {
         expedienteDTO.recursosLimitados( expediente.getRecursosLimitados() );
         expedienteDTO.areaFronteriza( expediente.getAreaFronteriza() );
         expedienteDTO.tipoVictima( expediente.getTipoVictima() );
+        expedienteDTO.fugaDescripcion( expediente.getFugaDescripcion() );
+        expedienteDTO.fugaLugar( expediente.getFugaLugar() );
+        expedienteDTO.fugaLatitud( expediente.getFugaLatitud() );
+        expedienteDTO.fugaLongitud( expediente.getFugaLongitud() );
+        expedienteDTO.detencionDescripcion( expediente.getDetencionDescripcion() );
+        expedienteDTO.detencionLugar( expediente.getDetencionLugar() );
+        expedienteDTO.detencionLatitud( expediente.getDetencionLatitud() );
+        expedienteDTO.detencionLongitud( expediente.getDetencionLongitud() );
 
         expedienteDTO.estadoSituacion( expediente.getEstadoSituacion() != null ? expediente.getEstadoSituacion().toUpperCase() : null );
 
@@ -203,6 +211,14 @@ public class ExpedienteMapperImpl implements ExpedienteMapper {
         expediente.setRecursosLimitados( expedienteDTO.getRecursosLimitados() );
         expediente.setAreaFronteriza( expedienteDTO.getAreaFronteriza() );
         expediente.setTipoVictima( expedienteDTO.getTipoVictima() );
+        expediente.setFugaDescripcion( expedienteDTO.getFugaDescripcion() );
+        expediente.setFugaLugar( expedienteDTO.getFugaLugar() );
+        expediente.setFugaLatitud( expedienteDTO.getFugaLatitud() );
+        expediente.setFugaLongitud( expedienteDTO.getFugaLongitud() );
+        expediente.setDetencionDescripcion( expedienteDTO.getDetencionDescripcion() );
+        expediente.setDetencionLugar( expedienteDTO.getDetencionLugar() );
+        expediente.setDetencionLatitud( expedienteDTO.getDetencionLatitud() );
+        expediente.setDetencionLongitud( expedienteDTO.getDetencionLongitud() );
 
         return expediente;
     }
@@ -288,6 +304,14 @@ public class ExpedienteMapperImpl implements ExpedienteMapper {
         expediente.setRecursosLimitados( expedienteDTO.getRecursosLimitados() );
         expediente.setAreaFronteriza( expedienteDTO.getAreaFronteriza() );
         expediente.setTipoVictima( expedienteDTO.getTipoVictima() );
+        expediente.setFugaDescripcion( expedienteDTO.getFugaDescripcion() );
+        expediente.setFugaLugar( expedienteDTO.getFugaLugar() );
+        expediente.setFugaLatitud( expedienteDTO.getFugaLatitud() );
+        expediente.setFugaLongitud( expedienteDTO.getFugaLongitud() );
+        expediente.setDetencionDescripcion( expedienteDTO.getDetencionDescripcion() );
+        expediente.setDetencionLugar( expedienteDTO.getDetencionLugar() );
+        expediente.setDetencionLatitud( expedienteDTO.getDetencionLatitud() );
+        expediente.setDetencionLongitud( expedienteDTO.getDetencionLongitud() );
 
         return expediente;
     }

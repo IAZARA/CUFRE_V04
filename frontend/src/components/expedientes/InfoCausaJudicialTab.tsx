@@ -3,7 +3,9 @@ import {
   TextField,
   MenuItem,
   Box,
-  Typography
+  Typography,
+  Divider,
+  Tooltip
 } from '@mui/material';
 import { Expediente } from '../../types/expediente.types';
 
@@ -34,11 +36,11 @@ const InfoCausaJudicialTab: React.FC<InfoCausaJudicialTabProps> = ({ expediente,
 
   return (
     <Box component="form" noValidate autoComplete="off">
-      <Typography variant="h6" gutterBottom>
+      <Typography variant="h6" sx={{ mb: 2, fontWeight: 600 }}>
         Información de la Causa Judicial
       </Typography>
-      
-      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+      <Divider sx={{ mb: 3 }} />
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3 }}>
           <Box sx={{ width: { xs: '100%', md: 'calc(50% - 1.5rem)' } }}>
             <TextField
@@ -52,6 +54,8 @@ const InfoCausaJudicialTab: React.FC<InfoCausaJudicialTabProps> = ({ expediente,
               InputLabelProps={{
                 shrink: true,
               }}
+              size="small"
+              variant="outlined"
             />
           </Box>
           
@@ -63,6 +67,8 @@ const InfoCausaJudicialTab: React.FC<InfoCausaJudicialTabProps> = ({ expediente,
               value={expediente.numeroCausa || ''}
               onChange={handleChange}
               margin="normal"
+              size="small"
+              variant="outlined"
             />
           </Box>
         </Box>
@@ -77,6 +83,8 @@ const InfoCausaJudicialTab: React.FC<InfoCausaJudicialTabProps> = ({ expediente,
             onChange={handleChange}
             margin="normal"
             helperText="Título o descripción breve del expediente"
+            size="small"
+            variant="outlined"
           />
         </Box>
         
@@ -89,6 +97,8 @@ const InfoCausaJudicialTab: React.FC<InfoCausaJudicialTabProps> = ({ expediente,
               value={expediente.juzgado || ''}
               onChange={handleChange}
               margin="normal"
+              size="small"
+              variant="outlined"
             />
           </Box>
           
@@ -100,6 +110,8 @@ const InfoCausaJudicialTab: React.FC<InfoCausaJudicialTabProps> = ({ expediente,
               value={expediente.secretaria || ''}
               onChange={handleChange}
               margin="normal"
+              size="small"
+              variant="outlined"
             />
           </Box>
         </Box>
@@ -113,6 +125,8 @@ const InfoCausaJudicialTab: React.FC<InfoCausaJudicialTabProps> = ({ expediente,
               value={expediente.fiscalia || ''}
               onChange={handleChange}
               margin="normal"
+              size="small"
+              variant="outlined"
             />
           </Box>
           
@@ -125,6 +139,8 @@ const InfoCausaJudicialTab: React.FC<InfoCausaJudicialTabProps> = ({ expediente,
               value={expediente.jurisdiccion || ''}
               onChange={handleChange}
               margin="normal"
+              size="small"
+              variant="outlined"
             >
               {jurisdicciones.map((option) => (
                 <MenuItem key={option} value={option}>
@@ -142,6 +158,8 @@ const InfoCausaJudicialTab: React.FC<InfoCausaJudicialTabProps> = ({ expediente,
               value={expediente.provincia || ''}
               onChange={handleChange}
               margin="normal"
+              size="small"
+              variant="outlined"
             />
           </Box>
         </Box>
@@ -156,6 +174,8 @@ const InfoCausaJudicialTab: React.FC<InfoCausaJudicialTabProps> = ({ expediente,
               value={expediente.tipoCaptura || 'OTRO'}
               onChange={handleChange}
               margin="normal"
+              size="small"
+              variant="outlined"
             >
               {tiposCaptura.map((option) => (
                 <MenuItem key={option} value={option}>
@@ -173,6 +193,8 @@ const InfoCausaJudicialTab: React.FC<InfoCausaJudicialTabProps> = ({ expediente,
               value={expediente.pais || ''}
               onChange={handleChange}
               margin="normal"
+              size="small"
+              variant="outlined"
             />
           </Box>
         </Box>
@@ -187,6 +209,8 @@ const InfoCausaJudicialTab: React.FC<InfoCausaJudicialTabProps> = ({ expediente,
             value={expediente.motivoCaptura || ''}
             onChange={handleChange}
             margin="normal"
+            size="small"
+            variant="outlined"
           />
         </Box>
         
@@ -200,6 +224,8 @@ const InfoCausaJudicialTab: React.FC<InfoCausaJudicialTabProps> = ({ expediente,
             value={expediente.disposicionJuzgado || ''}
             onChange={handleChange}
             margin="normal"
+            size="small"
+            variant="outlined"
           />
         </Box>
       </Box>

@@ -38,4 +38,7 @@ public interface PersonaExpedienteRepository extends JpaRepository<PersonaExpedi
     
     @Query("SELECT COUNT(DISTINCT pe.persona.id) FROM PersonaExpediente pe WHERE pe.tipoRelacion = :tipoRelacion")
     Long countDistinctPersonasByTipoRelacion(@Param("tipoRelacion") String tipoRelacion);
+    
+    @Query("SELECT COUNT(DISTINCT pe.persona.id) FROM PersonaExpediente pe")
+    Long countDistinctPersonasVinculadas();
 } 

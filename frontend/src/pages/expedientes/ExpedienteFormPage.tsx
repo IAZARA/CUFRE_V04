@@ -28,6 +28,8 @@ import FotografiasTab from '../../components/expedientes/FotografiasTab';
 import DocumentosTab from '../../components/expedientes/DocumentosTab';
 import PersonasTab from '../../components/expedientes/PersonasTab';
 import DelitosTab from '../../components/expedientes/DelitosTab';
+import FugaTab from '../../components/expedientes/FugaTab';
+import DetencionGeoTab from '../../components/expedientes/DetencionGeoTab';
 
 // Interfaz para las pestañas
 interface TabPanelProps {
@@ -402,12 +404,15 @@ const ExpedienteFormPage: React.FC = () => {
             <Tab label="Causa Judicial" {...a11yProps(1)} />
             <Tab label="Persona" {...a11yProps(2)} />
             <Tab label="Prófugo" {...a11yProps(3)} />
-            <Tab label="Delito" {...a11yProps(4)} />
-            <Tab label="Detención" {...a11yProps(5)} />
-            <Tab label="Organización" {...a11yProps(6)} />
-            <Tab label="Impacto" {...a11yProps(7)} />
-            <Tab label="Fotografías" {...a11yProps(8)} />
-            <Tab label="Documentos" {...a11yProps(9)} />
+            <Tab label="Información del Hecho" {...a11yProps(4)} />
+            <Tab label="Delito" {...a11yProps(5)} />
+            <Tab label="Detención" {...a11yProps(6)} />
+            <Tab label="Organización" {...a11yProps(7)} />
+            <Tab label="Impacto" {...a11yProps(8)} />
+            <Tab label="Fotografías" {...a11yProps(9)} />
+            <Tab label="Documentos" {...a11yProps(10)} />
+            <Tab label="Punto de Fuga" {...a11yProps(11)} />
+            <Tab label="Punto de Detención" {...a11yProps(12)} />
           </Tabs>
         </Box>
 
@@ -428,27 +433,37 @@ const ExpedienteFormPage: React.FC = () => {
         </TabPanel>
         
         <TabPanel value={tabValue} index={4}>
-          <DelitosTab expediente={expediente} onChange={handleFieldChange} />
+          <InfoHechoTab expediente={expediente} onChange={handleFieldChange} />
         </TabPanel>
         
         <TabPanel value={tabValue} index={5}>
-          <InfoDetencionTab expediente={expediente} onChange={handleFieldChange} />
+          <DelitosTab expediente={expediente} onChange={handleFieldChange} />
         </TabPanel>
         
         <TabPanel value={tabValue} index={6}>
-          <InfoOrganizacionTab expediente={expediente} onChange={handleFieldChange} />
+          <InfoDetencionTab expediente={expediente} onChange={handleFieldChange} />
         </TabPanel>
         
         <TabPanel value={tabValue} index={7}>
-          <InfoImpactoTab expediente={expediente} onChange={handleFieldChange} />
+          <InfoOrganizacionTab expediente={expediente} onChange={handleFieldChange} />
         </TabPanel>
         
         <TabPanel value={tabValue} index={8}>
-          <FotografiasTab expediente={expediente} onChange={handleFieldChange} />
+          <InfoImpactoTab expediente={expediente} onChange={handleFieldChange} />
         </TabPanel>
         
         <TabPanel value={tabValue} index={9}>
+          <FotografiasTab expediente={expediente} onChange={handleFieldChange} />
+        </TabPanel>
+        
+        <TabPanel value={tabValue} index={10}>
           <DocumentosTab expediente={expediente} onChange={handleFieldChange} />
+        </TabPanel>
+        <TabPanel value={tabValue} index={11}>
+          <FugaTab expediente={expediente} onChange={handleFieldChange} />
+        </TabPanel>
+        <TabPanel value={tabValue} index={12}>
+          <DetencionGeoTab expediente={expediente} onChange={handleFieldChange} />
         </TabPanel>
       </Paper>
     </Box>

@@ -119,5 +119,5 @@ public interface ExpedienteRepository extends JpaRepository<Expediente, Long> {
 
     List<Expediente> findAllByOrderByPrioridadAsc(Pageable pageable);
 
-    List<Expediente> findAllByEstadoSituacionAndOrderByPrioridadAsc(String estadoSituacion, Pageable pageable);
+    List<Expediente> findAllByEstadoSituacionOrderByPrioridadAsc(String estadoSituacion, Pageable pageable);
 } 

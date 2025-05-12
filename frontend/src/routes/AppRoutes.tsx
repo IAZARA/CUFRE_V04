@@ -27,6 +27,7 @@ import DelitoFormPage from '../pages/delitos/DelitoFormPage';
 
 // Páginas de Estadísticas
 import EstadisticasPage from '../pages/estadisticas/EstadisticasPage';
+import MapaGeneralPage from '../pages/estadisticas/MapaGeneralPage';
 
 // Páginas de Usuarios
 import UsuariosPage from '../pages/usuarios/UsuariosPage';
@@ -74,6 +75,7 @@ const AppRoutes: React.FC = () => {
           
           {/* Rutas de Estadísticas */}
           <Route path="/estadisticas" element={<EstadisticasPage />} />
+          <Route path="/estadisticas/mapa" element={<MapaGeneralPage />} />
           
           {/* Rutas solo para administradores */}
           <Route element={<ProtectedRoute requiredRoles={[Rol.ADMINISTRADOR, Rol.SUPERUSUARIO]} />}>

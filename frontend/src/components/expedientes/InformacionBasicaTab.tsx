@@ -5,7 +5,10 @@ import {
   FormControlLabel,
   Checkbox,
   FormHelperText,
-  Box
+  Box,
+  Typography,
+  Divider,
+  Tooltip
 } from '@mui/material';
 import { Expediente } from '../../types/expediente.types';
 
@@ -70,21 +73,29 @@ const InformacionBasicaTab: React.FC<InformacionBasicaTabProps> = ({ expediente,
 
   return (
     <Box component="form" noValidate autoComplete="off">
-      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3 }}>
-          <Box sx={{ width: { xs: '100%', md: 'calc(50% - 1.5rem)' } }}>
-            <TextField
-              fullWidth
-              required
-              label="Número de Expediente"
-              name="numero"
-              value={expediente.numero}
-              onChange={handleChange}
-              margin="normal"
-              helperText="Ingrese el número de identificación único del expediente"
-            />
+      <Typography variant="h6" sx={{ mb: 2, fontWeight: 600 }}>
+        Información Básica del Expediente
+      </Typography>
+      <Divider sx={{ mb: 3 }} />
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
+          <Box sx={{ width: { xs: '100%', md: 'calc(50% - 2rem)' } }}>
+            <Tooltip title="Este número es único para cada expediente" arrow>
+              <TextField
+                fullWidth
+                required
+                label="Número de Expediente"
+                name="numero"
+                value={expediente.numero}
+                onChange={handleChange}
+                margin="normal"
+                helperText="Ingrese el número de identificación único del expediente"
+                size="small"
+                variant="outlined"
+              />
+            </Tooltip>
           </Box>
-          <Box sx={{ width: { xs: '100%', md: 'calc(50% - 1.5rem)' } }}>
+          <Box sx={{ width: { xs: '100%', md: 'calc(50% - 2rem)' } }}>
             <TextField
               fullWidth
               required
@@ -97,6 +108,8 @@ const InformacionBasicaTab: React.FC<InformacionBasicaTabProps> = ({ expediente,
               InputLabelProps={{
                 shrink: true,
               }}
+              size="small"
+              variant="outlined"
             />
           </Box>
         </Box>
@@ -110,9 +123,12 @@ const InformacionBasicaTab: React.FC<InformacionBasicaTabProps> = ({ expediente,
             onChange={handleChange}
             margin="normal"
             helperText="Título o descripción breve del expediente"
+            size="small"
+            variant="outlined"
           />
         </Box>
-        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3 }}>
+        <Divider sx={{ my: 2 }} />
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
           <Box sx={{ width: { xs: '100%', md: 'calc(33.33% - 2rem)' } }}>
             <TextField
               fullWidth
@@ -122,6 +138,8 @@ const InformacionBasicaTab: React.FC<InformacionBasicaTabProps> = ({ expediente,
               value={expediente.estadoSituacion || 'SIN EFECTO'}
               onChange={handleChange}
               margin="normal"
+              size="small"
+              variant="outlined"
             >
               {estados.map((option) => (
                 <MenuItem key={option} value={option.toUpperCase()}>
@@ -139,6 +157,8 @@ const InformacionBasicaTab: React.FC<InformacionBasicaTabProps> = ({ expediente,
               value={expediente.fuerzaAsignada || 'S/D'}
               onChange={handleChange}
               margin="normal"
+              size="small"
+              variant="outlined"
             >
               {fuerzasAsignadas.map((option) => (
                 <MenuItem key={option} value={option}>
@@ -156,6 +176,8 @@ const InformacionBasicaTab: React.FC<InformacionBasicaTabProps> = ({ expediente,
               value={expediente.jurisdiccion || ''}
               onChange={handleChange}
               margin="normal"
+              size="small"
+              variant="outlined"
             >
               {jurisdicciones.map((option) => (
                 <MenuItem key={option} value={option}>
@@ -165,7 +187,7 @@ const InformacionBasicaTab: React.FC<InformacionBasicaTabProps> = ({ expediente,
             </TextField>
           </Box>
         </Box>
-        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3 }}>
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
           <Box sx={{ width: { xs: '100%', md: 'calc(33.33% - 2rem)' } }}>
             <TextField
               fullWidth
@@ -175,6 +197,8 @@ const InformacionBasicaTab: React.FC<InformacionBasicaTabProps> = ({ expediente,
               value={expediente.instancia || ''}
               onChange={handleChange}
               margin="normal"
+              size="small"
+              variant="outlined"
             >
               {instancias.map((option) => (
                 <MenuItem key={option} value={option}>
@@ -192,6 +216,8 @@ const InformacionBasicaTab: React.FC<InformacionBasicaTabProps> = ({ expediente,
               value={expediente.autorizacionTareas || ''}
               onChange={handleChange}
               margin="normal"
+              size="small"
+              variant="outlined"
             >
               <MenuItem value="SI">SI</MenuItem>
               <MenuItem value="NO">NO</MenuItem>
@@ -209,6 +235,8 @@ const InformacionBasicaTab: React.FC<InformacionBasicaTabProps> = ({ expediente,
               InputLabelProps={{
                 shrink: true,
               }}
+              size="small"
+              variant="outlined"
             />
           </Box>
         </Box>
@@ -223,6 +251,8 @@ const InformacionBasicaTab: React.FC<InformacionBasicaTabProps> = ({ expediente,
             onChange={handleChange}
             margin="normal"
             helperText="Describa brevemente el contenido o propósito del expediente"
+            size="small"
+            variant="outlined"
           />
         </Box>
       </Box>

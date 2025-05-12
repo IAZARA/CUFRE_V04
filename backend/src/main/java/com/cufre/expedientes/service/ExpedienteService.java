@@ -404,7 +404,7 @@ public class ExpedienteService extends AbstractBaseService<Expediente, Expedient
      */
     @Transactional(readOnly = true)
     public List<ExpedienteDTO> findMasBuscados(int limit) {
-        List<Expediente> expedientes = repository.findAllByEstadoSituacionAndOrderByPrioridadAsc("CAPTURA VIGENTE", PageRequest.of(0, limit));
+        List<Expediente> expedientes = repository.findAllByEstadoSituacionOrderByPrioridadAsc("CAPTURA VIGENTE", PageRequest.of(0, limit));
         return expedientes.stream().map(this::toDto).collect(Collectors.toList());
     }
 } 

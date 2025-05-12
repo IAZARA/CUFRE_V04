@@ -3,7 +3,9 @@ import {
   TextField,
   MenuItem,
   Box,
-  Typography
+  Typography,
+  Divider,
+  Tooltip
 } from '@mui/material';
 import { Expediente } from '../../types/expediente.types';
 
@@ -60,11 +62,11 @@ const InfoImpactoTab: React.FC<InfoImpactoTabProps> = ({ expediente, onChange })
 
   return (
     <Box component="form" noValidate autoComplete="off">
-      <Typography variant="h6" gutterBottom>
-        Impacto y Contexto del Caso
+      <Typography variant="h6" sx={{ mb: 2, fontWeight: 600 }}>
+        Información de Impacto
       </Typography>
-      
-      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+      <Divider sx={{ mb: 3 }} />
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3 }}>
           <Box sx={{ width: { xs: '100%', md: 'calc(50% - 1.5rem)' } }}>
             <TextField
@@ -75,6 +77,8 @@ const InfoImpactoTab: React.FC<InfoImpactoTabProps> = ({ expediente, onChange })
               value={expediente.impactoMediatico || ''}
               onChange={handleChange}
               margin="normal"
+              size="small"
+              variant="outlined"
             >
               {nivelesImpacto.map((option) => (
                 <MenuItem key={option} value={option}>
@@ -93,6 +97,8 @@ const InfoImpactoTab: React.FC<InfoImpactoTabProps> = ({ expediente, onChange })
               value={expediente.impactoSocial || ''}
               onChange={handleChange}
               margin="normal"
+              size="small"
+              variant="outlined"
             >
               {nivelesImpacto.map((option) => (
                 <MenuItem key={option} value={option}>
@@ -114,6 +120,8 @@ const InfoImpactoTab: React.FC<InfoImpactoTabProps> = ({ expediente, onChange })
             onChange={handleChange}
             margin="normal"
             helperText="Datos relevantes que ayuden a comprender el contexto completo del caso"
+            size="small"
+            variant="outlined"
           />
         </Box>
 
@@ -127,6 +135,8 @@ const InfoImpactoTab: React.FC<InfoImpactoTabProps> = ({ expediente, onChange })
               value={expediente.nivelIncidenciaZona || 'S/D'}
               onChange={handleChange}
               margin="normal"
+              size="small"
+              variant="outlined"
             >
               {nivelesIncidenciaZona.map((option) => (
                 <MenuItem key={option} value={option}>
@@ -144,6 +154,8 @@ const InfoImpactoTab: React.FC<InfoImpactoTabProps> = ({ expediente, onChange })
               value={expediente.institucionSensibleCercana || 'S/D'}
               onChange={handleChange}
               margin="normal"
+              size="small"
+              variant="outlined"
             >
               {institucionesSensibles.map((option) => (
                 <MenuItem key={option} value={option}>
@@ -163,6 +175,8 @@ const InfoImpactoTab: React.FC<InfoImpactoTabProps> = ({ expediente, onChange })
               value={expediente.recursosLimitados || 'S/D'}
               onChange={handleChange}
               margin="normal"
+              size="small"
+              variant="outlined"
             >
               {recursosLimitados.map((option) => (
                 <MenuItem key={option} value={option}>
@@ -180,6 +194,8 @@ const InfoImpactoTab: React.FC<InfoImpactoTabProps> = ({ expediente, onChange })
               value={expediente.areaFronteriza || 'S/D'}
               onChange={handleChange}
               margin="normal"
+              size="small"
+              variant="outlined"
             >
               {areasFronterizas.map((option) => (
                 <MenuItem key={option} value={option}>
@@ -198,6 +214,8 @@ const InfoImpactoTab: React.FC<InfoImpactoTabProps> = ({ expediente, onChange })
             value={expediente.impactoPercepcion || 'S/D'}
             onChange={handleChange}
             margin="normal"
+            size="small"
+            variant="outlined"
           >
             {nivelesPercepcion.map((option) => (
               <MenuItem key={option} value={option}>

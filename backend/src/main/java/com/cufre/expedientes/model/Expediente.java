@@ -245,6 +245,32 @@ public class Expediente {
     @Column(name = "TIPO_VICTIMA", length = 20)
     private String tipoVictima;
     
+    // --- FUGA ---
+    @Column(name = "FUGA_DESCRIPCION")
+    private String fugaDescripcion;
+
+    @Column(name = "FUGA_LUGAR")
+    private String fugaLugar;
+
+    @Column(name = "FUGA_LATITUD")
+    private Double fugaLatitud;
+
+    @Column(name = "FUGA_LONGITUD")
+    private Double fugaLongitud;
+
+    // --- DETENCIÓN GEO ---
+    @Column(name = "DETENCION_DESCRIPCION")
+    private String detencionDescripcion;
+
+    @Column(name = "DETENCION_LUGAR")
+    private String detencionLugar;
+
+    @Column(name = "DETENCION_LATITUD")
+    private Double detencionLatitud;
+
+    @Column(name = "DETENCION_LONGITUD")
+    private Double detencionLongitud;
+    
     // Relaciones
     @OneToMany(mappedBy = "expediente", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Fotografia> fotografias = new ArrayList<>();

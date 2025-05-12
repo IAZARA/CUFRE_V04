@@ -1,6 +1,10 @@
 package com.cufre.expedientes.service;
 
 import com.cufre.expedientes.repository.ExpedienteRepository;
+import com.cufre.expedientes.repository.UsuarioRepository;
+import com.cufre.expedientes.repository.PersonaRepository;
+import com.cufre.expedientes.repository.DelitoRepository;
+import com.cufre.expedientes.repository.PersonaExpedienteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +17,10 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class EstadisticaService {
     private final ExpedienteRepository expedienteRepository;
+    private final UsuarioRepository usuarioRepository;
+    private final PersonaRepository personaRepository;
+    private final DelitoRepository delitoRepository;
+    private final PersonaExpedienteRepository personaExpedienteRepository;
     
     /**
      * Obtiene la cantidad de expedientes por provincia
@@ -94,6 +102,15 @@ public class EstadisticaService {
         
         // Total de expedientes
         dashboardData.put("totalExpedientes", expedienteRepository.count());
+        
+        // Total de usuarios
+        dashboardData.put("totalUsuarios", usuarioRepository.count());
+        
+        // Total de personas vinculadas a expedientes
+        dashboardData.put("totalPersonas", personaExpedienteRepository.countDistinctPersonasVinculadas());
+        
+        // Total de delitos
+        dashboardData.put("totalDelitos", delitoRepository.count());
         
         // Expedientes por provincia
         dashboardData.put("expedientesPorProvincia", countByProvincia());

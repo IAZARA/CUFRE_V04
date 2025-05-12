@@ -26,8 +26,11 @@ import DescriptionRoundedIcon from '@mui/icons-material/DescriptionRounded';
 import NoteAddRoundedIcon from '@mui/icons-material/NoteAddRounded';
 import GavelRoundedIcon from '@mui/icons-material/GavelRounded';
 import BarChartRoundedIcon from '@mui/icons-material/BarChartRounded';
+import PieChartOutlineRoundedIcon from '@mui/icons-material/PieChartOutlineRounded';
 import PersonSearchRoundedIcon from '@mui/icons-material/PersonSearchRounded';
 import GroupRoundedIcon from '@mui/icons-material/GroupRounded';
+import ExitToAppRoundedIcon from '@mui/icons-material/ExitToAppRounded';
+import PlaceRoundedIcon from '@mui/icons-material/PlaceRounded';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { Rol } from '../../types/usuario.types';
@@ -54,6 +57,7 @@ const Sidebar: React.FC<SidebarProps> = ({ open, handleDrawerClose }) => {
   
   const [expedientesOpen, setExpedientesOpen] = useState(false);
   const [delitosOpen, setDelitosOpen] = useState(false);
+  const [estadisticasOpen, setEstadisticasOpen] = useState(false);
 
   const handleExpedientesClick = () => {
     setExpedientesOpen(!expedientesOpen);
@@ -61,6 +65,10 @@ const Sidebar: React.FC<SidebarProps> = ({ open, handleDrawerClose }) => {
 
   const handleDelitosClick = () => {
     setDelitosOpen(!delitosOpen);
+  };
+
+  const handleEstadisticasClick = () => {
+    setEstadisticasOpen(!estadisticasOpen);
   };
 
   const handleNavigation = (path: string) => {
@@ -194,19 +202,40 @@ const Sidebar: React.FC<SidebarProps> = ({ open, handleDrawerClose }) => {
           </List>
         </Collapse>
 
-        {/* Estadísticas */}
+        {/* Estadísticas (expandible) */}
         <ListItem disablePadding>
-          <ListItemButton 
-            selected={location.pathname === '/estadisticas'}
-            onClick={() => handleNavigation('/estadisticas')}
-            sx={{ borderRadius: 2, mb: 1, px: 2, py: 1.5 }}
-          >
+          <ListItemButton onClick={handleEstadisticasClick} sx={{ borderRadius: 2, mb: 1, px: 2, py: 1.5 }}>
             <ListItemIcon sx={{ color: '#fff', minWidth: 0, mr: 2 }}>
               <BarChartRoundedIcon fontSize="medium" />
             </ListItemIcon>
             <ListItemText primary="Estadísticas" primaryTypographyProps={{ fontWeight: 500, color: '#fff' }} />
+            {estadisticasOpen ? <ExpandLess /> : <ExpandMore />}
           </ListItemButton>
         </ListItem>
+        <Collapse in={estadisticasOpen} timeout="auto" unmountOnExit>
+          <List component="div" disablePadding>
+            <ListItemButton
+              sx={{ pl: 5, borderRadius: 2, mb: 1 }}
+              selected={location.pathname === '/estadisticas'}
+              onClick={() => handleNavigation('/estadisticas')}
+            >
+              <ListItemIcon sx={{ color: '#fff', minWidth: 0, mr: 2 }}>
+                <PieChartOutlineRoundedIcon fontSize="small" />
+              </ListItemIcon>
+              <ListItemText primary="Gráficos" primaryTypographyProps={{ fontWeight: 500, color: '#fff' }} />
+            </ListItemButton>
+            <ListItemButton
+              sx={{ pl: 5, borderRadius: 2, mb: 1 }}
+              selected={location.pathname === '/estadisticas/mapa'}
+              onClick={() => handleNavigation('/estadisticas/mapa')}
+            >
+              <ListItemIcon sx={{ color: '#fff', minWidth: 0, mr: 2 }}>
+                <PlaceRoundedIcon fontSize="small" />
+              </ListItemIcon>
+              <ListItemText primary="Mapa" primaryTypographyProps={{ fontSize: 15 }} />
+            </ListItemButton>
+          </List>
+        </Collapse>
 
         {/* Más Buscados */}
         <ListItem disablePadding>
